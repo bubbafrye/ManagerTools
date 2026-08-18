@@ -1,0 +1,33 @@
+.goal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 96px;
+  padding: 10px;
+  border-radius: var(--document-panel-radii);
+  border: var(--document-panel-stroke-weight) solid var(--goals-goals-panel-stroke);
+  background: var(--goals-goals-panel-surface);
+}
+
+.deleteButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 25px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.goal:hover .deleteButton,
+.deleteButton:focus-visible {
+  opacity: 1;
+}
+
+.content {
+  padding-right: 24px;
+}

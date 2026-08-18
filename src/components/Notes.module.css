@@ -1,0 +1,10 @@
+.notes {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 5px 20px;
+  border-radius: var(--document-panel-radii);
+  border: var(--document-panel-stroke-weight) solid var(--notes-notes-panel-stroke);
+  background: var(--notes-notes-panel-surface);
+  word-break: break-word;
+}

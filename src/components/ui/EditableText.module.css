@@ -1,0 +1,57 @@
+.editable {
+  width: 100%;
+  font-size: 16px;
+  line-height: normal;
+  color: var(--document-text-color);
+  word-break: break-word;
+  white-space: pre-wrap;
+  min-height: 1.25em;
+}
+
+.editableHeader {
+  font-family: var(--document-text-header-font-face);
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.editableSubheader {
+  font-family: var(--document-text-header-font-face);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.editableDate {
+  font-family: var(--document-text-header-font-face);
+  font-weight: bold;
+  font-size: 18px;
+  min-height: 29px;
+}
+
+.editableBulletList {
+  min-height: 1.5em;
+}
+
+.editableInline {
+  width: auto;
+  min-width: 1ch;
+  min-height: 0;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  white-space: nowrap;
+  word-break: normal;
+}
+
+.placeholder:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(28, 28, 28, 0.35);
+}
+
+.editable.muted {
+  color: color-mix(in srgb, var(--document-text-color) 60%, transparent);
+}
+
+.placeholder.muted:empty::before {
+  color: color-mix(in srgb, var(--document-text-color) 60%, transparent);
+}

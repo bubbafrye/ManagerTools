@@ -1,0 +1,34 @@
+.page {
+  display: grid;
+  grid-template-columns: 480px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  column-gap: 35px;
+  row-gap: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  padding-top: var(--document-margins-top);
+  padding-right: var(--document-margins-sides);
+  padding-bottom: var(--document-margins-bottom);
+  padding-left: var(--document-margins-sides);
+}
+
+.chrome {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rightColumn {
+  min-width: 0;
+}

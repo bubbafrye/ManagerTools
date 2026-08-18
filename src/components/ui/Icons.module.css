@@ -1,0 +1,50 @@
+.icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.addItem {
+  width: 22px;
+  height: 22px;
+}
+
+.adjust {
+  width: 24px;
+  height: 25px;
+}
+
+.edit {
+  width: 25px;
+  height: 22px;
+}
+
+.trash {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 25px;
+  flex-shrink: 0;
+}
+
+.trashDefault,
+.trashOver {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.trashOver {
+  opacity: 0;
+}
+
+:global(button:hover) > .trash .trashDefault,
+:global(button:focus-visible) > .trash .trashDefault {
+  opacity: 0;
+}
+
+:global(button:hover) > .trash .trashOver,
+:global(button:focus-visible) > .trash .trashOver {
+  opacity: 1;
+}

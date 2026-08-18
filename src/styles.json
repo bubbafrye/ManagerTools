@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "fileName": "styles",
+  "collections": [
+    {
+      "id": "VariableCollectionId:11:40",
+      "name": "One-on-one",
+      "modes": [
+        {
+          "id": "11:0",
+          "name": "Mode 1"
+        }
+      ],
+      "variables": [
+        {
+          "name": "actions/actions-container-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#e6e6e6"
+          }
+        },
+        {
+          "name": "actions/actions-container-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#ffffff"
+          }
+        },
+        {
+          "name": "actions/actions-panel-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#5e5e5e"
+          }
+        },
+        {
+          "name": "actions/actions-panel-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#c6c6c6"
+          }
+        },
+        {
+          "name": "agenda/agenda-container-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#929292"
+          }
+        },
+        {
+          "name": "agenda/agenda-container-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#c7c7c7"
+          }
+        },
+        {
+          "name": "agenda/agenda-panel-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#929292"
+          }
+        },
+        {
+          "name": "agenda/agenda-panel-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#e0e0e0"
+          }
+        },
+        {
+          "name": "container/container-radii",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 8
+          }
+        },
+        {
+          "name": "container/container-stroke-weight",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 2
+          }
+        },
+        {
+          "name": "document/IC-name",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "Mode 1": "IC"
+          }
+        },
+        {
+          "name": "document/manager-name",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "Mode 1": "Manager"
+          }
+        },
+        {
+          "name": "document/body-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#808080"
+          }
+        },
+        {
+          "name": "document/margins-bottom",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 50
+          }
+        },
+        {
+          "name": "document/margins-sides",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 50
+          }
+        },
+        {
+          "name": "document/margins-top",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 30
+          }
+        },
+        {
+          "name": "document/panel-radii",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 4
+          }
+        },
+        {
+          "name": "document/panel-stroke-weight",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 2
+          }
+        },
+        {
+          "name": "document/text-body-font-face",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "Mode 1": "Inter"
+          }
+        },
+        {
+          "name": "document/text-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#1c1c1c"
+          }
+        },
+        {
+          "name": "document/text-header-font-face",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "Mode 1": "Inter"
+          }
+        },
+        {
+          "name": "document/text-header-font-weight",
+          "resolvedType": "STRING",
+          "valuesByMode": {
+            "Mode 1": "bold"
+          }
+        },
+        {
+          "name": "goals/goals-container-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#acacac"
+          }
+        },
+        {
+          "name": "goals/goals-containter-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#929292"
+          }
+        },
+        {
+          "name": "goals/goals-panel-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#aeaeae"
+          }
+        },
+        {
+          "name": "goals/goals-panel-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#dcdcdc"
+          }
+        },
+        {
+          "name": "notes/notes-container-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#929292"
+          }
+        },
+        {
+          "name": "notes/notes-container-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#f1f1f1"
+          }
+        },
+        {
+          "name": "notes/notes-panel-stroke",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#929292"
+          }
+        },
+        {
+          "name": "notes/notes-panel-surface",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#f1f1f1"
+          }
+        },
+        {
+          "name": "ui/ui-stroke-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#5e5e5e"
+          }
+        },
+        {
+          "name": "ui/ui-stroke-weight",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 1
+          }
+        },
+        {
+          "name": "ui/ui-surface-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#ffffff"
+          }
+        },
+        {
+          "name": "ui/ui2-stroke-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#545454"
+          }
+        },
+        {
+          "name": "ui/ui2-stroke-weight",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "Mode 1": 0
+          }
+        },
+        {
+          "name": "ui/ui2-surface-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#414141"
+          }
+        }
+      ]
+    },
+    {
+      "id": "VariableCollectionId:4134:452",
+      "name": "Framework",
+      "modes": [
+        {
+          "id": "4134:0",
+          "name": "green"
+        }
+      ],
+      "variables": [
+        {
+          "name": "column/base",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "green": "#c1c879"
+          }
+        },
+        {
+          "name": "column/stop1",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "green": "#ffffffb2"
+          }
+        },
+        {
+          "name": "column/stop2",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "green": "#ffffff8c"
+          }
+        },
+        {
+          "name": "column/stop3",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "green": "#ffffff66"
+          }
+        },
+        {
+          "name": "column/stop4",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "green": "#ffffff40"
+          }
+        }
+      ]
+    }
+  ],
+  "figmaFileKey": "yLoM56mVPrxu2czhbZcPSY"
+}

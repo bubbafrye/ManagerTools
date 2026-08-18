@@ -1,0 +1,49 @@
+.wrap {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  --list-indent: 24px;
+}
+
+.field {
+  width: 100%;
+  min-width: 0;
+  min-height: 20px;
+  font-size: 16px;
+  line-height: normal;
+  color: var(--document-text-color);
+  word-break: break-word;
+}
+
+.field ul {
+  margin: 0;
+  padding-left: var(--list-indent);
+  list-style: disc;
+}
+
+.field li[data-depth="1"] {
+  margin-left: var(--list-indent);
+}
+
+.field li[data-depth="2"] {
+  margin-left: calc(var(--list-indent) * 2);
+}
+
+.field li[data-depth="3"] {
+  margin-left: calc(var(--list-indent) * 3);
+}
+
+.hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  line-height: normal;
+  color: color-mix(in srgb, var(--document-text-color) 35%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hintBesideBullet {
+  left: var(--list-indent);
+}

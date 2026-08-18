@@ -1,0 +1,21 @@
+.addItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+
+.addItem:hover .label {
+  opacity: 0.85;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: 16px;
+  line-height: normal;
+  opacity: 0.6;
+}

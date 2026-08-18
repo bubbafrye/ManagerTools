@@ -1,0 +1,36 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 47px;
+  width: 100%;
+}
+
+.title {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  font-family: var(--document-text-header-font-face);
+  font-weight: var(--document-text-header-font-weight);
+  font-size: 26px;
+  line-height: normal;
+  color: var(--document-text-color);
+  white-space: nowrap;
+}
+
+.settingsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 25px;
+  flex-shrink: 0;
+}
+
+.settingsButton:hover {
+  opacity: 0.75;
+}

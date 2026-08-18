@@ -1,0 +1,14 @@
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.sides {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}

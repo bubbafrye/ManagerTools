@@ -1,0 +1,26 @@
+.swatch {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 0.5px solid #858585;
+}
+
+.swatches {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.colorGroup {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  line-height: normal;
+  white-space: nowrap;
+}

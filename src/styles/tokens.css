@@ -1,0 +1,47 @@
+/* Generated from src/styles.json — One-on-one collection (Mode 1) */
+:root {
+  --actions-actions-container-stroke: #e6e6e6;
+  --actions-actions-container-surface: #ffffff;
+  --actions-actions-panel-stroke: #5e5e5e;
+  --actions-actions-panel-surface: #c6c6c6;
+  --agenda-agenda-container-stroke: #929292;
+  --agenda-agenda-container-surface: #c7c7c7;
+  --agenda-agenda-panel-stroke: #929292;
+  --agenda-agenda-panel-surface: #e0e0e0;
+  --container-container-radii: 8px;
+  --container-container-stroke-weight: 2px;
+  --document-body-color: #808080;
+  --document-ic-name: "IC";
+  --document-manager-name: "Manager";
+  --document-margins-bottom: 50px;
+  --document-margins-sides: 50px;
+  --document-margins-top: 30px;
+  --document-panel-radii: 4px;
+  --document-panel-stroke-weight: 2px;
+  --document-text-body-font-face: Inter, sans-serif;
+  --document-text-color: #1c1c1c;
+  --document-text-header-font-face: Inter, sans-serif;
+  --document-text-header-font-weight: bold;
+  --goals-goals-container-surface: #acacac;
+  --goals-goals-containter-stroke: #929292;
+  --goals-goals-panel-stroke: #aeaeae;
+  --goals-goals-panel-surface: #dcdcdc;
+  --notes-notes-container-stroke: #929292;
+  --notes-notes-container-surface: #f1f1f1;
+  --notes-notes-panel-stroke: #929292;
+  --notes-notes-panel-surface: #f1f1f1;
+  --ui-ui-stroke-color: #5e5e5e;
+  --ui-ui-stroke-weight: 1px;
+  --ui-ui-surface-color: #ffffff;
+  --ui-ui2-stroke-color: #545454;
+  --ui-ui2-stroke-weight: 0px;
+  --ui-ui2-surface-color: #414141;
+  --actions-panel-radius: 5px;
+
+  /* Framework collection (green mode) — page background gradient */
+  --column-base: #c1c879;
+  --column-stop1: #ffffffb2;
+  --column-stop2: #ffffff8c;
+  --column-stop3: #ffffff66;
+  --column-stop4: #ffffff40;
+}

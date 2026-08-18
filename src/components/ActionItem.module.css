@@ -1,0 +1,38 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 10px;
+  border-radius: var(--document-panel-radii);
+  border: var(--document-panel-stroke-weight) solid var(--actions-actions-panel-stroke);
+  background: var(--actions-actions-panel-surface);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.due {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: normal;
+}
+
+.due button {
+  align-self: center;
+}
+
+.completedHidden {
+  display: none;
+}
+
+.completed .text {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
