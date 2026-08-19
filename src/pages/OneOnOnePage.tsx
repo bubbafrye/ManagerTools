@@ -4,11 +4,13 @@ import { Agenda } from "../components/Agenda";
 import { DocumentHeader } from "../components/DocumentHeader";
 import { Goals } from "../components/Goals";
 import { AdjustmentPanel } from "../components/ui/AdjustmentPanel";
+import { RandoIcon, SandIcon } from "../components/ui/Icons";
 import {
   DEFAULT_APPEARANCE,
   applyAppearance,
   type Appearance,
 } from "../appearance";
+import { applyRandomizedLook, randomizeLook, randomizeSandLook } from "../randomizeLook";
 import type { DocumentActions } from "../hooks/useDocumentState";
 import styles from "./OneOnOnePage.module.css";
 
@@ -62,16 +64,45 @@ export function OneOnOnePage({
           onToggleEditMode={() => setEditMode((open) => !open)}
         />
         {editMode ? (
-          <AdjustmentPanel
-            appearance={appearance}
-            onChange={(patch) =>
-              setAppearance((prev) => ({ ...prev, ...patch }))
-            }
-            showCompleted={settings.showCompletedTasks}
-            onShowCompletedChange={(showCompletedTasks) =>
-              updateSettings({ showCompletedTasks })
-            }
-          />
+          <div className={styles.editStrip} data-layout="edit-strip">
+            <AdjustmentPanel
+              appearance={appearance}
+              onChange={(patch) =>
+                setAppearance((prev) => ({ ...prev, ...patch }))
+              }
+              showCompleted={settings.showCompletedTasks}
+              onShowCompletedChange={(showCompletedTasks) =>
+                updateSettings({ showCompletedTasks })
+              }
+            />
+            <div className={styles.editSpacer} aria-hidden />
+            <div className={styles.lookButtons}>
+              <button
+                type="button"
+                className={styles.lookButton}
+                aria-label="rando"
+                onClick={() => {
+                  const look = randomizeLook();
+                  applyRandomizedLook(look);
+                  setAppearance((prev) => ({ ...prev, ...look.appearance }));
+                }}
+              >
+                <RandoIcon />
+              </button>
+              <button
+                type="button"
+                className={styles.lookButton}
+                aria-label="sand"
+                onClick={() => {
+                  const look = randomizeSandLook();
+                  applyRandomizedLook(look);
+                  setAppearance((prev) => ({ ...prev, ...look.appearance }));
+                }}
+              >
+                <SandIcon />
+              </button>
+            </div>
+          </div>
         ) : null}
       </div>
       <div className={styles.leftColumn} data-layout="left-column">

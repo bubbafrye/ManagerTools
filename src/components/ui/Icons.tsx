@@ -28,6 +28,30 @@ export function EditIcon({ className }: IconProps) {
   );
 }
 
+export function RandoIcon({ className }: IconProps) {
+  return (
+    <img
+      className={`${styles.icon} ${styles.rando} ${className ?? ""}`}
+      src="/assets/rando.svg"
+      alt=""
+      width={50}
+      height={50}
+    />
+  );
+}
+
+export function SandIcon({ className }: IconProps) {
+  return (
+    <img
+      className={`${styles.icon} ${styles.sand} ${className ?? ""}`}
+      src="/assets/sand.svg"
+      alt=""
+      width={50}
+      height={50}
+    />
+  );
+}
+
 export function AdjustIcon({ className }: IconProps) {
   return (
     <span

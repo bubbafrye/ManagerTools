@@ -140,3 +140,49 @@ test("dragging an agenda entry out deletes notes and both agenda blocks", async 
   await expect(agenda.locator("[data-sortable-id]")).toHaveCount(0);
   await expect(agenda.locator("[data-layout='agenda-ic']")).toHaveCount(0);
 });
+
+test("confirm buttons use the light variant when header text is dark", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("region", { name: "Action Items" }).locator("[data-sortable-id]").nth(0).dragTo(
+    page.locator("[data-layout='document-header']"),
+    { sourcePosition: { x: 6, y: 6 } },
+  );
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("button", { name: "NO" })).toHaveCSS(
+    "background-color",
+    "rgb(255, 124, 124)",
+  );
+  await expect(dialog.getByRole("button", { name: "YES" })).toHaveCSS(
+    "background-color",
+    "rgb(157, 255, 130)",
+  );
+});
+
+test("confirm buttons use the dark variant when header text is light", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => {
+    document.documentElement.style.setProperty(
+      "--document-header-text-color",
+      "#ffe3b0",
+    );
+  });
+  await page.getByRole("region", { name: "Action Items" }).locator("[data-sortable-id]").nth(0).dragTo(
+    page.locator("[data-layout='document-header']"),
+    { sourcePosition: { x: 6, y: 6 } },
+  );
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("button", { name: "NO" })).toHaveCSS(
+    "background-color",
+    "rgb(178, 3, 3)",
+  );
+  await expect(dialog.getByRole("button", { name: "YES" })).toHaveCSS(
+    "background-color",
+    "rgb(34, 159, 0)",
+  );
+});

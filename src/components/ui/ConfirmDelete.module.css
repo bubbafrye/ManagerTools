@@ -30,7 +30,6 @@
   width: 100%;
   padding: 10px 20px;
   border-radius: var(--document-panel-radii);
-  background: rgba(255, 255, 255, 0.6);
 }
 
 .message {
@@ -41,52 +40,5 @@
   font-weight: normal;
   line-height: normal;
   text-align: center;
-  color: var(--document-header-text-color);
-}
-
-.actions {
-  display: flex;
-  gap: 24px;
-  flex-shrink: 0;
-}
-
-.btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 100px;
-  height: 30px;
-  padding: 5px 21px;
-  overflow: clip;
-  border: 1px solid var(--ui-ui-stroke-color);
-  font-family: var(--document-text-header-font-face);
-  font-size: 12px;
-  font-weight: bold;
-  line-height: normal;
-  text-align: center;
-  color: var(--document-header-text-color);
-  cursor: pointer;
-}
-
-.btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  box-shadow:
-    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
-    inset 0 4px 0 rgba(255, 255, 255, 0.4);
-}
-
-.no {
-  border-radius: 2px;
-  background: #ffdcdc;
-}
-
-.yes {
-  border-radius: 3px;
-  background: #d7ffcc;
+  color: var(--document-body-text-color);
 }

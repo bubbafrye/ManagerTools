@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { LOOK_TOKENS_CHANGED } from "../../randomizeLook";
 import styles from "./Swatch.module.css";
 
 type SwatchProps = {
@@ -28,6 +29,12 @@ function tokenToHex(token: string): string {
 
 export function Swatch({ token, label }: SwatchProps) {
   const [hex, setHex] = useState(() => tokenToHex(token));
+
+  useEffect(() => {
+    const sync = () => setHex(tokenToHex(token));
+    window.addEventListener(LOOK_TOKENS_CHANGED, sync);
+    return () => window.removeEventListener(LOOK_TOKENS_CHANGED, sync);
+  }, [token]);
 
   return (
     <input

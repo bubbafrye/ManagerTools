@@ -21,6 +21,12 @@
   height: 22px;
 }
 
+.rando,
+.sand {
+  width: 50px;
+  height: 50px;
+}
+
 .trash {
   position: relative;
   display: block;

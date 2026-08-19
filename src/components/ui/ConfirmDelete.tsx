@@ -1,4 +1,9 @@
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import {
+  ButtonGroup,
+  buttonGroupVariantForText,
+  headerTextHex,
+} from "./ButtonGroup";
 import styles from "./ConfirmDelete.module.css";
 
 const CONTAINER_LOOK: Record<string, { surface: string; stroke: string }> = {
@@ -28,6 +33,7 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
   const onNoRef = useRef(onNo);
   const titleId = useId();
   const look = CONTAINER_LOOK[kind] ?? CONTAINER_LOOK["action-item"];
+  const [variant] = useState(() => buttonGroupVariantForText(headerTextHex()));
 
   onNoRef.current = onNo;
 
@@ -69,19 +75,12 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
           Are you sure you want to permanently remove this item?
         </p>
       </div>
-      <div className={styles.actions}>
-        <button
-          ref={noRef}
-          type="button"
-          className={`${styles.btn} ${styles.no}`}
-          onClick={onNo}
-        >
-          NO
-        </button>
-        <button type="button" className={`${styles.btn} ${styles.yes}`} onClick={onYes}>
-          YES
-        </button>
-      </div>
+      <ButtonGroup
+        variant={variant}
+        noRef={noRef}
+        onYes={onYes}
+        onNo={onNo}
+      />
     </dialog>
   );
 }
