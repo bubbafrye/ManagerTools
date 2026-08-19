@@ -18,6 +18,7 @@
   font-weight: bold;
   font-size: 18px;
   line-height: normal;
+  color: var(--document-header-text-color);
 }
 
 .name {

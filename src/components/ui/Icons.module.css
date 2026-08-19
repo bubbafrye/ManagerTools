@@ -9,8 +9,11 @@
 }
 
 .adjust {
-  width: 24px;
-  height: 25px;
+  width: 28px;
+  height: 29px;
+  background-color: var(--document-header-text-color);
+  -webkit-mask: url("/assets/adjust.svg") center / contain no-repeat;
+  mask: url("/assets/adjust.svg") center / contain no-repeat;
 }
 
 .edit {

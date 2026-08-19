@@ -144,3 +144,20 @@ test("edit mode shows a decorative pencil and section swatches, not nested gears
     "visible",
   );
 });
+
+test("swatch writes a color token live", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const picker = page.getByLabel("header color", { exact: true });
+  await picker.fill("#ff0000");
+
+  const textColor = await page.evaluate(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--document-header-text-color")
+      .trim()
+      .toLowerCase(),
+  );
+  expect(textColor).toBe("#ff0000");
+});

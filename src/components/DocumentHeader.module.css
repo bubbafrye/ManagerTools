@@ -6,7 +6,7 @@
   font-weight: bold;
   font-size: 32px;
   line-height: normal;
-  color: var(--document-text-color);
+  color: var(--document-header-text-color);
 }
 
 .settingsButton {
@@ -18,7 +18,7 @@
   flex-shrink: 0;
 }
 
-.settingsButton img {
+.settingsButton .adjust {
   width: 28px;
   height: 29px;
 }

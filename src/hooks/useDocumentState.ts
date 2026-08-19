@@ -11,6 +11,7 @@ import {
   type DocumentState,
   type GoalData,
 } from "../types/document";
+import { moveBetween, moveById } from "../reorder";
 
 export function useDocumentState() {
   const [document, setDocument] = useState<DocumentState>(createInitialDocument);
@@ -102,6 +103,42 @@ export function useDocumentState() {
     [],
   );
 
+  const reorderActionItems = useCallback(
+    (itemId: string, beforeId: string | null) => {
+      setDocument((prev) => ({
+        ...prev,
+        actionItems: moveById(prev.actionItems, itemId, beforeId),
+      }));
+    },
+    [],
+  );
+
+  const moveGoal = useCallback(
+    (
+      fromList: "professionalGoals" | "personalGoals",
+      toList: "professionalGoals" | "personalGoals",
+      itemId: string,
+      beforeId: string | null,
+    ) => {
+      setDocument((prev) => {
+        if (fromList === toList) {
+          return {
+            ...prev,
+            [fromList]: moveById(prev[fromList], itemId, beforeId),
+          };
+        }
+        const { from, to } = moveBetween(
+          prev[fromList],
+          prev[toList],
+          itemId,
+          beforeId,
+        );
+        return { ...prev, [fromList]: from, [toList]: to };
+      });
+    },
+    [],
+  );
+
   const updateIdentity = useCallback(
     (patch: { icName?: string; managerName?: string }) => {
       setDocument((prev) => ({ ...prev, ...patch }));
@@ -144,6 +181,23 @@ export function useDocumentState() {
     [],
   );
 
+  const reorderAgendaEntries = useCallback(
+    (itemId: string, beforeId: string | null) => {
+      setDocument((prev) => ({
+        ...prev,
+        agendaEntries: moveById(prev.agendaEntries, itemId, beforeId),
+      }));
+    },
+    [],
+  );
+
+  const deleteAgendaEntry = useCallback((id: string) => {
+    setDocument((prev) => ({
+      ...prev,
+      agendaEntries: prev.agendaEntries.filter((entry) => entry.id !== id),
+    }));
+  }, []);
+
   return {
     document,
     updateSettings,
@@ -154,9 +208,13 @@ export function useDocumentState() {
     updateGoal,
     deleteGoal,
     incrementGoalProgress,
+    reorderActionItems,
+    moveGoal,
     updateIdentity,
     addAgendaEntry,
     updateAgendaEntry,
+    reorderAgendaEntries,
+    deleteAgendaEntry,
   };
 }
 

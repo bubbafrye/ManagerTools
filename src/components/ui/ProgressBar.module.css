@@ -57,7 +57,7 @@
   font-size: 8px;
   line-height: normal;
   font-weight: normal;
-  color: var(--document-text-color);
+  color: var(--document-body-text-color);
   white-space: nowrap;
 }
 
@@ -78,6 +78,6 @@
   margin: 0;
   font-size: 12px;
   line-height: normal;
-  color: var(--document-text-color);
+  color: var(--document-body-text-color);
   white-space: nowrap;
 }

@@ -11,7 +11,7 @@
   min-height: 20px;
   font-size: 16px;
   line-height: normal;
-  color: var(--document-text-color);
+  color: var(--document-body-text-color);
   word-break: break-word;
 }
 
@@ -39,7 +39,7 @@
   left: 0;
   font-size: 16px;
   line-height: normal;
-  color: color-mix(in srgb, var(--document-text-color) 35%, transparent);
+  color: color-mix(in srgb, var(--document-body-text-color) 35%, transparent);
   pointer-events: none;
   user-select: none;
 }

@@ -21,9 +21,15 @@ export function OneOnOnePage({
   addGoal,
   updateGoal,
   incrementGoalProgress,
+  reorderActionItems,
+  moveGoal,
+  deleteActionItem,
+  deleteGoal,
   updateIdentity,
   addAgendaEntry,
   updateAgendaEntry,
+  reorderAgendaEntries,
+  deleteAgendaEntry,
   updateSettings,
 }: OneOnOnePageProps) {
   const { settings } = document;
@@ -75,6 +81,8 @@ export function OneOnOnePage({
           showCompleted={settings.showCompletedTasks}
           onAdd={addActionItem}
           onUpdate={updateActionItem}
+          onReorder={reorderActionItems}
+          onDelete={deleteActionItem}
         />
         <Goals
           professionalGoals={document.professionalGoals}
@@ -95,6 +103,24 @@ export function OneOnOnePage({
           onIncrementPersonal={(id) =>
             incrementGoalProgress("personalGoals", id)
           }
+          onMove={(move) => {
+            if (
+              (move.fromList === "professionalGoals" ||
+                move.fromList === "personalGoals") &&
+              (move.toList === "professionalGoals" ||
+                move.toList === "personalGoals")
+            ) {
+              moveGoal(move.fromList, move.toList, move.itemId, move.beforeId);
+            }
+          }}
+          onDelete={(itemId, listId) => {
+            if (
+              listId === "professionalGoals" ||
+              listId === "personalGoals"
+            ) {
+              deleteGoal(listId, itemId);
+            }
+          }}
         />
       </div>
       <div className={styles.rightColumn} data-layout="agenda-column">
@@ -105,6 +131,8 @@ export function OneOnOnePage({
           editMode={editMode}
           onAdd={addAgendaEntry}
           onUpdate={updateAgendaEntry}
+          onReorder={reorderAgendaEntries}
+          onDelete={deleteAgendaEntry}
         />
       </div>
     </main>

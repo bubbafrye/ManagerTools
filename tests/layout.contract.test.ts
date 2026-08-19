@@ -63,6 +63,9 @@ describe("layout CSS contract", () => {
     assert.match(tokens, /--document-margins-sides:\s*50px/);
     assert.match(tokens, /--document-margins-bottom:/);
     assert.match(tokens, /--document-body-color:\s*#808080/);
+    assert.match(tokens, /--document-header-text-color:\s*#1c1c1c/);
+    assert.match(tokens, /--document-body-text-color:\s*#424242/);
+    assert.doesNotMatch(tokens, /--document-text-color:/);
     assert.doesNotMatch(tokens, /--document-margins-sides:\s*150px/);
   });
 });

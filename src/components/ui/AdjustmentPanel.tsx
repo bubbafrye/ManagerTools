@@ -5,7 +5,7 @@ import {
   type Appearance,
   type FontName,
 } from "../../appearance";
-import { ColorGroup } from "./Swatch";
+import { ColorGroup, Swatch } from "./Swatch";
 import { Tickbox } from "./Tickbox";
 import styles from "./AdjustmentPanel.module.css";
 
@@ -62,40 +62,48 @@ export function AdjustmentPanel({
         </div>
       </div>
       <div className={styles.row}>
-        <FontSelect
-          ariaLabel="header font"
-          value={appearance.headerFont}
-          onChange={(headerFont) => onChange({ headerFont })}
-        />
-        <FontSelect
-          ariaLabel="body font"
-          value={appearance.bodyFont}
-          onChange={(bodyFont) => onChange({ bodyFont })}
-        />
-        <ColorGroup
-          label="font"
-          colors={[
-            { color: "var(--document-text-color)", label: "font color" },
-          ]}
-        />
+        <div className={styles.fontPair}>
+          <FontSelect
+            ariaLabel="header font"
+            value={appearance.headerFont}
+            onChange={(headerFont) => onChange({ headerFont })}
+          />
+          <Swatch
+            token="--document-header-text-color"
+            label="header color"
+          />
+        </div>
+        <div className={styles.fontPair}>
+          <FontSelect
+            ariaLabel="body font"
+            value={appearance.bodyFont}
+            onChange={(bodyFont) => onChange({ bodyFont })}
+          />
+          <Swatch
+            token="--document-body-text-color"
+            label="body text color"
+          />
+        </div>
         <ColorGroup
           label="body"
           colors={[
-            { color: "var(--document-body-color)", label: "body color" },
+            { token: "--document-body-color", label: "body color" },
           ]}
         />
         <ColorGroup
           label="accent 1"
+          compact
           colors={[
-            { color: "var(--ui-ui-surface-color)", label: "accent 1 surface" },
-            { color: "var(--ui-ui-stroke-color)", label: "accent 1 stroke" },
+            { token: "--ui-ui-surface-color", label: "accent 1 surface" },
+            { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
           ]}
         />
         <ColorGroup
           label="accent 2"
+          compact
           colors={[
-            { color: "var(--ui-ui2-surface-color)", label: "accent 2 surface" },
-            { color: "var(--ui-ui2-stroke-color)", label: "accent 2 stroke" },
+            { token: "--ui-ui2-surface-color", label: "accent 2 surface" },
+            { token: "--ui-ui2-stroke-color", label: "accent 2 stroke" },
           ]}
         />
       </div>

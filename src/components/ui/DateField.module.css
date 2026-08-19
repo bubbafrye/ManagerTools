@@ -45,10 +45,12 @@
   font-size: 18px;
   min-height: 29px;
   width: 100%;
+  color: var(--document-header-text-color);
 }
 
 .due {
   width: 5.5rem;
   font-size: 16px;
   line-height: normal;
+  color: var(--document-body-text-color);
 }

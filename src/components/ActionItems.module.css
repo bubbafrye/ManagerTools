@@ -9,10 +9,3 @@
     var(--actions-actions-container-stroke);
   background: var(--actions-actions-container-surface);
 }
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}

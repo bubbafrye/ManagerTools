@@ -18,7 +18,7 @@ body,
 body {
   margin: 0;
   font-family: var(--document-text-body-font-face);
-  color: var(--document-text-color);
+  color: var(--document-body-text-color);
   background: var(--document-body-color);
 }
 

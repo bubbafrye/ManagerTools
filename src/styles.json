@@ -146,10 +146,17 @@
           }
         },
         {
-          "name": "document/text-color",
+          "name": "document/header-text-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
             "Mode 1": "#1c1c1c"
+          }
+        },
+        {
+          "name": "document/body-text-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "Mode 1": "#424242"
           }
         },
         {

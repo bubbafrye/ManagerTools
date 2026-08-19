@@ -30,12 +30,9 @@ export function EditIcon({ className }: IconProps) {
 
 export function AdjustIcon({ className }: IconProps) {
   return (
-    <img
+    <span
       className={`${styles.icon} ${styles.adjust} ${className ?? ""}`}
-      src="/assets/adjust.svg"
-      alt=""
-      width={24}
-      height={25}
+      aria-hidden
     />
   );
 }

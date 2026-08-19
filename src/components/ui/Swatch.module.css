@@ -2,9 +2,27 @@
   display: block;
   width: 24px;
   height: 24px;
+  padding: 0;
   flex-shrink: 0;
   border-radius: 3px;
   border: 0.5px solid #858585;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.swatch::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.swatch::-webkit-color-swatch {
+  border: none;
+  border-radius: 2.5px;
+}
+
+.swatch::-moz-color-swatch {
+  border: none;
+  border-radius: 2.5px;
 }
 
 .swatches {
@@ -23,4 +41,9 @@
   font-size: 14px;
   line-height: normal;
   white-space: nowrap;
+  color: var(--document-header-text-color);
+}
+
+.colorGroupCompact {
+  gap: 3px;
 }

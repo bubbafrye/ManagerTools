@@ -19,7 +19,8 @@
   --document-panel-radii: 4px;
   --document-panel-stroke-weight: 2px;
   --document-text-body-font-face: Inter, sans-serif;
-  --document-text-color: #1c1c1c;
+  --document-header-text-color: #1c1c1c;
+  --document-body-text-color: #424242;
   --document-text-header-font-face: Inter, sans-serif;
   --document-text-header-font-weight: bold;
   --goals-goals-container-surface: #acacac;

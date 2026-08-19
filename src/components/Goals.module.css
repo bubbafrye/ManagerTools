@@ -16,18 +16,11 @@
   font-weight: bold;
   font-size: 16px;
   line-height: normal;
-  color: var(--document-text-color);
+  color: var(--document-header-text-color);
 }
 
 .spacer {
   height: 20px;
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
 }
 
 .section {

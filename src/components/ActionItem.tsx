@@ -52,7 +52,7 @@ export function ActionItem({
           <DateField
             value={item.dueDate ?? ""}
             onChange={(dueDate) => onUpdate({ dueDate })}
-            ariaLabel="Due: "
+            ariaLabel="Due date"
           />
         </div>
       )}

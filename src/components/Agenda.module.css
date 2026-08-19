@@ -19,11 +19,3 @@
     var(--agenda-agenda-container-stroke);
   background: var(--agenda-agenda-container-surface);
 }
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  min-width: 0;
-}

@@ -18,7 +18,7 @@
   font-weight: var(--document-text-header-font-weight);
   font-size: 26px;
   line-height: normal;
-  color: var(--document-text-color);
+  color: var(--document-header-text-color);
   white-space: nowrap;
 }
 

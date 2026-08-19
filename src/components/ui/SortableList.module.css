@@ -1,0 +1,50 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.list:empty {
+  min-height: 48px;
+}
+
+.item {
+  cursor: grab;
+}
+
+.item:not(:last-child) {
+  padding-bottom: 10px;
+}
+
+.item:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0;
+}
+
+.ghost {
+  position: fixed;
+  z-index: 9;
+  margin: 0;
+  pointer-events: none;
+}
+
+.ghostDeletable {
+  opacity: 0.5;
+}
+
+.dropBefore {
+  box-shadow: 0 -2px 0 0 var(--document-header-text-color);
+}
+
+.dropAfter {
+  box-shadow: 0 2px 0 0 var(--document-header-text-color);
+}
+
+.pendingRemove {
+  display: none;
+}

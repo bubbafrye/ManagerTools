@@ -1,8 +1,10 @@
 .addItem {
   display: flex;
   align-items: center;
+  align-self: start;
   gap: 10px;
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   text-align: left;
 }
 
