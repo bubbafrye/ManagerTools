@@ -32,6 +32,11 @@
   height: 30px;
 }
 
+.addTheme {
+  width: 52px;
+  height: 52px;
+}
+
 .trash {
   position: relative;
   display: block;

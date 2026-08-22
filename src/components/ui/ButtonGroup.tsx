@@ -6,9 +6,11 @@ export type ButtonGroupVariant = "light" | "dark";
 
 type ButtonGroupProps = {
   variant: ButtonGroupVariant;
-  onYes: () => void;
-  onNo: () => void;
+  onYes?: () => void;
+  onNo?: () => void;
+  onOk?: () => void;
   noRef?: Ref<HTMLButtonElement>;
+  okRef?: Ref<HTMLButtonElement>;
 };
 
 function cssToHex(raw: string) {
@@ -41,8 +43,25 @@ export function ButtonGroup({
   variant,
   onYes,
   onNo,
+  onOk,
   noRef,
+  okRef,
 }: ButtonGroupProps) {
+  if (onOk) {
+    return (
+      <div className={`${styles.group} ${styles.solo} ${styles[variant]}`}>
+        <button
+          ref={okRef}
+          type="button"
+          className={`${styles.btn} ${styles.yes}`}
+          onClick={onOk}
+        >
+          OK
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={`${styles.group} ${styles[variant]}`}>
       <button

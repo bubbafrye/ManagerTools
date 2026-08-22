@@ -74,30 +74,14 @@
 }
 
 .saveTheme {
-  position: relative;
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
   padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  background: var(--containers-panel-surface);
+  border: 0;
+  background: transparent;
   cursor: pointer;
-}
-
-.saveThemeFace {
-  position: absolute;
-  inset: 2px;
-  background: var(--containers-card1-surface-color);
-}
-
-.saveThemeGlyph {
-  position: absolute;
-  inset: 0;
-  background-color: var(--containers-panel-stroke-color);
-  -webkit-mask: url("/assets/add-theme-glyph.svg") center / 52px 52px no-repeat;
-  mask: url("/assets/add-theme-glyph.svg") center / 52px 52px no-repeat;
-  pointer-events: none;
 }
 
 .options {

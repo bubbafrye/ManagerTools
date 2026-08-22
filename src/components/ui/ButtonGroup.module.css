@@ -6,6 +6,11 @@
   height: 30px;
 }
 
+.solo {
+  width: 100px;
+  justify-content: center;
+}
+
 .btn {
   position: relative;
   display: flex;

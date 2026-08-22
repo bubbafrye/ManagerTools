@@ -20,8 +20,8 @@ import {
   type ThemeId,
 } from "../../themes";
 import { ColorGroup, Swatch } from "./Swatch";
-import { ConfirmDelete } from "./ConfirmDelete";
-import { RandoIcon } from "./Icons";
+import { ConfirmDelete, FeedbackDialog } from "./ConfirmDelete";
+import { AddThemeIcon, RandoIcon } from "./Icons";
 import styles from "./AdjustmentPanel.module.css";
 
 type AdjustmentPanelProps = {
@@ -59,6 +59,7 @@ export function AdjustmentPanel({
     () => new Set(),
   );
   const [pendingDelete, setPendingDelete] = useState<ThemeId | null>(null);
+  const [saveNoticeOpen, setSaveNoticeOpen] = useState(false);
 
   const row1 = THEME_PRESET_ORDER.row1.filter((id) => !removedIds.has(id));
   const row2 = THEME_PRESET_ORDER.row2.filter((id) => !removedIds.has(id));
@@ -112,9 +113,9 @@ export function AdjustmentPanel({
           className={styles.saveTheme}
           aria-label="save theme"
           title="Save theme (coming soon)"
+          onClick={() => setSaveNoticeOpen(true)}
         >
-          <span className={styles.saveThemeFace} aria-hidden />
-          <span className={styles.saveThemeGlyph} aria-hidden />
+          <AddThemeIcon />
         </button>
         <div className={styles.options}>
           <div className={styles.row}>
@@ -227,6 +228,14 @@ export function AdjustmentPanel({
           </div>
         </div>
       </div>
+
+      {saveNoticeOpen ? (
+        <FeedbackDialog
+          kind="save-theme"
+          message="Save functionality not supported yet."
+          onOk={() => setSaveNoticeOpen(false)}
+        />
+      ) : null}
 
       {pendingDelete ? (
         <ConfirmDelete
@@ -369,6 +378,12 @@ type NumberFieldProps = {
 };
 
 function NumberField({ label, value, onChange }: NumberFieldProps) {
+  const [draft, setDraft] = useState(String(value));
+
+  useEffect(() => {
+    setDraft(String(value));
+  }, [value]);
+
   return (
     <label className={styles.numberField}>
       {label}
@@ -376,11 +391,17 @@ function NumberField({ label, value, onChange }: NumberFieldProps) {
         className={styles.numberInput}
         type="number"
         min={0}
-        value={value}
+        value={draft}
         aria-label={label}
         onChange={(event) => {
-          const next = Number.parseInt(event.target.value, 10);
+          const raw = event.target.value;
+          setDraft(raw);
+          if (raw === "") return;
+          const next = Number.parseInt(raw, 10);
           if (Number.isFinite(next) && next >= 0) onChange(next);
+        }}
+        onBlur={() => {
+          setDraft(String(value));
         }}
       />
     </label>

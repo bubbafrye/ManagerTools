@@ -39,7 +39,6 @@ const ALPHA_COLOR_TOKENS: Record<string, string> = {
 };
 
 const EXTRA_STROKE_WEIGHT_TOKENS = [
-  "--containers-card2-stroke-weight",
   "--ui-ui-stroke-weight",
   "--ui-ui2-stroke-weight",
 ] as const;

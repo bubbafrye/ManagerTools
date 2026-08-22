@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode, type Ref } from "react";
 import {
   ButtonGroup,
   buttonGroupVariantForText,
@@ -6,36 +6,44 @@ import {
 } from "./ButtonGroup";
 import styles from "./ConfirmDelete.module.css";
 
-type ConfirmDeleteProps = {
+type ConfirmChromeProps = {
   kind: string;
-  onYes: () => void;
-  onNo: () => void;
+  message: string;
+  onDismiss: () => void;
+  focusRef: Ref<HTMLButtonElement>;
+  children: ReactNode;
 };
 
-export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
+function ConfirmChrome({
+  kind,
+  message,
+  onDismiss,
+  focusRef,
+  children,
+}: ConfirmChromeProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const noRef = useRef<HTMLButtonElement>(null);
-  const onNoRef = useRef(onNo);
+  const onDismissRef = useRef(onDismiss);
   const titleId = useId();
-  const [variant] = useState(() => buttonGroupVariantForText(headerTextHex()));
 
-  onNoRef.current = onNo;
+  onDismissRef.current = onDismiss;
 
   useEffect(() => {
     const node = dialogRef.current;
     if (!node) return;
     if (!node.open) node.showModal();
-    noRef.current?.focus();
+    if (focusRef && typeof focusRef !== "function" && focusRef.current) {
+      focusRef.current.focus();
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      onNoRef.current();
+      onDismissRef.current();
     };
     const onCancel = (event: Event) => {
       event.preventDefault();
-      onNoRef.current();
+      onDismissRef.current();
     };
 
     window.addEventListener("keydown", onKeyDown, true);
@@ -45,7 +53,7 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
       node.removeEventListener("cancel", onCancel);
       if (node.open) node.close();
     };
-  }, []);
+  }, [focusRef]);
 
   return (
     <dialog
@@ -60,15 +68,49 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
     >
       <div className={styles.prompt}>
         <p className={styles.message} id={titleId}>
-          Are you sure you want to permanently remove this item?
+          {message}
         </p>
       </div>
-      <ButtonGroup
-        variant={variant}
-        noRef={noRef}
-        onYes={onYes}
-        onNo={onNo}
-      />
+      {children}
     </dialog>
+  );
+}
+
+type ConfirmDeleteProps = {
+  kind: string;
+  onYes: () => void;
+  onNo: () => void;
+};
+
+export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
+  const noRef = useRef<HTMLButtonElement>(null);
+  const [variant] = useState(() => buttonGroupVariantForText(headerTextHex()));
+
+  return (
+    <ConfirmChrome
+      kind={kind}
+      message="Are you sure you want to permanently remove this item?"
+      onDismiss={onNo}
+      focusRef={noRef}
+    >
+      <ButtonGroup variant={variant} noRef={noRef} onYes={onYes} onNo={onNo} />
+    </ConfirmChrome>
+  );
+}
+
+type FeedbackDialogProps = {
+  kind: string;
+  message: string;
+  onOk: () => void;
+};
+
+export function FeedbackDialog({ kind, message, onOk }: FeedbackDialogProps) {
+  const okRef = useRef<HTMLButtonElement>(null);
+  const [variant] = useState(() => buttonGroupVariantForText(headerTextHex()));
+
+  return (
+    <ConfirmChrome kind={kind} message={message} onDismiss={onOk} focusRef={okRef}>
+      <ButtonGroup variant={variant} okRef={okRef} onOk={onOk} />
+    </ConfirmChrome>
   );
 }

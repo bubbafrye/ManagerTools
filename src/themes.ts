@@ -275,6 +275,7 @@ export function applyThemeTokens(theme: ThemeTokens) {
     if (css) root.setProperty(css, value);
   }
   for (const [figmaName, value] of Object.entries(theme.floats)) {
+    if (figmaName === "containers/card2-stroke-weight") continue;
     const css = FIGMA_FLOAT_TO_CSS[figmaName];
     if (css) root.setProperty(css, `${value}px`);
   }

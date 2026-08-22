@@ -64,6 +64,10 @@ export function applyAppearance(appearance: Appearance) {
     `${appearance.cardBorder}px`,
   );
   root.setProperty(
+    "--containers-card2-stroke-weight",
+    `${appearance.cardBorder}px`,
+  );
+  root.setProperty(
     "--document-text-header-font-face",
     fontStack(appearance.headerFont),
   );

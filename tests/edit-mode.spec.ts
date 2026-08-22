@@ -74,8 +74,39 @@ test("number and font controls update CSS tokens live", async ({ page }) => {
   expect(tokens.panelStroke).toBe("5px");
   expect(tokens.card1).toBe("8px");
   expect(tokens.card1Stroke).toBe("7px");
-  expect(tokens.card2Stroke).toBe("2px");
+  expect(tokens.card2Stroke).toBe("7px");
   expect(tokens.header).toContain("Lora");
+});
+
+test("corner and border inputs can be cleared without changing the live tokens", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const corners = page.getByLabel("corners");
+  await corners.fill("12");
+  await corners.fill("");
+  await expect(corners).toHaveValue("");
+
+  const tokens = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    return {
+      panel: root.getPropertyValue("--containers-panel-radii").trim(),
+      card1: root.getPropertyValue("--containers-card1-radii").trim(),
+    };
+  });
+  expect(tokens.panel).toBe("12px");
+  expect(tokens.card1).toBe("8px");
+
+  await corners.fill("10");
+  const after = await page.evaluate(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--containers-panel-radii")
+      .trim(),
+  );
+  expect(after).toBe("10px");
 });
 
 test("due dates are per item and hidden in static until ticked", async ({
@@ -287,8 +318,7 @@ test("themes sit on the left, edit panel on the right, and rando still randomize
   expect(after.marginTop).toBe(before.marginTop);
   expect(after.marginSides).toBe(before.marginSides);
   expect(after.panelRadius).toBe(Math.ceil(after.containerRadius * 0.6));
-  expect(after.card2Stroke).toBeGreaterThanOrEqual(0);
-  expect(after.card2Stroke).toBeLessThanOrEqual(20);
+  expect(after.card2Stroke).toBe(after.panelStroke);
   expect(after.containerRadius).toBeGreaterThanOrEqual(0);
   expect(after.containerRadius).toBeLessThanOrEqual(50);
   expect(after.containerStroke).toBeGreaterThanOrEqual(0);
@@ -369,4 +399,20 @@ test("grey preset restores the original base palette", async ({ page }) => {
   expect(after.panel).toBe("#c6c6c6");
   expect(after.card1).toBe("#e2e2e2");
   expect(after.panelRadii).toBe("8px");
+});
+
+test("save theme shows a not-supported notice with OK", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+  await page.getByRole("button", { name: "save theme" }).click();
+
+  const dialog = page.locator("dialog[data-confirm-kind='save-theme']");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("Save functionality not supported yet.");
+  await expect(dialog.getByRole("button", { name: "OK" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "NO" })).toHaveCount(0);
+
+  await dialog.getByRole("button", { name: "OK" }).click();
+  await expect(dialog).toHaveCount(0);
 });
