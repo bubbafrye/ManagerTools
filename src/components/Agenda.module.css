@@ -14,8 +14,8 @@
   padding: 15px;
   width: 100%;
   min-width: 0;
-  border-radius: var(--container-container-radii);
-  border: var(--container-container-stroke-weight) solid
-    var(--agenda-agenda-container-stroke);
-  background: var(--agenda-agenda-container-surface);
+  border-radius: var(--containers-panel-radii);
+  border: var(--containers-panel-stroke-weight) solid
+    var(--containers-panel-stroke-color);
+  background: var(--containers-panel-surface);
 }

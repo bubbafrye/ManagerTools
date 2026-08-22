@@ -6,21 +6,6 @@ import {
 } from "./ButtonGroup";
 import styles from "./ConfirmDelete.module.css";
 
-const CONTAINER_LOOK: Record<string, { surface: string; stroke: string }> = {
-  "action-item": {
-    surface: "var(--actions-actions-container-surface)",
-    stroke: "var(--actions-actions-container-stroke)",
-  },
-  goal: {
-    surface: "var(--goals-goals-container-surface)",
-    stroke: "var(--goals-goals-containter-stroke)",
-  },
-  agenda: {
-    surface: "var(--agenda-agenda-container-surface)",
-    stroke: "var(--agenda-agenda-container-stroke)",
-  },
-};
-
 type ConfirmDeleteProps = {
   kind: string;
   onYes: () => void;
@@ -32,7 +17,6 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
   const noRef = useRef<HTMLButtonElement>(null);
   const onNoRef = useRef(onNo);
   const titleId = useId();
-  const look = CONTAINER_LOOK[kind] ?? CONTAINER_LOOK["action-item"];
   const [variant] = useState(() => buttonGroupVariantForText(headerTextHex()));
 
   onNoRef.current = onNo;
@@ -67,8 +51,12 @@ export function ConfirmDelete({ kind, onYes, onNo }: ConfirmDeleteProps) {
     <dialog
       ref={dialogRef}
       className={styles.dialog}
+      data-confirm-kind={kind}
       aria-labelledby={titleId}
-      style={{ background: look.surface, borderColor: look.stroke }}
+      style={{
+        background: "var(--containers-panel-surface)",
+        borderColor: "var(--containers-panel-stroke-color)",
+      }}
     >
       <div className={styles.prompt}>
         <p className={styles.message} id={titleId}>

@@ -1,0 +1,7 @@
+.ghost {
+  box-sizing: border-box;
+}
+
+.ghostDeletable {
+  opacity: 0.5;
+}

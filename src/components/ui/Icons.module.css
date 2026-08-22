@@ -6,6 +6,9 @@
 .addItem {
   width: 22px;
   height: 22px;
+  background-color: var(--document-header-text-color);
+  -webkit-mask: url("/assets/add-item.svg") center / contain no-repeat;
+  mask: url("/assets/add-item.svg") center / contain no-repeat;
 }
 
 .adjust {
@@ -19,12 +22,14 @@
 .edit {
   width: 25px;
   height: 22px;
+  background-color: var(--document-header-text-color);
+  -webkit-mask: url("/assets/edit.svg") center / contain no-repeat;
+  mask: url("/assets/edit.svg") center / contain no-repeat;
 }
 
-.rando,
-.sand {
-  width: 50px;
-  height: 50px;
+.rando {
+  width: 30px;
+  height: 30px;
 }
 
 .trash {

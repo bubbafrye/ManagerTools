@@ -1,113 +1,364 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type DragEvent } from "react";
 import {
   FONT_OPTIONS,
+  cardRadiiFromPanel,
   fontStack,
   type Appearance,
   type FontName,
 } from "../../appearance";
+import {
+  createDragGhost,
+  hideNativeDragImage,
+  moveDragGhost,
+  removeDragGhost,
+  type DragGhostSession,
+} from "../../dragGhost";
+import {
+  THEMES,
+  THEME_PRESET_ORDER,
+  themeCssVars,
+  type ThemeId,
+} from "../../themes";
 import { ColorGroup, Swatch } from "./Swatch";
-import { Tickbox } from "./Tickbox";
+import { ConfirmDelete } from "./ConfirmDelete";
+import { RandoIcon } from "./Icons";
 import styles from "./AdjustmentPanel.module.css";
 
 type AdjustmentPanelProps = {
   appearance: Appearance;
   onChange: (patch: Partial<Appearance>) => void;
-  showCompleted: boolean;
-  onShowCompletedChange: (showCompleted: boolean) => void;
+  onRandomize: () => void;
+  activeThemeId: ThemeId | null;
+  onSelectTheme: (id: ThemeId) => void;
+  onThemeRemoved?: (id: ThemeId) => void;
 };
+
+type ThemeDrag = {
+  id: ThemeId;
+  session: DragGhostSession;
+};
+
+let activeThemeDrag: ThemeDrag | null = null;
+
+function keepThemeDropAlive(event: Event) {
+  if (!activeThemeDrag?.session.outside) return;
+  event.preventDefault();
+  const transfer = (event as { dataTransfer?: DataTransfer }).dataTransfer;
+  if (transfer) transfer.dropEffect = "move";
+}
 
 export function AdjustmentPanel({
   appearance,
   onChange,
-  showCompleted,
-  onShowCompletedChange,
+  onRandomize,
+  activeThemeId,
+  onSelectTheme,
+  onThemeRemoved,
 }: AdjustmentPanelProps) {
+  const [removedIds, setRemovedIds] = useState<ReadonlySet<ThemeId>>(
+    () => new Set(),
+  );
+  const [pendingDelete, setPendingDelete] = useState<ThemeId | null>(null);
+
+  const row1 = THEME_PRESET_ORDER.row1.filter((id) => !removedIds.has(id));
+  const row2 = THEME_PRESET_ORDER.row2.filter((id) => !removedIds.has(id));
+
   return (
-    <div className={styles.panel} data-layout="adjustment-panel">
-      <div className={styles.row}>
-        <NumberField
-          label="panel radius"
-          value={appearance.panelRadius}
-          onChange={(panelRadius) => onChange({ panelRadius })}
-        />
-        <NumberField
-          label="panel border"
-          value={appearance.panelBorder}
-          onChange={(panelBorder) => onChange({ panelBorder })}
-        />
-        <NumberField
-          label="card radius"
-          value={appearance.cardRadius}
-          onChange={(cardRadius) => onChange({ cardRadius })}
-        />
-        <NumberField
-          label="card border"
-          value={appearance.cardBorder}
-          onChange={(cardBorder) => onChange({ cardBorder })}
-        />
-        <div className={styles.toggle}>
-          <Tickbox
-            checked={showCompleted}
-            onChange={onShowCompletedChange}
-            label="show completed"
-          />
+    <div className={styles.themeEditor} data-layout="theme-editor">
+      <div
+        className={styles.themes}
+        data-layout="themes"
+        data-themes-container=""
+      >
+        <div className={styles.themeRow}>
           <button
             type="button"
-            className={styles.toggleLabel}
-            tabIndex={-1}
-            onClick={() => onShowCompletedChange(!showCompleted)}
+            className={styles.themeButton}
+            aria-label="rando"
+            onClick={onRandomize}
           >
-            show completed
+            <RandoIcon />
           </button>
+          {row1.map((id) => (
+            <ThemeSwatchButton
+              key={id}
+              id={id}
+              selected={activeThemeId === id}
+              hidden={pendingDelete === id}
+              onSelect={onSelectTheme}
+              onRequestDelete={setPendingDelete}
+            />
+          ))}
+        </div>
+        <div className={styles.themeRow}>
+          {row2.map((id) => (
+            <ThemeSwatchButton
+              key={id}
+              id={id}
+              selected={activeThemeId === id}
+              hidden={pendingDelete === id}
+              onSelect={onSelectTheme}
+              onRequestDelete={setPendingDelete}
+            />
+          ))}
         </div>
       </div>
-      <div className={styles.row}>
-        <div className={styles.fontPair}>
-          <FontSelect
-            ariaLabel="header font"
-            value={appearance.headerFont}
-            onChange={(headerFont) => onChange({ headerFont })}
-          />
-          <Swatch
-            token="--document-header-text-color"
-            label="header color"
-          />
+
+      <div className={styles.spacer} aria-hidden />
+
+      <div className={styles.panel} data-layout="adjustment-panel">
+        <button
+          type="button"
+          className={styles.saveTheme}
+          aria-label="save theme"
+          title="Save theme (coming soon)"
+        >
+          <span className={styles.saveThemeFace} aria-hidden />
+          <span className={styles.saveThemeGlyph} aria-hidden />
+        </button>
+        <div className={styles.options}>
+          <div className={styles.row}>
+            <div className={styles.fontPair}>
+              <FontSelect
+                ariaLabel="header font"
+                value={appearance.headerFont}
+                onChange={(headerFont) => onChange({ headerFont })}
+              />
+              <Swatch
+                token="--document-header-text-color"
+                label="header color"
+              />
+            </div>
+            <div className={styles.fontPair}>
+              <FontSelect
+                ariaLabel="body font"
+                value={appearance.bodyFont}
+                onChange={(bodyFont) => onChange({ bodyFont })}
+              />
+              <Swatch
+                token="--document-body-text-color"
+                label="body text color"
+              />
+            </div>
+            <NumberField
+              label="corners"
+              value={appearance.panelRadius}
+              onChange={(panelRadius) =>
+                onChange({
+                  panelRadius,
+                  cardRadius: cardRadiiFromPanel(panelRadius),
+                })
+              }
+            />
+            <NumberField
+              label="outer borders"
+              value={appearance.panelBorder}
+              onChange={(panelBorder) => onChange({ panelBorder })}
+            />
+            <NumberField
+              label="inner borders"
+              value={appearance.cardBorder}
+              onChange={(cardBorder) => onChange({ cardBorder })}
+            />
+          </div>
+          <div className={styles.row}>
+            <ColorGroup
+              label="page"
+              colors={[{ token: "--document-body-color", label: "page color" }]}
+            />
+            <ColorGroup
+              label="panels"
+              compact
+              colors={[
+                {
+                  token: "--containers-panel-surface",
+                  label: "panels surface",
+                },
+                {
+                  token: "--containers-panel-stroke-color",
+                  label: "panels stroke",
+                },
+              ]}
+            />
+            <ColorGroup
+              label="section 1"
+              compact
+              colors={[
+                {
+                  token: "--containers-card1-surface-color",
+                  label: "section 1 surface",
+                },
+                {
+                  token: "--containers-card1-stroke-color",
+                  label: "section 1 stroke",
+                },
+              ]}
+            />
+            <ColorGroup
+              label="section 2"
+              compact
+              colors={[
+                {
+                  token: "--containers-card2-surface-color",
+                  label: "section 2 surface",
+                },
+                {
+                  token: "--containers-card2-stroke-color",
+                  label: "section 2 stroke",
+                },
+              ]}
+            />
+            <ColorGroup
+              label="accent 1"
+              compact
+              colors={[
+                { token: "--ui-ui-surface-color", label: "accent 1 surface" },
+                { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
+              ]}
+            />
+            <ColorGroup
+              label="accent 2"
+              compact
+              colors={[
+                { token: "--ui-ui2-surface-color", label: "accent 2 surface" },
+                { token: "--ui-ui2-stroke-color", label: "accent 2 stroke" },
+              ]}
+            />
+          </div>
         </div>
-        <div className={styles.fontPair}>
-          <FontSelect
-            ariaLabel="body font"
-            value={appearance.bodyFont}
-            onChange={(bodyFont) => onChange({ bodyFont })}
-          />
-          <Swatch
-            token="--document-body-text-color"
-            label="body text color"
-          />
-        </div>
-        <ColorGroup
-          label="body"
-          colors={[
-            { token: "--document-body-color", label: "body color" },
-          ]}
-        />
-        <ColorGroup
-          label="accent 1"
-          compact
-          colors={[
-            { token: "--ui-ui-surface-color", label: "accent 1 surface" },
-            { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
-          ]}
-        />
-        <ColorGroup
-          label="accent 2"
-          compact
-          colors={[
-            { token: "--ui-ui2-surface-color", label: "accent 2 surface" },
-            { token: "--ui-ui2-stroke-color", label: "accent 2 stroke" },
-          ]}
-        />
       </div>
+
+      {pendingDelete ? (
+        <ConfirmDelete
+          kind="theme"
+          onYes={() => {
+            const id = pendingDelete;
+            setRemovedIds((prev) => new Set(prev).add(id));
+            setPendingDelete(null);
+            onThemeRemoved?.(id);
+          }}
+          onNo={() => setPendingDelete(null)}
+        />
+      ) : null}
     </div>
+  );
+}
+
+type ThemeSwatchButtonProps = {
+  id: ThemeId;
+  selected: boolean;
+  hidden: boolean;
+  onSelect: (id: ThemeId) => void;
+  onRequestDelete: (id: ThemeId) => void;
+};
+
+function ThemeSwatchButton({
+  id,
+  selected,
+  hidden,
+  onSelect,
+  onRequestDelete,
+}: ThemeSwatchButtonProps) {
+  const vars = themeCssVars(THEMES[id]) as CSSProperties;
+  const suppressClick = useRef(false);
+
+  return (
+    <button
+      type="button"
+      className={`${styles.themeButton}${hidden ? ` ${styles.themeButtonHidden}` : ""}`}
+      aria-label={id}
+      aria-pressed={selected}
+      data-theme-id={id}
+      draggable
+      style={vars}
+      onClick={() => {
+        if (suppressClick.current) {
+          suppressClick.current = false;
+          return;
+        }
+        onSelect(id);
+      }}
+      onDragStart={(event: DragEvent<HTMLButtonElement>) => {
+        suppressClick.current = true;
+        const session = createDragGhost(
+          event.currentTarget,
+          event.clientX,
+          event.clientY,
+          {
+            clone: "self",
+            container: event.currentTarget.closest("[data-themes-container]"),
+          },
+        );
+        activeThemeDrag = { id, session };
+        event.dataTransfer.setData("text/plain", id);
+        event.dataTransfer.effectAllowed = "move";
+        hideNativeDragImage(event);
+        event.currentTarget.classList.add(styles.themeDragging);
+        document.addEventListener("dragover", keepThemeDropAlive);
+      }}
+      onDrag={(event) => {
+        if (!activeThemeDrag || activeThemeDrag.id !== id) return;
+        if (event.clientX === 0 && event.clientY === 0) return;
+        moveDragGhost(activeThemeDrag.session, event.clientX, event.clientY);
+      }}
+      onDragEnd={(event) => {
+        document.removeEventListener("dragover", keepThemeDropAlive);
+        event.currentTarget.classList.remove(styles.themeDragging);
+        const drag = activeThemeDrag;
+        removeDragGhost(drag?.session ?? null);
+        activeThemeDrag = null;
+        if (!drag || drag.id !== id) return;
+        if (drag.session.outside) onRequestDelete(id);
+      }}
+    >
+      <ThemeSwatchGraphic />
+    </button>
+  );
+}
+
+/** Inline of /assets/theme-swatch.svg so theme CSS vars on the button apply. */
+function ThemeSwatchGraphic() {
+  return (
+    <svg
+      className={styles.themeSwatch}
+      width={30}
+      height={30}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <rect
+        x="1"
+        y="1"
+        width="30"
+        height="30"
+        fill="var(--document-body-color)"
+      />
+      <rect
+        x="0.5"
+        y="0.5"
+        width="31"
+        height="31"
+        stroke="black"
+        strokeOpacity="0.5"
+      />
+      <path
+        d="M6 2.5H26C27.933 2.5 29.5 4.067 29.5 6V26C29.5 27.933 27.933 29.5 26 29.5H6C4.067 29.5 2.5 27.933 2.5 26V6C2.5 4.067 4.067 2.5 6 2.5Z"
+        fill="var(--containers-panel-surface)"
+        stroke="var(--containers-panel-stroke-color)"
+      />
+      <path
+        d="M7 5.5H25C25.8284 5.5 26.5 6.17157 26.5 7V14C26.5 14.8284 25.8284 15.5 25 15.5H7C6.17157 15.5 5.5 14.8284 5.5 14V7C5.5 6.17157 6.17157 5.5 7 5.5Z"
+        fill="var(--containers-card1-surface-color)"
+        stroke="var(--containers-card1-stroke-color)"
+      />
+      <path
+        d="M7 18.5H25C25.8284 18.5 26.5 19.1716 26.5 20V25C26.5 25.8284 25.8284 26.5 25 26.5H7C6.17157 26.5 5.5 25.8284 5.5 25V20C5.5 19.1716 6.17157 18.5 7 18.5Z"
+        fill="var(--containers-card2-surface-color)"
+        stroke="var(--containers-card1-stroke-color)"
+      />
+    </svg>
   );
 }
 

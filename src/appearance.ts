@@ -32,10 +32,15 @@ export type Appearance = {
   bodyFont: FontName;
 };
 
+export function cardRadiiFromPanel(panelRadius: number) {
+  return Math.ceil(panelRadius * 0.6);
+}
+
+/** Spring light geometry (Figma); fonts stay Inter until the user changes them. */
 export const DEFAULT_APPEARANCE: Appearance = {
-  panelRadius: 8,
+  panelRadius: 4,
   panelBorder: 2,
-  cardRadius: 4,
+  cardRadius: 2,
   cardBorder: 2,
   headerFont: "Inter",
   bodyFont: "Inter",
@@ -48,14 +53,14 @@ export function fontStack(name: FontName): string {
 
 export function applyAppearance(appearance: Appearance) {
   const root = document.documentElement.style;
-  root.setProperty("--container-container-radii", `${appearance.panelRadius}px`);
+  root.setProperty("--containers-panel-radii", `${appearance.panelRadius}px`);
   root.setProperty(
-    "--container-container-stroke-weight",
+    "--containers-panel-stroke-weight",
     `${appearance.panelBorder}px`,
   );
-  root.setProperty("--document-panel-radii", `${appearance.cardRadius}px`);
+  root.setProperty("--containers-card1-radii", `${appearance.cardRadius}px`);
   root.setProperty(
-    "--document-panel-stroke-weight",
+    "--containers-card1-stroke-weight",
     `${appearance.cardBorder}px`,
   );
   root.setProperty(
@@ -66,8 +71,4 @@ export function applyAppearance(appearance: Appearance) {
     "--document-text-body-font-face",
     fontStack(appearance.bodyFont),
   );
-}
-
-if (typeof document !== "undefined") {
-  applyAppearance(DEFAULT_APPEARANCE);
 }

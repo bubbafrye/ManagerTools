@@ -1,0 +1,7 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="1" y="1" width="30" height="30" fill="var(--document-body-color)"/>
+  <rect x="0.5" y="0.5" width="31" height="31" stroke="black" stroke-opacity="0.5"/>
+  <path d="M6 2.5H26C27.933 2.5 29.5 4.067 29.5 6V26C29.5 27.933 27.933 29.5 26 29.5H6C4.067 29.5 2.5 27.933 2.5 26V6C2.5 4.067 4.067 2.5 6 2.5Z" fill="var(--containers-panel-surface)" stroke="var(--containers-panel-stroke-color)"/>
+  <path d="M7 5.5H25C25.8284 5.5 26.5 6.17157 26.5 7V14C26.5 14.8284 25.8284 15.5 25 15.5H7C6.17157 15.5 5.5 14.8284 5.5 14V7C5.5 6.17157 6.17157 5.5 7 5.5Z" fill="var(--containers-card1-surface-color)" stroke="var(--containers-card1-stroke-color)"/>
+  <path d="M7 18.5H25C25.8284 18.5 26.5 19.1716 26.5 20V25C26.5 25.8284 25.8284 26.5 25 26.5H7C6.17157 26.5 5.5 25.8284 5.5 25V20C5.5 19.1716 6.17157 18.5 7 18.5Z" fill="var(--containers-card2-surface-color)" stroke="var(--containers-card1-stroke-color)"/>
+</svg>

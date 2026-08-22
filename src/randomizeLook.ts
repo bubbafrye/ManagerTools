@@ -1,4 +1,10 @@
-import { FONT_OPTIONS, fontStack, type Appearance, type FontName } from "./appearance.ts";
+import {
+  FONT_OPTIONS,
+  applyAppearance,
+  cardRadiiFromPanel,
+  type Appearance,
+  type FontName,
+} from "./appearance.ts";
 
 export const LOOK_TOKENS_CHANGED = "look-tokens-changed";
 
@@ -9,26 +15,16 @@ export const TEXT_TOKENS = [
 
 export const SURFACE_TOKENS = [
   "--document-body-color",
-  "--actions-actions-container-surface",
-  "--actions-actions-panel-surface",
-  "--goals-goals-container-surface",
-  "--goals-goals-panel-surface",
-  "--agenda-agenda-container-surface",
-  "--agenda-agenda-panel-surface",
-  "--notes-notes-container-surface",
-  "--notes-notes-panel-surface",
+  "--containers-panel-surface",
+  "--containers-card1-surface-color",
+  "--containers-card2-surface-color",
   "--ui-ui-surface-color",
 ] as const;
 
 const STROKE_COLOR_TOKENS = [
-  "--actions-actions-container-stroke",
-  "--actions-actions-panel-stroke",
-  "--agenda-agenda-container-stroke",
-  "--agenda-agenda-panel-stroke",
-  "--goals-goals-containter-stroke",
-  "--goals-goals-panel-stroke",
-  "--notes-notes-container-stroke",
-  "--notes-notes-panel-stroke",
+  "--containers-panel-stroke-color",
+  "--containers-card1-stroke-color",
+  "--containers-card2-stroke-color",
   "--ui-ui-stroke-color",
   "--ui-ui2-stroke-color",
   "--ui-ui2-surface-color",
@@ -43,20 +39,9 @@ const ALPHA_COLOR_TOKENS: Record<string, string> = {
 };
 
 const EXTRA_STROKE_WEIGHT_TOKENS = [
+  "--containers-card2-stroke-weight",
   "--ui-ui-stroke-weight",
   "--ui-ui2-stroke-weight",
-] as const;
-
-export const AQUATIC_ACCENT_TOKENS = [
-  "--ui-ui2-surface-color",
-  "--ui-ui2-stroke-color",
-  "--ui-ui-stroke-color",
-  "--agenda-agenda-container-stroke",
-  "--agenda-agenda-panel-stroke",
-  "--column-stop1",
-  "--column-stop2",
-  "--column-stop3",
-  "--column-stop4",
 ] as const;
 
 type Rng = () => number;
@@ -72,17 +57,6 @@ type LookRecipe = {
   base?: Palette;
   accent?: Palette;
   accentTokens?: readonly string[];
-};
-
-const WARM_NEUTRAL: Palette = { hue: [18, 36], sat: [0.42, 0.78] };
-const AQUATIC: Palette = { hue: [176, 196], sat: [0.45, 0.78] };
-
-const SAND_RECIPE: LookRecipe = {
-  radius: [0, 9],
-  stroke: [0, 4],
-  base: WARM_NEUTRAL,
-  accent: AQUATIC,
-  accentTokens: AQUATIC_ACCENT_TOKENS,
 };
 
 export type RandomizedLook = {
@@ -270,7 +244,7 @@ function randomizeWith(recipe: LookRecipe, rng: Rng): RandomizedLook {
   return {
     appearance: {
       panelRadius: containerRadius,
-      cardRadius: containerRadius / 2,
+      cardRadius: cardRadiiFromPanel(containerRadius),
       panelBorder: randInt(rng, recipe.stroke[0], recipe.stroke[1]),
       cardBorder: randInt(rng, recipe.stroke[0], recipe.stroke[1]),
       headerFont: pickFont(rng),
@@ -285,42 +259,14 @@ export function randomizeLook(rng: Rng = Math.random): RandomizedLook {
   return randomizeWith({ radius: [0, 50], stroke: [0, 20] }, rng);
 }
 
-export function randomizeSandLook(rng: Rng = Math.random): RandomizedLook {
-  return randomizeWith(SAND_RECIPE, rng);
-}
-
 export function applyRandomizedLook(look: RandomizedLook) {
   const root = document.documentElement.style;
+  applyAppearance(look.appearance);
   for (const [token, value] of Object.entries(look.colors)) {
     root.setProperty(token, value);
   }
   for (const [token, value] of Object.entries(look.strokeWeights)) {
     root.setProperty(token, value);
   }
-  root.setProperty(
-    "--container-container-radii",
-    `${look.appearance.panelRadius}px`,
-  );
-  root.setProperty(
-    "--document-panel-radii",
-    `${look.appearance.cardRadius}px`,
-  );
-  root.setProperty(
-    "--container-container-stroke-weight",
-    `${look.appearance.panelBorder}px`,
-  );
-  root.setProperty(
-    "--document-panel-stroke-weight",
-    `${look.appearance.cardBorder}px`,
-  );
-  root.setProperty("--actions-panel-radius", `${look.appearance.cardRadius}px`);
-  root.setProperty(
-    "--document-text-header-font-face",
-    fontStack(look.appearance.headerFont),
-  );
-  root.setProperty(
-    "--document-text-body-font-face",
-    fontStack(look.appearance.bodyFont),
-  );
   window.dispatchEvent(new Event(LOOK_TOKENS_CHANGED));
 }

@@ -6,24 +6,20 @@ type IconProps = {
 
 export function AddItemIcon({ className }: IconProps) {
   return (
-    <img
+    <span
       className={`${styles.icon} ${styles.addItem} ${className ?? ""}`}
-      src="/assets/add-item.svg"
-      alt=""
-      width={22}
-      height={22}
+      data-icon="add-item"
+      aria-hidden
     />
   );
 }
 
 export function EditIcon({ className }: IconProps) {
   return (
-    <img
+    <span
       className={`${styles.icon} ${styles.edit} ${className ?? ""}`}
-      src="/assets/edit.svg"
-      alt=""
-      width={25}
-      height={22}
+      data-icon="edit"
+      aria-hidden
     />
   );
 }
@@ -34,20 +30,8 @@ export function RandoIcon({ className }: IconProps) {
       className={`${styles.icon} ${styles.rando} ${className ?? ""}`}
       src="/assets/rando.svg"
       alt=""
-      width={50}
-      height={50}
-    />
-  );
-}
-
-export function SandIcon({ className }: IconProps) {
-  return (
-    <img
-      className={`${styles.icon} ${styles.sand} ${className ?? ""}`}
-      src="/assets/sand.svg"
-      alt=""
-      width={50}
-      height={50}
+      width={30}
+      height={30}
     />
   );
 }

@@ -3,7 +3,6 @@ import { Goal } from "./Goal";
 import { AddItem } from "./ui/AddItem";
 import { SectionHeader } from "./ui/SectionHeader";
 import { SortableList, type SortableMove } from "./ui/SortableList";
-import { SwatchRow } from "./ui/Swatch";
 import styles from "./Goals.module.css";
 
 type GoalListId = "professionalGoals" | "personalGoals";
@@ -61,7 +60,6 @@ function GoalSection({
 type GoalsProps = {
   professionalGoals: GoalData[];
   personalGoals: GoalData[];
-  editMode: boolean;
   showCompleted: boolean;
   onAddProfessional: () => void;
   onAddPersonal: () => void;
@@ -76,7 +74,6 @@ type GoalsProps = {
 export function Goals({
   professionalGoals,
   personalGoals,
-  editMode,
   showCompleted,
   onAddProfessional,
   onAddPersonal,
@@ -93,33 +90,7 @@ export function Goals({
       aria-label="Goals"
       data-sortable-container="goal"
     >
-      <SectionHeader
-        title="Goals"
-        trailing={
-          editMode ? (
-            <SwatchRow
-              colors={[
-                {
-                  token: "--goals-goals-container-surface",
-                  label: "Goals container surface",
-                },
-                {
-                  token: "--goals-goals-containter-stroke",
-                  label: "Goals container stroke",
-                },
-                {
-                  token: "--goals-goals-panel-surface",
-                  label: "Goals card surface",
-                },
-                {
-                  token: "--goals-goals-panel-stroke",
-                  label: "Goals card stroke",
-                },
-              ]}
-            />
-          ) : null
-        }
-      />
+      <SectionHeader title="Goals" />
       <GoalSection
         title="Professional Goals:"
         listId="professionalGoals"

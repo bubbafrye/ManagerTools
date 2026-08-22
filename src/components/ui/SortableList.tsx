@@ -1,5 +1,11 @@
 import { useState, type DragEvent, type ReactNode } from "react";
-import { isCardDeletable } from "../../reorder";
+import {
+  createDragGhost,
+  hideNativeDragImage,
+  moveDragGhost,
+  removeDragGhost,
+  type DragGhostSession,
+} from "../../dragGhost";
 import { ConfirmDelete } from "./ConfirmDelete";
 import styles from "./SortableList.module.css";
 
@@ -28,12 +34,8 @@ type DragPayload = {
 };
 
 type ActiveDrag = DragPayload & {
-  container: Element | null;
   dropped: boolean;
-  outside: boolean;
-  ghost: HTMLElement | null;
-  offsetX: number;
-  offsetY: number;
+  session: DragGhostSession;
 };
 
 type Over = { id: string; edge: "before" | "after" } | "list" | null;
@@ -43,56 +45,8 @@ const INTERACTIVE =
 
 let activeDrag: ActiveDrag | null = null;
 
-function hideNativeGhost(event: DragEvent) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 1;
-  canvas.height = 1;
-  canvas.style.position = "fixed";
-  canvas.style.left = "-100px";
-  canvas.style.top = "-100px";
-  document.body.appendChild(canvas);
-  event.dataTransfer.setDragImage(canvas, 0, 0);
-  requestAnimationFrame(() => canvas.remove());
-}
-
-function createGhost(source: HTMLElement, clientX: number, clientY: number) {
-  const visual = (source.firstElementChild as HTMLElement | null) ?? source;
-  const rect = visual.getBoundingClientRect();
-  const ghost = visual.cloneNode(true) as HTMLElement;
-  ghost.removeAttribute("data-sortable-id");
-  ghost.setAttribute("aria-hidden", "true");
-  ghost.classList.add(styles.ghost);
-  ghost.style.width = `${rect.width}px`;
-  ghost.style.left = `${rect.left}px`;
-  ghost.style.top = `${rect.top}px`;
-  document.body.appendChild(ghost);
-  return {
-    ghost,
-    offsetX: clientX - rect.left,
-    offsetY: clientY - rect.top,
-  };
-}
-
-function moveGhost(drag: ActiveDrag, clientX: number, clientY: number) {
-  if (!drag.ghost) return;
-  drag.ghost.style.left = `${clientX - drag.offsetX}px`;
-  drag.ghost.style.top = `${clientY - drag.offsetY}px`;
-  if (drag.container) {
-    drag.outside = isCardDeletable(
-      drag.ghost.getBoundingClientRect(),
-      drag.container.getBoundingClientRect(),
-    );
-  }
-  drag.ghost.classList.toggle(styles.ghostDeletable, drag.outside);
-}
-
-function removeGhost(drag: ActiveDrag | null) {
-  drag?.ghost?.remove();
-  if (drag) drag.ghost = null;
-}
-
 function keepDropAlive(event: Event) {
-  if (!activeDrag?.outside) return;
+  if (!activeDrag?.session.outside) return;
   event.preventDefault();
   const transfer = (event as { dataTransfer?: DataTransfer }).dataTransfer;
   if (transfer) transfer.dropEffect = "move";
@@ -193,43 +147,43 @@ export function SortableList<T extends Item>({
                   return;
                 }
                 const payload: DragPayload = { kind, listId, itemId: item.id };
-                const preview = createGhost(
+                const session = createDragGhost(
                   event.currentTarget,
                   event.clientX,
                   event.clientY,
+                  {
+                    clone: "child",
+                    container: event.currentTarget.closest(
+                      "[data-sortable-container]",
+                    ),
+                  },
                 );
                 activeDrag = {
                   ...payload,
-                  container: event.currentTarget.closest(
-                    "[data-sortable-container]",
-                  ),
                   dropped: false,
-                  outside: false,
-                  ghost: preview.ghost,
-                  offsetX: preview.offsetX,
-                  offsetY: preview.offsetY,
+                  session,
                 };
                 event.dataTransfer.setData("text/plain", JSON.stringify(payload));
                 event.dataTransfer.effectAllowed = "move";
-                hideNativeGhost(event);
+                hideNativeDragImage(event);
                 event.currentTarget.classList.add(styles.dragging);
                 document.addEventListener("dragover", keepDropAlive);
               }}
               onDrag={(event) => {
                 if (!activeDrag) return;
                 if (event.clientX === 0 && event.clientY === 0) return;
-                moveGhost(activeDrag, event.clientX, event.clientY);
+                moveDragGhost(activeDrag.session, event.clientX, event.clientY);
               }}
               onDragEnd={(event) => {
                 document.removeEventListener("dragover", keepDropAlive);
                 event.currentTarget.classList.remove(styles.dragging);
                 event.currentTarget.draggable = true;
                 const drag = activeDrag;
-                removeGhost(drag);
+                removeDragGhost(drag?.session ?? null);
                 activeDrag = null;
                 setOver(null);
                 if (!drag || drag.dropped || drag.itemId !== item.id) return;
-                if (drag.outside) setPendingDelete(drag.itemId);
+                if (drag.session.outside) setPendingDelete(drag.itemId);
               }}
               onDragOver={(event) => {
                 if (!allow(event)) return;

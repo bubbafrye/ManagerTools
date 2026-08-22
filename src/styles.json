@@ -8,268 +8,230 @@
       "modes": [
         {
           "id": "11:0",
-          "name": "Mode 1"
+          "name": "default"
+        },
+        {
+          "id": "4223:0",
+          "name": "beige"
+        },
+        {
+          "id": "4223:1",
+          "name": "beach"
         }
       ],
       "variables": [
         {
-          "name": "actions/actions-container-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#e6e6e6"
-          }
-        },
-        {
-          "name": "actions/actions-container-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#ffffff"
-          }
-        },
-        {
-          "name": "actions/actions-panel-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#5e5e5e"
-          }
-        },
-        {
-          "name": "actions/actions-panel-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#c6c6c6"
-          }
-        },
-        {
-          "name": "agenda/agenda-container-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#929292"
-          }
-        },
-        {
-          "name": "agenda/agenda-container-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#c7c7c7"
-          }
-        },
-        {
-          "name": "agenda/agenda-panel-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#929292"
-          }
-        },
-        {
-          "name": "agenda/agenda-panel-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#e0e0e0"
-          }
-        },
-        {
-          "name": "container/container-radii",
+          "name": "containers/panel-radii",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 8
-          }
+          "valuesByMode": { "default": 8, "beige": 4, "beach": 4 }
         },
         {
-          "name": "container/container-stroke-weight",
+          "name": "containers/panel-stroke-weight",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 2
-          }
+          "valuesByMode": { "default": 2, "beige": 2, "beach": 2 }
         },
         {
-          "name": "document/IC-name",
-          "resolvedType": "STRING",
-          "valuesByMode": {
-            "Mode 1": "IC"
-          }
-        },
-        {
-          "name": "document/manager-name",
-          "resolvedType": "STRING",
-          "valuesByMode": {
-            "Mode 1": "Manager"
-          }
-        },
-        {
-          "name": "document/body-color",
+          "name": "containers/panel-surface",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#808080"
+            "default": "#c6c6c6",
+            "beige": "#d5d0bb",
+            "beach": "#fff0c2"
           }
         },
         {
-          "name": "document/margins-bottom",
+          "name": "containers/panel-stroke-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "default": "#5e5e5e",
+            "beige": "#787569",
+            "beach": "#915622"
+          }
+        },
+        {
+          "name": "containers/card1-radii",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 50
-          }
+          "valuesByMode": { "default": 4, "beige": 2, "beach": 2 }
         },
         {
-          "name": "document/margins-sides",
+          "name": "containers/card1-stroke-weight",
           "resolvedType": "FLOAT",
+          "valuesByMode": { "default": 2, "beige": 2, "beach": 2 }
+        },
+        {
+          "name": "containers/card1-surface-color",
+          "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": 50
+            "default": "#e2e2e2",
+            "beige": "#e9e4cd",
+            "beach": "#f1c991"
           }
         },
         {
-          "name": "document/margins-top",
+          "name": "containers/card1-stroke-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "default": "#5e5e5e",
+            "beige": "#787569",
+            "beach": "#915622"
+          }
+        },
+        {
+          "name": "containers/card2-radii",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 30
-          }
+          "valuesByMode": { "default": 4, "beige": 8, "beach": 8 }
         },
         {
-          "name": "document/panel-radii",
+          "name": "containers/card2-stroke-weight",
           "resolvedType": "FLOAT",
+          "valuesByMode": { "default": 2, "beige": 2, "beach": 2 }
+        },
+        {
+          "name": "containers/card2-surface-color",
+          "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": 4
+            "default": "#d4d4d4",
+            "beige": "#d5d0bb",
+            "beach": "#fff0c2"
           }
         },
         {
-          "name": "document/panel-stroke-weight",
-          "resolvedType": "FLOAT",
+          "name": "containers/card2-stroke-color",
+          "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": 2
-          }
-        },
-        {
-          "name": "document/text-body-font-face",
-          "resolvedType": "STRING",
-          "valuesByMode": {
-            "Mode 1": "Inter"
+            "default": "#5e5e5e",
+            "beige": "#787569",
+            "beach": "#915622"
           }
         },
         {
           "name": "document/header-text-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#1c1c1c"
+            "default": "#1c1c1c",
+            "beige": "#4f4d46",
+            "beach": "#380012"
           }
         },
         {
           "name": "document/body-text-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#424242"
+            "default": "#424242",
+            "beige": "#423c2a",
+            "beach": "#3a1b00"
           }
+        },
+        {
+          "name": "document/body-color",
+          "resolvedType": "COLOR",
+          "valuesByMode": {
+            "default": "#808080",
+            "beige": "#cec8aa",
+            "beach": "#8ec1b8"
+          }
+        },
+        {
+          "name": "document/margins-sides",
+          "resolvedType": "FLOAT",
+          "valuesByMode": { "default": 50, "beige": 50, "beach": 50 }
+        },
+        {
+          "name": "document/margins-top",
+          "resolvedType": "FLOAT",
+          "valuesByMode": { "default": 30, "beige": 30, "beach": 30 }
+        },
+        {
+          "name": "document/margins-bottom",
+          "resolvedType": "FLOAT",
+          "valuesByMode": { "default": 50, "beige": 50, "beach": 50 }
         },
         {
           "name": "document/text-header-font-face",
           "resolvedType": "STRING",
           "valuesByMode": {
-            "Mode 1": "Inter"
+            "default": "Inter",
+            "beige": "Inter",
+            "beach": "Inter"
           }
         },
         {
           "name": "document/text-header-font-weight",
           "resolvedType": "STRING",
           "valuesByMode": {
-            "Mode 1": "bold"
+            "default": "bold",
+            "beige": "bold",
+            "beach": "bold"
           }
         },
         {
-          "name": "goals/goals-container-surface",
-          "resolvedType": "COLOR",
+          "name": "document/text-body-font-face",
+          "resolvedType": "STRING",
           "valuesByMode": {
-            "Mode 1": "#acacac"
+            "default": "Inter",
+            "beige": "Inter",
+            "beach": "Inter"
           }
         },
         {
-          "name": "goals/goals-containter-stroke",
-          "resolvedType": "COLOR",
+          "name": "document/manager-name",
+          "resolvedType": "STRING",
           "valuesByMode": {
-            "Mode 1": "#929292"
+            "default": "Manager",
+            "beige": "Manager",
+            "beach": "Manager"
           }
         },
         {
-          "name": "goals/goals-panel-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#aeaeae"
-          }
+          "name": "document/IC-name",
+          "resolvedType": "STRING",
+          "valuesByMode": { "default": "IC", "beige": "IC", "beach": "IC" }
         },
         {
-          "name": "goals/goals-panel-surface",
+          "name": "ui/ui-surface-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#dcdcdc"
-          }
-        },
-        {
-          "name": "notes/notes-container-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#929292"
-          }
-        },
-        {
-          "name": "notes/notes-container-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#f1f1f1"
-          }
-        },
-        {
-          "name": "notes/notes-panel-stroke",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#929292"
-          }
-        },
-        {
-          "name": "notes/notes-panel-surface",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#f1f1f1"
+            "default": "#ffffff",
+            "beige": "#fff8d9",
+            "beach": "#fff5d8"
           }
         },
         {
           "name": "ui/ui-stroke-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#5e5e5e"
+            "default": "#5e5e5e",
+            "beige": "#787569",
+            "beach": "#915622"
           }
         },
         {
           "name": "ui/ui-stroke-weight",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 1
-          }
+          "valuesByMode": { "default": 1, "beige": 1, "beach": 1 }
         },
         {
-          "name": "ui/ui-surface-color",
+          "name": "ui/ui2-surface-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#ffffff"
+            "default": "#414141",
+            "beige": "#4f4724",
+            "beach": "#673b1e"
           }
         },
         {
           "name": "ui/ui2-stroke-color",
           "resolvedType": "COLOR",
           "valuesByMode": {
-            "Mode 1": "#545454"
+            "default": "#545454",
+            "beige": "#787569",
+            "beach": "#915622"
           }
         },
         {
           "name": "ui/ui2-stroke-weight",
           "resolvedType": "FLOAT",
-          "valuesByMode": {
-            "Mode 1": 0
-          }
-        },
-        {
-          "name": "ui/ui2-surface-color",
-          "resolvedType": "COLOR",
-          "valuesByMode": {
-            "Mode 1": "#414141"
-          }
+          "valuesByMode": { "default": 0, "beige": 0, "beach": 0 }
         }
       ]
     },
@@ -286,37 +248,27 @@
         {
           "name": "column/base",
           "resolvedType": "COLOR",
-          "valuesByMode": {
-            "green": "#c1c879"
-          }
+          "valuesByMode": { "green": "#c1c879" }
         },
         {
           "name": "column/stop1",
           "resolvedType": "COLOR",
-          "valuesByMode": {
-            "green": "#ffffffb2"
-          }
+          "valuesByMode": { "green": "#ffffffb2" }
         },
         {
           "name": "column/stop2",
           "resolvedType": "COLOR",
-          "valuesByMode": {
-            "green": "#ffffff8c"
-          }
+          "valuesByMode": { "green": "#ffffff8c" }
         },
         {
           "name": "column/stop3",
           "resolvedType": "COLOR",
-          "valuesByMode": {
-            "green": "#ffffff66"
-          }
+          "valuesByMode": { "green": "#ffffff66" }
         },
         {
           "name": "column/stop4",
           "resolvedType": "COLOR",
-          "valuesByMode": {
-            "green": "#ffffff40"
-          }
+          "valuesByMode": { "green": "#ffffff40" }
         }
       ]
     }

@@ -1,12 +1,112 @@
+.themeEditor {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-width: 0;
+}
+
+.themes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 15px;
+  border-radius: var(--containers-panel-radii);
+  background: var(--ui-ui-surface-color);
+}
+
+.themeRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.themeButton {
+  display: block;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+}
+
+.themeButton:active {
+  cursor: grabbing;
+}
+
+.themeButton[aria-pressed="true"] {
+  outline: 2px solid var(--ui-ui-stroke-color);
+  outline-offset: 1px;
+}
+
+.themeDragging {
+  opacity: 0;
+}
+
+.themeButtonHidden {
+  display: none;
+}
+
+.themeSwatch {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+
+.spacer {
+  flex: 1 0 0;
+  min-width: 1px;
+  height: 37px;
+}
+
 .panel {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 15px;
+  border-radius: var(--containers-panel-radii);
+  background: var(--ui-ui-surface-color);
+}
+
+.saveTheme {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  background: var(--containers-panel-surface);
+  cursor: pointer;
+}
+
+.saveThemeFace {
+  position: absolute;
+  inset: 2px;
+  background: var(--containers-card1-surface-color);
+}
+
+.saveThemeGlyph {
+  position: absolute;
+  inset: 0;
+  background-color: var(--containers-panel-stroke-color);
+  -webkit-mask: url("/assets/add-theme-glyph.svg") center / 52px 52px no-repeat;
+  mask: url("/assets/add-theme-glyph.svg") center / 52px 52px no-repeat;
+  pointer-events: none;
+}
+
+.options {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: max-content;
-  max-width: 100%;
-  padding: 10px;
-  border-radius: var(--container-container-radii);
-  background: rgba(255, 255, 255, 0.5);
+  padding-left: 10px;
+  padding-right: 10px;
+  border-left: 2px solid var(--containers-panel-stroke-color);
 }
 
 .row {
@@ -18,7 +118,7 @@
 .numberField {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
   font-size: 14px;
   line-height: normal;
   white-space: nowrap;
@@ -30,7 +130,7 @@
   height: 21px;
   padding: 0;
   border: 1px solid var(--ui-ui-stroke-color);
-  border-radius: 4px;
+  border-radius: var(--containers-card1-radii);
   background: var(--ui-ui-surface-color);
   font-size: 12px;
   line-height: normal;
@@ -53,7 +153,7 @@
 
 .fontSelect {
   position: relative;
-  width: 111.588px;
+  width: 112px;
   flex-shrink: 0;
 }
 
@@ -63,7 +163,7 @@
   height: 24px;
   padding: 2px 16px 2px 8px;
   border: 1px solid var(--ui-ui-stroke-color);
-  border-radius: 4px;
+  border-radius: var(--containers-card1-radii);
   background: var(--ui-ui-surface-color);
   font-size: 14px;
   line-height: normal;
@@ -99,7 +199,7 @@
   overflow-y: auto;
   padding: 2px 0;
   border: 1px solid var(--ui-ui-stroke-color);
-  border-radius: 4px;
+  border-radius: var(--containers-card1-radii);
   background: var(--ui-ui-surface-color);
 }
 
@@ -115,20 +215,4 @@
 .fontOption:hover,
 .fontOption[aria-selected="true"] {
   background: rgba(28, 28, 28, 0.08);
-}
-
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 14px;
-  line-height: normal;
-  white-space: nowrap;
-  color: var(--document-header-text-color);
-}
-
-.toggleLabel {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
 }

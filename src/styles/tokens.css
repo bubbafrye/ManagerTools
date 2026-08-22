@@ -1,43 +1,34 @@
-/* Generated from src/styles.json — One-on-one collection (Mode 1) */
+/* Generated from Figma One-on-one — spring light mode */
 :root {
-  --actions-actions-container-stroke: #e6e6e6;
-  --actions-actions-container-surface: #ffffff;
-  --actions-actions-panel-stroke: #5e5e5e;
-  --actions-actions-panel-surface: #c6c6c6;
-  --agenda-agenda-container-stroke: #929292;
-  --agenda-agenda-container-surface: #c7c7c7;
-  --agenda-agenda-panel-stroke: #929292;
-  --agenda-agenda-panel-surface: #e0e0e0;
-  --container-container-radii: 8px;
-  --container-container-stroke-weight: 2px;
-  --document-body-color: #808080;
+  --containers-panel-radii: 4px;
+  --containers-panel-stroke-weight: 2px;
+  --containers-panel-surface: #b2d3b1;
+  --containers-panel-stroke-color: #2e632c;
+  --containers-card1-radii: 2px;
+  --containers-card1-stroke-weight: 2px;
+  --containers-card1-surface-color: #e8f3e8;
+  --containers-card1-stroke-color: #2e632c;
+  --containers-card2-radii: 8px;
+  --containers-card2-stroke-weight: 2px;
+  --containers-card2-surface-color: #c6ddc5;
+  --containers-card2-stroke-color: #2e632c;
+  --document-body-color: #d1e7d0;
   --document-ic-name: "IC";
   --document-manager-name: "Manager";
   --document-margins-bottom: 50px;
   --document-margins-sides: 50px;
   --document-margins-top: 30px;
-  --document-panel-radii: 4px;
-  --document-panel-stroke-weight: 2px;
   --document-text-body-font-face: Inter, sans-serif;
-  --document-header-text-color: #1c1c1c;
-  --document-body-text-color: #424242;
+  --document-header-text-color: #102e0f;
+  --document-body-text-color: #224521;
   --document-text-header-font-face: Inter, sans-serif;
   --document-text-header-font-weight: bold;
-  --goals-goals-container-surface: #acacac;
-  --goals-goals-containter-stroke: #929292;
-  --goals-goals-panel-stroke: #aeaeae;
-  --goals-goals-panel-surface: #dcdcdc;
-  --notes-notes-container-stroke: #929292;
-  --notes-notes-container-surface: #f1f1f1;
-  --notes-notes-panel-stroke: #929292;
-  --notes-notes-panel-surface: #f1f1f1;
-  --ui-ui-stroke-color: #5e5e5e;
+  --ui-ui-stroke-color: #2f8c2c;
   --ui-ui-stroke-weight: 1px;
-  --ui-ui-surface-color: #ffffff;
-  --ui-ui2-stroke-color: #545454;
+  --ui-ui-surface-color: #f4fbf4;
+  --ui-ui2-stroke-color: #236321;
   --ui-ui2-stroke-weight: 0px;
-  --ui-ui2-surface-color: #414141;
-  --actions-panel-radius: 5px;
+  --ui-ui2-surface-color: #2f962c;
 
   /* Framework collection (green mode) — page background gradient */
   --column-base: #c1c879;

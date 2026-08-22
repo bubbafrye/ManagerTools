@@ -38,6 +38,7 @@ test("document header places adjust left, names center, and range right", async 
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
 
   const header = page.locator("[data-layout='document-header']");
   const settings = page.getByRole("button", { name: "Document settings" });

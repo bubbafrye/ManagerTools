@@ -3,7 +3,6 @@ import { ActionItem } from "./ActionItem";
 import { AddItem } from "./ui/AddItem";
 import { SectionHeader } from "./ui/SectionHeader";
 import { SortableList } from "./ui/SortableList";
-import { SwatchRow } from "./ui/Swatch";
 import styles from "./ActionItems.module.css";
 
 type ActionItemsProps = {
@@ -11,6 +10,7 @@ type ActionItemsProps = {
   editMode: boolean;
   showCompleted: boolean;
   onAdd: () => void;
+  onShowCompletedChange?: (showCompleted: boolean) => void;
   onUpdate: (id: string, patch: Partial<ActionItemData>) => void;
   onReorder: (itemId: string, beforeId: string | null) => void;
   onDelete: (itemId: string) => void;
@@ -21,6 +21,7 @@ export function ActionItems({
   editMode,
   showCompleted,
   onAdd,
+  onShowCompletedChange,
   onUpdate,
   onReorder,
   onDelete,
@@ -35,34 +36,18 @@ export function ActionItems({
       aria-label="Action Items"
       data-sortable-container="action-item"
     >
-      <SectionHeader
-        title="Action Items"
-        trailing={
-          editMode ? (
-            <SwatchRow
-              colors={[
-                {
-                  token: "--actions-actions-container-surface",
-                  label: "Action Items container surface",
-                },
-                {
-                  token: "--actions-actions-container-stroke",
-                  label: "Action Items container stroke",
-                },
-                {
-                  token: "--actions-actions-panel-surface",
-                  label: "Action Items card surface",
-                },
-                {
-                  token: "--actions-actions-panel-stroke",
-                  label: "Action Items card stroke",
-                },
-              ]}
-            />
-          ) : null
+      <SectionHeader title="Action Items" />
+      <AddItem
+        onClick={onAdd}
+        completedToggle={
+          editMode && onShowCompletedChange
+            ? {
+                checked: showCompleted,
+                onChange: onShowCompletedChange,
+              }
+            : undefined
         }
       />
-      <AddItem onClick={onAdd} />
       <SortableList
         kind="action-item"
         listId="actionItems"

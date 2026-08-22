@@ -56,20 +56,6 @@ export function Swatch({ token, label }: SwatchProps) {
   );
 }
 
-type SwatchRowProps = {
-  colors: { token: string; label: string }[];
-};
-
-export function SwatchRow({ colors }: SwatchRowProps) {
-  return (
-    <div className={styles.swatches}>
-      {colors.map((swatch) => (
-        <Swatch key={swatch.label} token={swatch.token} label={swatch.label} />
-      ))}
-    </div>
-  );
-}
-
 type ColorGroupProps = {
   label: string;
   colors: { token: string; label: string }[];

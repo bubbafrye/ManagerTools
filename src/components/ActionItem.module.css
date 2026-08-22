@@ -4,9 +4,10 @@
   gap: 10px;
   min-height: 50px;
   padding: 10px;
-  border-radius: var(--document-panel-radii);
-  border: var(--document-panel-stroke-weight) solid var(--actions-actions-panel-stroke);
-  background: var(--actions-actions-panel-surface);
+  border-radius: var(--containers-card1-radii);
+  border: var(--containers-card1-stroke-weight) solid
+    var(--containers-card1-stroke-color);
+  background: var(--containers-card1-surface-color);
 }
 
 .text {

@@ -30,21 +30,6 @@
   min-width: 0;
 }
 
-.editSpacer {
-  flex: 1;
-  min-width: 0;
-}
-
-.lookButtons {
-  display: flex;
-  flex-shrink: 0;
-  gap: 10px;
-}
-
-.lookButton {
-  flex-shrink: 0;
-}
-
 .leftColumn {
   display: flex;
   flex-direction: column;

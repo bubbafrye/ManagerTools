@@ -1,5 +1,17 @@
 import { expect, test, type Locator } from "@playwright/test";
 
+declare global {
+  interface Window {
+    __goalGhost?: Array<{
+      position: string;
+      left: string;
+      top: string;
+      x: number;
+      y: number;
+    }>;
+  }
+}
+
 async function sortableIds(scope: Locator) {
   return scope.locator("[data-sortable-id]").evaluateAll((els) =>
     els.map((el) => el.getAttribute("data-sortable-id")),
@@ -53,6 +65,76 @@ test("goals can be dragged between Professional and Personal", async ({
   await expect
     .poll(() => sortableIds(personal))
     .toEqual([fromIds[0], ...toIds]);
+});
+
+test("goal drag ghost stays position fixed while moving", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  await page.evaluate(() => {
+    window.__goalGhost = [];
+    document.addEventListener(
+      "drag",
+      (event) => {
+        if (event.clientX === 0 && event.clientY === 0) return;
+        const ghost = [...document.body.children].find(
+          (node) =>
+            node instanceof HTMLElement &&
+            node.getAttribute("aria-hidden") === "true" &&
+            node.style.width,
+        );
+        if (!(ghost instanceof HTMLElement)) return;
+        if (window.__goalGhost.length >= 5) return;
+        window.__goalGhost.push({
+          position: getComputedStyle(ghost).position,
+          left: ghost.style.left,
+          top: ghost.style.top,
+          x: event.clientX,
+          y: event.clientY,
+        });
+      },
+      true,
+    );
+  });
+
+  const professional = page
+    .getByRole("heading", { name: "Professional Goals:" })
+    .locator("xpath=..");
+  await professional.locator("[data-sortable-id]").nth(0).dragTo(
+    professional.locator("[data-sortable-id]").nth(1),
+    {
+      sourcePosition: { x: 6, y: 6 },
+      targetPosition: { x: 6, y: 40 },
+    },
+  );
+
+  const samples = await page.evaluate(() => window.__goalGhost);
+  expect(samples.length).toBeGreaterThan(0);
+  for (const sample of samples) {
+    expect(sample.position).toBe("fixed");
+  }
+});
+
+test("dragging a theme swatch out of the themes panel deletes it", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const themes = page.locator("[data-layout='themes']");
+  await expect(themes.getByRole("button", { name: "sand light" })).toBeVisible();
+  await themes.getByRole("button", { name: "sand light" }).dragTo(
+    page.locator("[data-layout='document-header']"),
+  );
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("data-confirm-kind", "theme");
+  await dialog.getByRole("button", { name: "YES" }).click();
+  await expect(themes.getByRole("button", { name: "sand light" })).toHaveCount(
+    0,
+  );
+  await expect(themes.getByRole("button", { name: "rando" })).toBeVisible();
 });
 
 test("dragging an action item out of its section deletes it", async ({

@@ -4,13 +4,17 @@ import { Agenda } from "../components/Agenda";
 import { DocumentHeader } from "../components/DocumentHeader";
 import { Goals } from "../components/Goals";
 import { AdjustmentPanel } from "../components/ui/AdjustmentPanel";
-import { RandoIcon, SandIcon } from "../components/ui/Icons";
 import {
   DEFAULT_APPEARANCE,
   applyAppearance,
   type Appearance,
 } from "../appearance";
-import { applyRandomizedLook, randomizeLook, randomizeSandLook } from "../randomizeLook";
+import { applyRandomizedLook, randomizeLook } from "../randomizeLook";
+import {
+  DEFAULT_THEME_ID,
+  applyTheme,
+  type ThemeId,
+} from "../themes";
 import type { DocumentActions } from "../hooks/useDocumentState";
 import styles from "./OneOnOnePage.module.css";
 
@@ -37,6 +41,9 @@ export function OneOnOnePage({
   const { settings } = document;
   const [editMode, setEditMode] = useState(false);
   const [appearance, setAppearance] = useState<Appearance>(DEFAULT_APPEARANCE);
+  const [activeThemeId, setActiveThemeId] = useState<ThemeId | null>(
+    DEFAULT_THEME_ID,
+  );
 
   useEffect(() => {
     applyAppearance(appearance);
@@ -67,41 +74,25 @@ export function OneOnOnePage({
           <div className={styles.editStrip} data-layout="edit-strip">
             <AdjustmentPanel
               appearance={appearance}
-              onChange={(patch) =>
-                setAppearance((prev) => ({ ...prev, ...patch }))
-              }
-              showCompleted={settings.showCompletedTasks}
-              onShowCompletedChange={(showCompletedTasks) =>
-                updateSettings({ showCompletedTasks })
-              }
+              activeThemeId={activeThemeId}
+              onChange={(patch) => {
+                setActiveThemeId(null);
+                setAppearance((prev) => ({ ...prev, ...patch }));
+              }}
+              onSelectTheme={(id) => {
+                setAppearance((prev) => applyTheme(id, prev));
+                setActiveThemeId(id);
+              }}
+              onThemeRemoved={(id) => {
+                setActiveThemeId((prev) => (prev === id ? null : prev));
+              }}
+              onRandomize={() => {
+                const look = randomizeLook();
+                applyRandomizedLook(look);
+                setAppearance((prev) => ({ ...prev, ...look.appearance }));
+                setActiveThemeId(null);
+              }}
             />
-            <div className={styles.editSpacer} aria-hidden />
-            <div className={styles.lookButtons}>
-              <button
-                type="button"
-                className={styles.lookButton}
-                aria-label="rando"
-                onClick={() => {
-                  const look = randomizeLook();
-                  applyRandomizedLook(look);
-                  setAppearance((prev) => ({ ...prev, ...look.appearance }));
-                }}
-              >
-                <RandoIcon />
-              </button>
-              <button
-                type="button"
-                className={styles.lookButton}
-                aria-label="sand"
-                onClick={() => {
-                  const look = randomizeSandLook();
-                  applyRandomizedLook(look);
-                  setAppearance((prev) => ({ ...prev, ...look.appearance }));
-                }}
-              >
-                <SandIcon />
-              </button>
-            </div>
           </div>
         ) : null}
       </div>
@@ -111,6 +102,9 @@ export function OneOnOnePage({
           editMode={editMode}
           showCompleted={settings.showCompletedTasks}
           onAdd={addActionItem}
+          onShowCompletedChange={(showCompletedTasks) =>
+            updateSettings({ showCompletedTasks })
+          }
           onUpdate={updateActionItem}
           onReorder={reorderActionItems}
           onDelete={deleteActionItem}
@@ -118,7 +112,6 @@ export function OneOnOnePage({
         <Goals
           professionalGoals={document.professionalGoals}
           personalGoals={document.personalGoals}
-          editMode={editMode}
           showCompleted={settings.showCompletedTasks}
           onAddProfessional={() => addGoal("professionalGoals")}
           onAddPersonal={() => addGoal("personalGoals")}
@@ -159,7 +152,6 @@ export function OneOnOnePage({
           entries={document.agendaEntries}
           icName={document.icName}
           managerName={document.managerName}
-          editMode={editMode}
           onAdd={addAgendaEntry}
           onUpdate={updateAgendaEntry}
           onReorder={reorderAgendaEntries}

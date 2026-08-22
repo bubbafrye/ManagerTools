@@ -49,6 +49,35 @@ describe("layout CSS contract", () => {
     assert.match(panelCss, /\.panel[\s\S]*min-width:\s*0/);
   });
 
+  it("maps Notes to card2 and IC/Manager agenda panels to card1 (Figma)", () => {
+    const notesCss = readFileSync(
+      join(root, "src/components/Notes.module.css"),
+      "utf8",
+    );
+    const panelCss = readFileSync(
+      join(root, "src/components/AgendaPanel.module.css"),
+      "utf8",
+    );
+
+    assert.match(notesCss, /background:\s*var\(--containers-card2-surface-color\)/);
+    assert.match(
+      notesCss,
+      /border:[\s\S]*var\(--containers-card2-stroke-color\)/,
+    );
+    assert.match(
+      panelCss,
+      /background:\s*var\(--containers-card1-surface-color\)/,
+    );
+    assert.match(
+      panelCss,
+      /border:[\s\S]*var\(--containers-card1-stroke-color\)/,
+    );
+    assert.doesNotMatch(
+      panelCss,
+      /--containers-card2-surface-color|--containers-card2-stroke-color/,
+    );
+  });
+
   it("loads tokens and base document styles without stripping resets", () => {
     const global = readFileSync(join(root, "src/styles/global.css"), "utf8");
     assert.match(global, /@import\s+["']\.\/tokens\.css["']/);
@@ -62,10 +91,16 @@ describe("layout CSS contract", () => {
     assert.match(tokens, /--document-margins-top:/);
     assert.match(tokens, /--document-margins-sides:\s*50px/);
     assert.match(tokens, /--document-margins-bottom:/);
-    assert.match(tokens, /--document-body-color:\s*#808080/);
-    assert.match(tokens, /--document-header-text-color:\s*#1c1c1c/);
-    assert.match(tokens, /--document-body-text-color:\s*#424242/);
+    assert.match(tokens, /--document-body-color:\s*#d1e7d0/);
+    assert.match(tokens, /--document-header-text-color:\s*#102e0f/);
+    assert.match(tokens, /--document-body-text-color:\s*#224521/);
     assert.doesNotMatch(tokens, /--document-text-color:/);
     assert.doesNotMatch(tokens, /--document-margins-sides:\s*150px/);
+    assert.match(tokens, /--containers-panel-surface:/);
+    assert.match(tokens, /--containers-card1-surface-color:/);
+    assert.match(tokens, /--containers-card2-surface-color:/);
+    assert.doesNotMatch(tokens, /--actions-actions-/);
+    assert.doesNotMatch(tokens, /--container-container-/);
+    assert.doesNotMatch(tokens, /--document-panel-/);
   });
 });

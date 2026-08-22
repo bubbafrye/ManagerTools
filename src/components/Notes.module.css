@@ -3,8 +3,9 @@
   flex-direction: column;
   width: 100%;
   padding: 5px 20px;
-  border-radius: var(--document-panel-radii);
-  border: var(--document-panel-stroke-weight) solid var(--notes-notes-panel-stroke);
-  background: var(--notes-notes-panel-surface);
+  border-radius: var(--containers-card1-radii);
+  border: var(--containers-card2-stroke-weight) solid
+    var(--containers-card2-stroke-color);
+  background: var(--containers-card2-surface-color);
   word-break: break-word;
 }
