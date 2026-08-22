@@ -1,3 +1,4 @@
+import { publicUrl } from "../../publicUrl";
 import { PROGRESS_SEGMENTS } from "../../types/document";
 import styles from "./ProgressBar.module.css";
 
@@ -46,7 +47,7 @@ export function ProgressBar({
             COMPLETE
             {completed ? (
               <img
-                src="/assets/complete-check.svg"
+                src={publicUrl("assets/complete-check.svg")}
                 alt=""
                 width={8}
                 height={8}
@@ -56,7 +57,7 @@ export function ProgressBar({
         ) : null}
       </div>
       {full && !completed ? (
-        <p className={styles.hint}>Press ‘complete’ to close the task.</p>
+        <p className={styles.hint}>Press ‘complete’ to close this task.</p>
       ) : null}
     </div>
   );

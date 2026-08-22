@@ -171,7 +171,7 @@ test("edit mode shows look-editor swatches in the panel, not section headers", a
 
   const settings = page.getByRole("button", { name: "Document settings" });
   await expect(settings).toHaveCount(1);
-  await expect(page.locator('img[src="/assets/trash.svg"]')).toHaveCount(0);
+  await expect(page.locator('img[src$="assets/trash.svg"]')).toHaveCount(0);
   await expect(page.getByLabel("panels surface")).toHaveCount(0);
 
   const pencils = page.locator("[data-layout='ic-manager'] [data-icon='edit']");
@@ -183,7 +183,7 @@ test("edit mode shows look-editor swatches in the panel, not section headers", a
 
   await settings.click();
   await expect(settings).toHaveCount(1);
-  await expect(page.locator('img[src="/assets/trash.svg"]')).toHaveCount(0);
+  await expect(page.locator('img[src$="assets/trash.svg"]')).toHaveCount(0);
   const panel = page.locator("[data-layout='adjustment-panel']");
   await expect(panel.getByLabel("panels surface")).toHaveCount(1);
   await expect(panel.getByLabel("section 1 surface")).toHaveCount(1);
@@ -223,8 +223,8 @@ test("themes sit on the left, edit panel on the right, and rando still randomize
   const panel = page.locator("[data-layout='adjustment-panel']");
   const rando = page.getByRole("button", { name: "rando" });
   const save = page.getByRole("button", { name: "save theme" });
-  await expect(rando.locator('img[src="/assets/rando.svg"]')).toBeVisible();
-  await expect(page.locator('img[src="/assets/sand.svg"]')).toHaveCount(0);
+  await expect(rando.locator('img[src$="assets/rando.svg"]')).toBeVisible();
+  await expect(page.locator('img[src$="assets/sand.svg"]')).toHaveCount(0);
   await expect(page.getByRole("button", { name: "grey" })).toBeVisible();
   await expect(page.getByRole("button", { name: "spring light" })).toBeVisible();
   await expect(page.getByRole("button", { name: "sand light" })).toBeVisible();

@@ -1,14 +1,20 @@
-import { useId } from "react";
+import { useId, type CSSProperties } from "react";
+import { publicUrl } from "../../publicUrl";
 import styles from "./Icons.module.css";
 
 type IconProps = {
   className?: string;
 };
 
+function maskUrl(path: string): CSSProperties {
+  return { ["--icon-mask" as string]: `url("${publicUrl(path)}")` };
+}
+
 export function AddItemIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.addItem} ${className ?? ""}`}
+      style={maskUrl("assets/add-item.svg")}
       data-icon="add-item"
       aria-hidden
     />
@@ -19,6 +25,7 @@ export function EditIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.edit} ${className ?? ""}`}
+      style={maskUrl("assets/edit.svg")}
       data-icon="edit"
       aria-hidden
     />
@@ -29,7 +36,7 @@ export function RandoIcon({ className }: IconProps) {
   return (
     <img
       className={`${styles.icon} ${styles.rando} ${className ?? ""}`}
-      src="/assets/rando.svg"
+      src={publicUrl("assets/rando.svg")}
       alt=""
       width={30}
       height={30}
@@ -120,6 +127,7 @@ export function AdjustIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.adjust} ${className ?? ""}`}
+      style={maskUrl("assets/adjust.svg")}
       aria-hidden
     />
   );
@@ -130,14 +138,14 @@ export function TrashIcon({ className }: IconProps) {
     <span className={`${styles.trash} ${className ?? ""}`} aria-hidden>
       <img
         className={styles.trashDefault}
-        src="/assets/trash.svg"
+        src={publicUrl("assets/trash.svg")}
         alt=""
         width={22}
         height={25}
       />
       <img
         className={styles.trashOver}
-        src="/assets/trash-over.svg"
+        src={publicUrl("assets/trash-over.svg")}
         alt=""
         width={22}
         height={25}

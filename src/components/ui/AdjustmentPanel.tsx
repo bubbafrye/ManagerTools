@@ -13,6 +13,7 @@ import {
   removeDragGhost,
   type DragGhostSession,
 } from "../../dragGhost";
+import { publicUrl } from "../../publicUrl";
 import {
   THEMES,
   THEME_PRESET_ORDER,
@@ -444,7 +445,10 @@ function FontSelect({ ariaLabel, value, onChange }: FontSelectProps) {
         aria-label={ariaLabel}
         aria-haspopup="listbox"
         aria-expanded={open}
-        style={{ fontFamily: fontStack(value) }}
+        style={{
+          fontFamily: fontStack(value),
+          ["--dropdown-mask" as string]: `url("${publicUrl("assets/dropdown.svg")}")`,
+        }}
         onClick={() => setOpen((prev) => !prev)}
       >
         {value}

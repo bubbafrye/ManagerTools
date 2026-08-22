@@ -1,3 +1,4 @@
+import { publicUrl } from "../../publicUrl";
 import styles from "./Tickbox.module.css";
 
 type TickboxProps = {
@@ -19,7 +20,7 @@ export function Tickbox({ checked, onChange, label }: TickboxProps) {
       {checked ? (
         <img
           className={styles.check}
-          src="/assets/check.svg"
+          src={publicUrl("assets/check.svg")}
           alt=""
           width={13}
           height={13}

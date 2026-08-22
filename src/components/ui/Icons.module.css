@@ -7,24 +7,24 @@
   width: 22px;
   height: 22px;
   background-color: var(--document-header-text-color);
-  -webkit-mask: url("/assets/add-item.svg") center / contain no-repeat;
-  mask: url("/assets/add-item.svg") center / contain no-repeat;
+  -webkit-mask: var(--icon-mask) center / contain no-repeat;
+  mask: var(--icon-mask) center / contain no-repeat;
 }
 
 .adjust {
   width: 28px;
   height: 29px;
   background-color: var(--document-header-text-color);
-  -webkit-mask: url("/assets/adjust.svg") center / contain no-repeat;
-  mask: url("/assets/adjust.svg") center / contain no-repeat;
+  -webkit-mask: var(--icon-mask) center / contain no-repeat;
+  mask: var(--icon-mask) center / contain no-repeat;
 }
 
 .edit {
   width: 25px;
   height: 22px;
   background-color: var(--document-header-text-color);
-  -webkit-mask: url("/assets/edit.svg") center / contain no-repeat;
-  mask: url("/assets/edit.svg") center / contain no-repeat;
+  -webkit-mask: var(--icon-mask) center / contain no-repeat;
+  mask: var(--icon-mask) center / contain no-repeat;
 }
 
 .rando {
