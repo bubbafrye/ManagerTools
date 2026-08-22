@@ -6,15 +6,19 @@ type IconProps = {
   className?: string;
 };
 
-function maskUrl(path: string): CSSProperties {
-  return { ["--icon-mask" as string]: `url("${publicUrl(path)}")` };
+function maskStyle(path: string): CSSProperties {
+  const image = `url("${publicUrl(path)}")`;
+  return {
+    WebkitMaskImage: image,
+    maskImage: image,
+  };
 }
 
 export function AddItemIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.addItem} ${className ?? ""}`}
-      style={maskUrl("assets/add-item.svg")}
+      style={maskStyle("assets/add-item.svg")}
       data-icon="add-item"
       aria-hidden
     />
@@ -25,7 +29,7 @@ export function EditIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.edit} ${className ?? ""}`}
-      style={maskUrl("assets/edit.svg")}
+      style={maskStyle("assets/edit.svg")}
       data-icon="edit"
       aria-hidden
     />
@@ -127,7 +131,7 @@ export function AdjustIcon({ className }: IconProps) {
   return (
     <span
       className={`${styles.icon} ${styles.adjust} ${className ?? ""}`}
-      style={maskUrl("assets/adjust.svg")}
+      style={maskStyle("assets/adjust.svg")}
       aria-hidden
     />
   );
