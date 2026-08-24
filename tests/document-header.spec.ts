@@ -27,7 +27,6 @@ test("document header IC and Manager names are full opacity in static view", asy
   expect(await colorAlpha(manager)).toBeCloseTo(0.6);
 
   await ic.click();
-  await page.keyboard.press("End");
   await page.keyboard.type(" Ada");
   expect(await colorAlpha(ic)).toBe(1);
   expect(await colorAlpha(manager)).toBeCloseTo(0.6);
@@ -72,4 +71,31 @@ test("document header places adjust left, names center, and range right", async 
   const clusterMid = (icBox!.x + managerBox!.x + managerBox!.width) / 2;
   const leftoverMid = namesBox!.x + namesBox!.width / 2;
   expect(clusterMid).toBeCloseTo(leftoverMid, 0);
+});
+
+test("default IC and Manager names clear on focus and restore if left unchanged", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const ic = page.getByRole("textbox", { name: "IC name" });
+  const manager = page.getByRole("textbox", { name: "Manager name" });
+
+  await expect(ic).toHaveText("IC");
+  await ic.click();
+  await expect(ic).toHaveText("");
+  await manager.click();
+  await expect(ic).toHaveText("IC");
+  await expect(manager).toHaveText("");
+  await page.locator("[data-layout='period']").click();
+  await expect(manager).toHaveText("Manager");
+
+  await ic.click();
+  await page.keyboard.type("Ada");
+  await manager.click();
+  await expect(ic).toHaveText("Ada");
+  await ic.click();
+  await expect(ic).toHaveText("Ada");
 });

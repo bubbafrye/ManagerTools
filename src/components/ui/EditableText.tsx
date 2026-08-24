@@ -12,6 +12,8 @@ type EditableTextProps = {
   onEnter?: (committed: string) => void;
   muted?: boolean;
   editable?: boolean;
+  /** If value equals placeholder, clear on focus; restore it on blur if still empty. */
+  clearDefaultOnFocus?: boolean;
 };
 
 export function EditableText({
@@ -25,6 +27,7 @@ export function EditableText({
   onEnter,
   muted = false,
   editable = true,
+  clearDefaultOnFocus = false,
 }: EditableTextProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -74,7 +77,34 @@ export function EditableText({
       className={`${styles.editable} ${variantClass} ${styles.placeholder}${muted ? ` ${styles.muted}` : ""}`}
       data-placeholder={placeholder}
       onInput={editable ? syncFromDom : undefined}
-      onBlur={editable ? syncFromDom : undefined}
+      onFocus={
+        editable && clearDefaultOnFocus
+          ? () => {
+              const el = ref.current;
+              if (!el || !placeholder) return;
+              if (value.trim() !== placeholder) return;
+              el.innerText = "";
+            }
+          : undefined
+      }
+      onBlur={
+        editable
+          ? () => {
+              const el = ref.current;
+              if (
+                clearDefaultOnFocus &&
+                placeholder &&
+                el &&
+                el.innerText.replace(/\u200B/g, "").trim() === "" &&
+                value.trim() === placeholder
+              ) {
+                el.innerText = value;
+                return;
+              }
+              syncFromDom();
+            }
+          : undefined
+      }
       onKeyDown={
         editable
           ? (event) => {

@@ -46,6 +46,7 @@ export function DocumentHeader({
           placeholder="IC"
           multiline={false}
           ariaLabel="IC name"
+          clearDefaultOnFocus
           muted={
             editMode && (icName.trim() === "" || icName.trim() === "IC")
           }
@@ -59,6 +60,7 @@ export function DocumentHeader({
           placeholder="Manager"
           multiline={false}
           ariaLabel="Manager name"
+          clearDefaultOnFocus
           muted={
             editMode &&
             (managerName.trim() === "" || managerName.trim() === "Manager")
