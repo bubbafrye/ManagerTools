@@ -68,7 +68,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#236321",
     },
     floats: {
-      "containers/panel-radii": 4,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 2,
       "containers/card1-stroke-weight": 2,
@@ -95,7 +95,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#75ca72",
     },
     floats: {
-      "containers/panel-radii": 4,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 2,
       "containers/card1-stroke-weight": 2,
@@ -122,7 +122,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#215d63",
     },
     floats: {
-      "containers/panel-radii": 10,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 8,
       "containers/card1-stroke-weight": 2,
@@ -149,7 +149,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#72c1ca",
     },
     floats: {
-      "containers/panel-radii": 4,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 2,
       "containers/card1-stroke-weight": 2,
@@ -176,7 +176,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#6f3020",
     },
     floats: {
-      "containers/panel-radii": 10,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 2,
       "containers/card1-stroke-weight": 2,
@@ -203,7 +203,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#e0b888",
     },
     floats: {
-      "containers/panel-radii": 4,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 2,
       "containers/card1-stroke-weight": 2,
@@ -230,7 +230,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
       "ui/ui2-stroke-color": "#545454",
     },
     floats: {
-      "containers/panel-radii": 8,
+      "containers/panel-radii": 6,
       "containers/panel-stroke-weight": 2,
       "containers/card1-radii": 4,
       "containers/card1-stroke-weight": 2,

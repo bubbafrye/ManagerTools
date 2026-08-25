@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import csv from "../data/role-definitions.csv?raw";
 import {
   VISIBLE_TIER_COUNT,
   defaultSkillRatings,
   parseRoleDefinitions,
   splitTierRank,
+  type RoleSkill,
 } from "../data/parseRoleDefinitions";
 import { SkillFocus } from "./SkillFocus";
+import { EditableText } from "./ui/EditableText";
 import { TierSelector } from "./TierSelector";
 import styles from "./GrowthFramework.module.css";
 
@@ -32,29 +34,64 @@ type GrowthFrameworkProps = {
   icName: string;
   managerName: string;
   editMode?: boolean;
+  disciplineName?: string;
+  contentEdit?: boolean;
 };
 
 export function GrowthFramework({
   icName,
   managerName,
   editMode = false,
+  disciplineName,
+  contentEdit = false,
 }: GrowthFrameworkProps) {
-  const discipline = useMemo(() => parseRoleDefinitions(csv)[0] ?? null, []);
+  const disciplines = useMemo(() => parseRoleDefinitions(csv), []);
+  const discipline = useMemo(() => {
+    if (disciplineName) {
+      return (
+        disciplines.find((role) => role.discipline === disciplineName) ??
+        disciplines[0] ??
+        null
+      );
+    }
+    return disciplines[0] ?? null;
+  }, [disciplines, disciplineName]);
   const [expanded, setExpanded] = useState(false);
   const [roleLevel, setRoleLevel] = useState(1);
   const [ratings, setRatings] = useState<Record<string, number>>(() =>
     discipline ? defaultSkillRatings(discipline) : {},
   );
   const [notes, setNotes] = useState<AssessmentNotes>({});
+  const [skills, setSkills] = useState<RoleSkill[]>(
+    () => discipline?.skills ?? [],
+  );
+  const [roleTitle, setRoleTitle] = useState(
+    () => discipline?.discipline ?? "",
+  );
+  const [roleDefinition, setRoleDefinition] = useState(
+    () => discipline?.definition ?? "",
+  );
+  const [tierDescriptions, setTierDescriptions] = useState<string[]>(
+    () => discipline?.tiers.map((tier) => tier.description) ?? [],
+  );
+
+  useEffect(() => {
+    setSkills(discipline?.skills ?? []);
+    setRoleTitle(discipline?.discipline ?? "");
+    setRoleDefinition(discipline?.definition ?? "");
+    setTierDescriptions(
+      discipline?.tiers.map((tier) => tier.description) ?? [],
+    );
+  }, [discipline]);
 
   if (!discipline) return null;
 
+  const skillsOpen = contentEdit || expanded;
   const rankTier = discipline.tiers[roleLevel - 1] ?? discipline.tiers[0];
   const { numeral, subtitle } = splitTierRank(rankTier.rank);
-  const description = discipline.definition || rankTier.description;
-  const title = numeral
-    ? `${discipline.discipline} ${numeral}`
-    : discipline.discipline;
+  const description =
+    roleDefinition ||
+    (tierDescriptions[roleLevel - 1] ?? rankTier.description);
 
   return (
     <section className={styles.framework} aria-label="Growth Framework">
@@ -62,7 +99,23 @@ export function GrowthFramework({
         <div className={styles.info}>
           <div className={styles.text}>
             <header className={styles.header}>
-              <h2 className={styles.title}>{title}</h2>
+              <h2 className={styles.title}>
+                {contentEdit ? (
+                  <EditableText
+                    variant="inline"
+                    multiline={false}
+                    value={roleTitle}
+                    onChange={setRoleTitle}
+                    ariaLabel="Role title"
+                    placeholder="Role"
+                  />
+                ) : (
+                  roleTitle
+                )}
+                {numeral ? (
+                  <span className={styles.titleLevel}>{` ${numeral}`}</span>
+                ) : null}
+              </h2>
               {editMode ? (
                 <div
                   className={styles.roleSelector}
@@ -82,23 +135,42 @@ export function GrowthFramework({
               ) : null}
               <p className={styles.rank}>{subtitle}</p>
             </header>
-            {description ? (
+            {contentEdit ? (
+              <div className={styles.description}>
+                <EditableText
+                  value={description}
+                  onChange={(value) => {
+                    if (roleDefinition) {
+                      setRoleDefinition(value);
+                      return;
+                    }
+                    setTierDescriptions((prev) => {
+                      const next = [...prev];
+                      next[roleLevel - 1] = value;
+                      return next;
+                    });
+                  }}
+                  ariaLabel="Role description"
+                  placeholder="Add Role description"
+                />
+              </div>
+            ) : description ? (
               <p className={styles.description}>{description}</p>
             ) : null}
           </div>
           <button
             type="button"
             className={styles.viewSkills}
-            aria-expanded={expanded}
+            aria-expanded={skillsOpen}
             aria-controls="growth-skills"
             onClick={() => setExpanded((open) => !open)}
           >
-            {expanded ? "Hide Skills" : "View Skills"}
+            {skillsOpen ? "Hide Skills" : "View Skills"}
           </button>
         </div>
         <div className={styles.chart}>
           <div className={styles.array} data-layout="growth-array">
-            {discipline.skills.map((skill, index) => {
+            {skills.map((skill, index) => {
               const rating = ratings[skill.id] ?? 1;
               const hue = HUE_VARS[index % HUE_VARS.length];
               return (
@@ -144,13 +216,13 @@ export function GrowthFramework({
       </div>
       <div
         id="growth-skills"
-        className={`${styles.skillsFold} ${expanded ? styles.skillsFoldOpen : ""}`}
+        className={`${styles.skillsFold} ${skillsOpen ? styles.skillsFoldOpen : ""}`}
         data-layout="growth-skills"
-        aria-hidden={!expanded}
+        aria-hidden={!skillsOpen}
       >
         <div className={styles.skillsInner}>
           <div className={styles.skillsGrid}>
-            {discipline.skills.map((skill, index) => {
+            {skills.map((skill, index) => {
               const hue = HUE_VARS[index % HUE_VARS.length];
               const rating = ratings[skill.id] ?? 1;
               const skillNotes = notes[skill.id] ?? { ic: "", manager: "" };
@@ -166,8 +238,14 @@ export function GrowthFramework({
                     managerName={managerName}
                     icNotes={skillNotes.ic}
                     managerNotes={skillNotes.manager}
+                    contentEdit={contentEdit}
                     onRatingChange={(level) =>
                       setRatings((prev) => ({ ...prev, [skill.id]: level }))
+                    }
+                    onSkillChange={(next) =>
+                      setSkills((prev) =>
+                        prev.map((item) => (item.id === next.id ? next : item)),
+                      )
                     }
                     onIcNotesChange={(value) =>
                       setNotes((prev) => {

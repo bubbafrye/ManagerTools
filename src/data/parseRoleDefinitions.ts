@@ -95,6 +95,14 @@ function headerIndex(headers: string[], name: string) {
   return headers.findIndex((header) => header.trim().toLowerCase() === lower);
 }
 
+export const NEW_ROLE_LABEL = "-- New Role --";
+
+export function listRoleNames(disciplines: RoleDiscipline[]): string[] {
+  const names = disciplines.map((role) => role.discipline);
+  const rest = names.filter((name) => name !== NEW_ROLE_LABEL);
+  return names.includes(NEW_ROLE_LABEL) ? [...rest, NEW_ROLE_LABEL] : rest;
+}
+
 export function parseRoleDefinitions(csv: string): RoleDiscipline[] {
   const records = parseCsvRecords(csv);
   if (records.length < 2) return [];

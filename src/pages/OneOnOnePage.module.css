@@ -39,7 +39,9 @@
 
 .editStrip {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
   width: 100%;
   min-width: 0;
 }

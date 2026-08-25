@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import {
   VISIBLE_TIER_COUNT,
   defaultSkillRatings,
+  listRoleNames,
   parseRoleDefinitions,
   splitTierRank,
 } from "../src/data/parseRoleDefinitions.ts";
@@ -16,9 +17,9 @@ const csv = readFileSync(
 );
 
 describe("parseRoleDefinitions", () => {
-  it("groups the Product Designer role and five visible tiers, omitting Staff", () => {
+  it("groups each CSV role and keeps -- New Role -- last in the name list", () => {
     const disciplines = parseRoleDefinitions(csv);
-    assert.equal(disciplines.length, 1);
+    assert.equal(disciplines.length, 2);
     const role = disciplines[0];
     assert.equal(role.discipline, "Product Designer");
     assert.equal(role.definition, "");
@@ -43,6 +44,28 @@ describe("parseRoleDefinitions", () => {
     assert.equal(role.skills[0].title, "Technical Ability");
     assert.equal(role.skills[5].title, "Research & Data");
     assert.match(role.skills[5].definition, /research and analytics/i);
+    assert.equal(disciplines[1].discipline, "-- New Role --");
+    assert.deepEqual(listRoleNames(disciplines), [
+      "Product Designer",
+      "-- New Role --",
+    ]);
+    assert.deepEqual(
+      listRoleNames([
+        {
+          discipline: "-- New Role --",
+          definition: "",
+          tiers: [],
+          skills: [],
+        },
+        {
+          discipline: "Product Designer",
+          definition: "",
+          tiers: [],
+          skills: [],
+        },
+      ]),
+      ["Product Designer", "-- New Role --"],
+    );
   });
 
   it("defaults every skill rating to tier 1", () => {

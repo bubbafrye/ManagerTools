@@ -373,9 +373,9 @@ test("theme presets apply Figma mode tokens without changing fonts", async ({
   expect(after.panel).toBe("#33261e");
   expect(after.card1).toBe("#46372b");
   expect(after.card2).toBe("#2a1d18");
-  expect(after.panelRadii).toBe("4px");
+  expect(after.panelRadii).toBe("6px");
   expect(after.card1Radii).toBe("2px");
-  expect(after.corners).toBe("4");
+  expect(after.corners).toBe("6");
   expect(after.headerFont).toMatch(/Lora/);
   expect(after.bodyFont).toMatch(/Inter/);
 });
@@ -400,7 +400,7 @@ test("grey preset restores the original base palette", async ({ page }) => {
   expect(after.page).toBe("#808080");
   expect(after.panel).toBe("#c6c6c6");
   expect(after.card1).toBe("#e2e2e2");
-  expect(after.panelRadii).toBe("8px");
+  expect(after.panelRadii).toBe("6px");
 });
 
 test("save theme shows a not-supported notice with OK", async ({ page }) => {
@@ -415,6 +415,64 @@ test("save theme shows a not-supported notice with OK", async ({ page }) => {
   await expect(dialog.getByRole("button", { name: "OK" })).toBeVisible();
   await expect(dialog.getByRole("button", { name: "NO" })).toHaveCount(0);
 
+  await dialog.getByRole("button", { name: "OK" }).click();
+  await expect(dialog).toHaveCount(0);
+});
+
+test("role editor lists CSV roles with New Role last and save starts disabled", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const role = page.getByRole("button", { name: "Role", exact: true });
+  const save = page.getByRole("button", { name: "save role preset" });
+  const editPreset = page.getByRole("button", { name: "Edit Preset" });
+  await expect(role).toHaveText("Product Designer");
+  await expect(save).toBeDisabled();
+  await expect(editPreset).toBeEnabled();
+
+  await role.click();
+  const options = page.getByRole("option");
+  await expect(options).toHaveCount(2);
+  await expect(options.nth(0)).toHaveText("Product Designer");
+  await expect(options.nth(1)).toHaveText("-- New Role --");
+
+  await page.getByRole("option", { name: "-- New Role --" }).click();
+  await expect(role).toHaveText("-- New Role --");
+  await expect(
+    page.getByRole("heading", { name: "-- New Role -- I" }),
+  ).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "Role title" })).toBeEditable();
+  await expect(page.getByRole("textbox", { name: "Role description" })).toBeEditable();
+  await expect(page.getByText("Associate", { exact: true })).toBeVisible();
+  await expect(save).toBeEnabled();
+  await expect(editPreset).toBeDisabled();
+  await expect(page.getByLabel("IC’s Assessment")).toHaveCount(0);
+  await expect(
+    page.getByRole("textbox", { name: "Skill 1 header" }),
+  ).toBeVisible();
+
+  await role.click();
+  await page.getByRole("option", { name: "Product Designer" }).click();
+  await expect(save).toBeDisabled();
+  await expect(editPreset).toBeEnabled();
+
+  await page.getByRole("button", { name: "View Skills" }).click();
+  await expect(page.getByLabel("IC’s Assessment").first()).toBeVisible();
+  await editPreset.click();
+  await expect(save).toBeEnabled();
+  await expect(editPreset).toBeDisabled();
+  await expect(page.getByLabel("IC’s Assessment")).toHaveCount(0);
+  await expect(
+    page.getByRole("textbox", { name: "Technical Ability header" }),
+  ).toBeEditable();
+
+  await save.click();
+  const dialog = page.locator("dialog[data-confirm-kind='save-role-preset']");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("Save functionality not supported yet.");
   await dialog.getByRole("button", { name: "OK" }).click();
   await expect(dialog).toHaveCount(0);
 });

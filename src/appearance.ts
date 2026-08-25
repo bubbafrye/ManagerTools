@@ -38,7 +38,7 @@ export function cardRadiiFromPanel(panelRadius: number) {
 
 /** Spring light geometry (Figma); fonts stay Inter until the user changes them. */
 export const DEFAULT_APPEARANCE: Appearance = {
-  panelRadius: 4,
+  panelRadius: 6,
   panelBorder: 2,
   cardRadius: 2,
   cardBorder: 2,

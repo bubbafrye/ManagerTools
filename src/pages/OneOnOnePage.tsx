@@ -1,10 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ActionItems } from "../components/ActionItems";
 import { Agenda } from "../components/Agenda";
 import { DocumentHeader } from "../components/DocumentHeader";
 import { Goals } from "../components/Goals";
 import { GrowthFramework } from "../components/GrowthFramework";
 import { AdjustmentPanel } from "../components/ui/AdjustmentPanel";
+import { RoleEditor } from "../components/ui/RoleEditor";
+import csv from "../data/role-definitions.csv?raw";
+import {
+  listRoleNames,
+  NEW_ROLE_LABEL,
+  parseRoleDefinitions,
+} from "../data/parseRoleDefinitions";
 import {
   DEFAULT_APPEARANCE,
   applyAppearance,
@@ -45,6 +52,14 @@ export function OneOnOnePage({
   const [activeThemeId, setActiveThemeId] = useState<ThemeId | null>(
     DEFAULT_THEME_ID,
   );
+  const roleNames = useMemo(
+    () => listRoleNames(parseRoleDefinitions(csv)),
+    [],
+  );
+  const [selectedRole, setSelectedRole] = useState(
+    () => roleNames[0] ?? "Product Designer",
+  );
+  const [contentEdit, setContentEdit] = useState(false);
 
   useEffect(() => {
     applyAppearance(appearance);
@@ -94,14 +109,27 @@ export function OneOnOnePage({
                 setActiveThemeId(null);
               }}
             />
+            <RoleEditor
+              roles={roleNames}
+              value={selectedRole}
+              contentEdit={contentEdit}
+              onChange={(role) => {
+                setSelectedRole(role);
+                setContentEdit(role === NEW_ROLE_LABEL);
+              }}
+              onEditPreset={() => setContentEdit(true)}
+            />
           </div>
         ) : null}
       </div>
       <div className={styles.framework} data-layout="growth-framework">
         <GrowthFramework
+          key={selectedRole}
           icName={document.icName}
           managerName={document.managerName}
           editMode={editMode}
+          disciplineName={selectedRole}
+          contentEdit={contentEdit}
         />
       </div>
       <div className={styles.leftColumn} data-layout="left-column">

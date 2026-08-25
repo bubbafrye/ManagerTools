@@ -21,6 +21,10 @@
   background: var(--containers-card2-surface-color);
 }
 
+.definition:last-child {
+  border-radius: var(--containers-card1-radii);
+}
+
 .title {
   margin: 0;
   font-family: var(--document-text-header-font-face);
