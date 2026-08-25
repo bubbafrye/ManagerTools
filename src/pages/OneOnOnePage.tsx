@@ -132,68 +132,70 @@ export function OneOnOnePage({
           contentEdit={contentEdit}
         />
       </div>
-      <div className={styles.leftColumn} data-layout="left-column">
-        <ActionItems
-          items={document.actionItems}
-          editMode={editMode}
-          showCompleted={settings.showCompletedTasks}
-          onAdd={addActionItem}
-          onShowCompletedChange={(showCompletedTasks) =>
-            updateSettings({ showCompletedTasks })
-          }
-          onUpdate={updateActionItem}
-          onReorder={reorderActionItems}
-          onDelete={deleteActionItem}
-        />
-        <Goals
-          professionalGoals={document.professionalGoals}
-          personalGoals={document.personalGoals}
-          showCompleted={settings.showCompletedTasks}
-          onAddProfessional={() => addGoal("professionalGoals")}
-          onAddPersonal={() => addGoal("personalGoals")}
-          onUpdateProfessional={(id, patch) =>
-            updateGoal("professionalGoals", id, patch)
-          }
-          onUpdatePersonal={(id, patch) =>
-            updateGoal("personalGoals", id, patch)
-          }
-          onIncrementProfessional={(id) =>
-            incrementGoalProgress("professionalGoals", id)
-          }
-          onIncrementPersonal={(id) =>
-            incrementGoalProgress("personalGoals", id)
-          }
-          onMove={(move) => {
-            if (
-              (move.fromList === "professionalGoals" ||
-                move.fromList === "personalGoals") &&
-              (move.toList === "professionalGoals" ||
-                move.toList === "personalGoals")
-            ) {
-              moveGoal(move.fromList, move.toList, move.itemId, move.beforeId);
+      <section className={styles.oneOnOne} data-layout="one-on-one">
+        <div className={styles.leftSide} data-layout="left-column">
+          <ActionItems
+            items={document.actionItems}
+            editMode={editMode}
+            showCompleted={settings.showCompletedTasks}
+            onAdd={addActionItem}
+            onShowCompletedChange={(showCompletedTasks) =>
+              updateSettings({ showCompletedTasks })
             }
-          }}
-          onDelete={(itemId, listId) => {
-            if (
-              listId === "professionalGoals" ||
-              listId === "personalGoals"
-            ) {
-              deleteGoal(listId, itemId);
+            onUpdate={updateActionItem}
+            onReorder={reorderActionItems}
+            onDelete={deleteActionItem}
+          />
+          <Goals
+            professionalGoals={document.professionalGoals}
+            personalGoals={document.personalGoals}
+            showCompleted={settings.showCompletedTasks}
+            onAddProfessional={() => addGoal("professionalGoals")}
+            onAddPersonal={() => addGoal("personalGoals")}
+            onUpdateProfessional={(id, patch) =>
+              updateGoal("professionalGoals", id, patch)
             }
-          }}
-        />
-      </div>
-      <div className={styles.rightColumn} data-layout="agenda-column">
-        <Agenda
-          entries={document.agendaEntries}
-          icName={document.icName}
-          managerName={document.managerName}
-          onAdd={addAgendaEntry}
-          onUpdate={updateAgendaEntry}
-          onReorder={reorderAgendaEntries}
-          onDelete={deleteAgendaEntry}
-        />
-      </div>
+            onUpdatePersonal={(id, patch) =>
+              updateGoal("personalGoals", id, patch)
+            }
+            onIncrementProfessional={(id) =>
+              incrementGoalProgress("professionalGoals", id)
+            }
+            onIncrementPersonal={(id) =>
+              incrementGoalProgress("personalGoals", id)
+            }
+            onMove={(move) => {
+              if (
+                (move.fromList === "professionalGoals" ||
+                  move.fromList === "personalGoals") &&
+                (move.toList === "professionalGoals" ||
+                  move.toList === "personalGoals")
+              ) {
+                moveGoal(move.fromList, move.toList, move.itemId, move.beforeId);
+              }
+            }}
+            onDelete={(itemId, listId) => {
+              if (
+                listId === "professionalGoals" ||
+                listId === "personalGoals"
+              ) {
+                deleteGoal(listId, itemId);
+              }
+            }}
+          />
+        </div>
+        <div className={styles.agendaSide} data-layout="agenda-column">
+          <Agenda
+            entries={document.agendaEntries}
+            icName={document.icName}
+            managerName={document.managerName}
+            onAdd={addAgendaEntry}
+            onUpdate={updateAgendaEntry}
+            onReorder={reorderAgendaEntries}
+            onDelete={deleteAgendaEntry}
+          />
+        </div>
+      </section>
     </main>
   );
 }

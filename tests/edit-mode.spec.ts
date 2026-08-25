@@ -459,6 +459,7 @@ test("role editor lists CSV roles with New Role last and save starts disabled", 
   await expect(save).toBeDisabled();
   await expect(editPreset).toBeEnabled();
 
+  await page.getByRole("button", { name: "Read more..." }).click();
   await page.getByRole("button", { name: "View Skills" }).click();
   await expect(page.getByLabel("IC’s Assessment").first()).toBeVisible();
   await editPreset.click();

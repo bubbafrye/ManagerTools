@@ -11,9 +11,21 @@ test("Growth Framework Role panel uses CSV copy and five vis cells", async ({
     framework.getByRole("heading", { name: "Product Designer I" }),
   ).toBeVisible();
   await expect(framework.getByText("Associate", { exact: true })).toBeVisible();
+  await expect(framework.getByRole("button", { name: "Read more..." })).toBeVisible();
+  await expect(framework.getByRole("button", { name: "View Skills" })).toHaveCount(0);
+  await expect(
+    framework.getByText(/foundational design execution/),
+  ).toHaveCount(0);
+
+  await framework.getByRole("button", { name: "Read more..." }).click();
   await expect(
     framework.getByText(/foundational design execution/),
   ).toBeVisible();
+  await expect(framework.getByRole("button", { name: "View Skills" })).toBeVisible();
+  await framework.getByText(/foundational design execution/).click();
+  await expect(framework.getByRole("button", { name: "Read more..." })).toBeVisible();
+  await expect(framework.getByRole("button", { name: "View Skills" })).toHaveCount(0);
+  await framework.getByRole("button", { name: "Read more..." }).click();
 
   const columns = framework.locator("[data-layout='growth-array'] > div");
   await expect(columns).toHaveCount(6);
@@ -46,12 +58,12 @@ test("Growth Framework Role panel uses CSV copy and five vis cells", async ({
 
   await expect(framework.getByRole("button", { name: "Role level I" })).toHaveCount(0);
   await page.getByRole("button", { name: "Document settings" }).click();
-  await expect(framework.getByRole("button", { name: "Role level I" })).toBeVisible();
-  await framework.getByRole("button", { name: "Role level III" }).click();
+  await expect(framework.getByRole("button", { name: "Role level I", exact: true })).toBeVisible();
+  await framework.getByRole("button", { name: "Role level III", exact: true }).click();
   await expect(
     framework.getByRole("heading", { name: "Product Designer III" }),
   ).toBeVisible();
   await expect(framework.getByText("Senior", { exact: true })).toBeVisible();
-  await expect(framework.getByText(/high autonomy to lead complex/)).toBeVisible();
+  await expect(framework.getByText(/Operates with high autonomy/)).toBeVisible();
   await expect(columns.first()).toHaveAttribute("data-rating", "3");
 });

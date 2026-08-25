@@ -1,9 +1,7 @@
 .page {
-  display: grid;
-  grid-template-columns: 480px minmax(0, 1fr);
-  grid-template-rows: auto auto minmax(0, 1fr);
-  column-gap: 35px;
-  row-gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
@@ -15,8 +13,13 @@
   padding-left: var(--document-margins-sides);
 }
 
-/* <1160: pad 35/25. 1160+: pad 50 */
 @media (max-width: 1159px) {
+  .page {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 1279px) and (min-width: 1160px) {
   .page {
     --document-margins-top: 35px;
     --document-margins-bottom: 35px;
@@ -24,8 +27,23 @@
   }
 }
 
+@media (max-width: 1159px) and (min-width: 960px) {
+  .page {
+    --document-margins-top: 20px;
+    --document-margins-bottom: 20px;
+    --document-margins-sides: 15px;
+  }
+}
+
+@media (max-width: 959px) {
+  .page {
+    --document-margins-top: 20px;
+    --document-margins-bottom: 20px;
+    --document-margins-sides: 10px;
+  }
+}
+
 .chrome {
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -33,7 +51,6 @@
 }
 
 .framework {
-  grid-column: 1 / -1;
   min-width: 0;
 }
 
@@ -46,12 +63,64 @@
   min-width: 0;
 }
 
-.leftColumn {
+.oneOnOne {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+  min-width: 0;
+  padding-block: 2px;
 }
 
-.rightColumn {
+.leftSide {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 480px;
+  flex-shrink: 0;
   min-width: 0;
+}
+
+.agendaSide {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+@media (max-width: 1279px) and (min-width: 1160px) {
+  .leftSide {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 1159px) and (min-width: 960px) {
+  .oneOnOne {
+    gap: 10px;
+  }
+
+  .leftSide {
+    width: 320px;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 959px) {
+  .oneOnOne {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .leftSide {
+    width: 100%;
+    gap: 15px;
+  }
+
+  .agendaSide {
+    width: 100%;
+    order: -1;
+  }
 }

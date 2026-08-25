@@ -74,6 +74,7 @@ export function GrowthFramework({
   const [tierDescriptions, setTierDescriptions] = useState<string[]>(
     () => discipline?.tiers.map((tier) => tier.description) ?? [],
   );
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   useEffect(() => {
     setSkills(discipline?.skills ?? []);
@@ -82,11 +83,13 @@ export function GrowthFramework({
     setTierDescriptions(
       discipline?.tiers.map((tier) => tier.description) ?? [],
     );
+    setDescriptionOpen(false);
   }, [discipline]);
 
   if (!discipline) return null;
 
   const skillsOpen = contentEdit || expanded;
+  const showDescription = contentEdit || descriptionOpen;
   const rankTier = discipline.tiers[roleLevel - 1] ?? discipline.tiers[0];
   const { numeral, subtitle } = splitTierRank(rankTier.rank);
   const description =
@@ -95,7 +98,11 @@ export function GrowthFramework({
 
   return (
     <section className={styles.framework} aria-label="Growth Framework">
-      <div className={styles.role} data-layout="growth-role">
+      <div
+        className={`${styles.role}${showDescription ? "" : ` ${styles.roleShort}`}`}
+        data-layout="growth-role"
+        data-short={showDescription ? undefined : ""}
+      >
         <div className={styles.info}>
           <div className={styles.text}>
             <header className={styles.header}>
@@ -154,19 +161,38 @@ export function GrowthFramework({
                   placeholder="Add Role description"
                 />
               </div>
-            ) : description ? (
-              <p className={styles.description}>{description}</p>
-            ) : null}
+            ) : showDescription && description ? (
+              <button
+                type="button"
+                className={styles.descriptionToggle}
+                onClick={() => {
+                  setDescriptionOpen(false);
+                  setExpanded(false);
+                }}
+              >
+                {description}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.readMore}
+                onClick={() => setDescriptionOpen(true)}
+              >
+                Read more...
+              </button>
+            )}
           </div>
-          <button
-            type="button"
-            className={styles.viewSkills}
-            aria-expanded={skillsOpen}
-            aria-controls="growth-skills"
-            onClick={() => setExpanded((open) => !open)}
-          >
-            {skillsOpen ? "Hide Skills" : "View Skills"}
-          </button>
+          {showDescription ? (
+            <button
+              type="button"
+              className={styles.viewSkills}
+              aria-expanded={skillsOpen}
+              aria-controls="growth-skills"
+              onClick={() => setExpanded((open) => !open)}
+            >
+              {skillsOpen ? "Hide Skills" : "View Skills"}
+            </button>
+          ) : null}
         </div>
         <div className={styles.chart}>
           <div className={styles.array} data-layout="growth-array">
@@ -181,6 +207,7 @@ export function GrowthFramework({
                   data-skill={skill.id}
                   data-rating={rating}
                 >
+                  <p className={styles.columnLabel}>{skill.title}</p>
                   <div className={styles.cellStack}>
                     {Array.from({ length: VISIBLE_TIER_COUNT }, (_, cell) => {
                       const level = VISIBLE_TIER_COUNT - cell;
@@ -207,7 +234,6 @@ export function GrowthFramework({
                       );
                     })}
                   </div>
-                  <p className={styles.columnLabel}>{skill.title}</p>
                 </div>
               );
             })}

@@ -20,19 +20,28 @@ describe("layout CSS contract", () => {
     assert.doesNotMatch(css, /padding:\s*20px/);
   });
 
-  it("keeps the left column at 480px and lets the agenda column flex", () => {
+  it("uses a flex 1:1 section with a 480px left side at wide breakpoints", () => {
     const css = readFileSync(
       join(root, "src/pages/OneOnOnePage.module.css"),
       "utf8",
     );
 
+    assert.match(css, /\.oneOnOne[\s\S]*display:\s*flex/);
+    assert.match(css, /\.leftSide[\s\S]*width:\s*480px/);
+    assert.match(css, /\.agendaSide[\s\S]*flex:\s*1 1 0/);
+    assert.match(css, /\.agendaSide[\s\S]*min-width:\s*0/);
     assert.match(
       css,
-      /grid-template-columns:\s*480px minmax\(0,\s*1fr\)/,
+      /@media \(max-width:\s*1159px\) and \(min-width:\s*960px\)[\s\S]*width:\s*320px/,
     );
-    assert.match(css, /\.chrome[\s\S]*grid-column:\s*1 \/ -1/);
-    assert.match(css, /\.framework[\s\S]*grid-column:\s*1 \/ -1/);
-    assert.match(css, /\.rightColumn[\s\S]*min-width:\s*0/);
+    assert.match(
+      css,
+      /@media \(max-width:\s*959px\)[\s\S]*flex-direction:\s*column/,
+    );
+    assert.match(
+      css,
+      /@media \(max-width:\s*959px\)[\s\S]*\.agendaSide[\s\S]*order:\s*-1/,
+    );
   });
 
   it("splits IC and Manager agenda panels 50/50 inside leftover width", () => {
@@ -123,9 +132,10 @@ describe("layout CSS contract", () => {
       "utf8",
     );
 
-    assert.match(page, /@media \(max-width:\s*1159px\)/);
+    assert.match(page, /@media \(max-width:\s*1279px\) and \(min-width:\s*1160px\)/);
     assert.match(page, /--document-margins-sides:\s*25px/);
-    assert.match(page, /--document-margins-top:\s*35px/);
+    assert.match(page, /--document-margins-sides:\s*15px/);
+    assert.match(page, /--document-margins-sides:\s*10px/);
     assert.match(growth, /@media \(min-width:\s*960px\)/);
     assert.match(growth, /@media \(min-width:\s*1160px\)/);
     assert.match(growth, /@media \(min-width:\s*1280px\)/);

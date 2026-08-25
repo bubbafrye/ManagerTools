@@ -1,25 +1,81 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const LEFT_COLUMN_WIDTH = 480;
-const COLUMN_GAP = 35;
+type ViewportSpec = {
+  width: number;
+  height: number;
+  leftColumnWidth: number;
+  columnGap: number;
+  tokenSides: number;
+  tokenTop: number;
+  tokenBottom: number;
+};
+
+const viewports: ViewportSpec[] = [
+  {
+    width: 1440,
+    height: 900,
+    leftColumnWidth: 480,
+    columnGap: 15,
+    tokenSides: 50,
+    tokenTop: 30,
+    tokenBottom: 50,
+  },
+  {
+    width: 1200,
+    height: 800,
+    leftColumnWidth: 480,
+    columnGap: 15,
+    tokenSides: 25,
+    tokenTop: 35,
+    tokenBottom: 35,
+  },
+  {
+    width: 1100,
+    height: 800,
+    leftColumnWidth: 320,
+    columnGap: 10,
+    tokenSides: 15,
+    tokenTop: 20,
+    tokenBottom: 20,
+  },
+  {
+    width: 1024,
+    height: 768,
+    leftColumnWidth: 320,
+    columnGap: 10,
+    tokenSides: 15,
+    tokenTop: 20,
+    tokenBottom: 20,
+  },
+  {
+    width: 700,
+    height: 900,
+    leftColumnWidth: 680,
+    columnGap: 0,
+    tokenSides: 10,
+    tokenTop: 20,
+    tokenBottom: 20,
+  },
+];
 
 async function layoutMetrics(page: Page) {
   return page.evaluate(() => {
     const pageEl = document.querySelector("[data-layout='page']");
+    const oneOnOne = document.querySelector("[data-layout='one-on-one']");
     const left = document.querySelector("[data-layout='left-column']");
     const agendaColumn = document.querySelector("[data-layout='agenda-column']");
     const agendaPanel = document.querySelector("[data-layout='agenda-panel']");
     const period = document.querySelector("[data-layout='period']");
     const agendaIc = document.querySelector("[data-layout='agenda-ic']");
     const agendaManager = document.querySelector("[data-layout='agenda-manager']");
-    if (!pageEl || !left || !agendaColumn || !agendaPanel || !period) {
+    if (!pageEl || !oneOnOne || !left || !agendaColumn || !agendaPanel || !period) {
       throw new Error("layout nodes missing");
     }
     if (!agendaIc || !agendaManager) {
       throw new Error("agenda subcolumns missing");
     }
     const pageStyle = getComputedStyle(pageEl);
-    const root = getComputedStyle(document.documentElement);
+    const oneOnOneStyle = getComputedStyle(oneOnOne);
     const leftRect = left.getBoundingClientRect();
     const columnRect = agendaColumn.getBoundingClientRect();
     const panelRect = agendaPanel.getBoundingClientRect();
@@ -27,7 +83,9 @@ async function layoutMetrics(page: Page) {
     const icRect = agendaIc.getBoundingClientRect();
     const managerRect = agendaManager.getBoundingClientRect();
     const px = (value: string) => Number.parseFloat(value);
-    const tokenSides = px(root.getPropertyValue("--document-margins-sides"));
+    const pageTokenTop = px(pageStyle.getPropertyValue("--document-margins-top"));
+    const pageTokenSides = px(pageStyle.getPropertyValue("--document-margins-sides"));
+    const pageTokenBottom = px(pageStyle.getPropertyValue("--document-margins-bottom"));
 
     const layoutChain = (el: Element) => {
       const nodes = [];
@@ -53,17 +111,20 @@ async function layoutMetrics(page: Page) {
     };
 
     return {
-      tokenTop: px(root.getPropertyValue("--document-margins-top")),
-      tokenSides,
-      tokenBottom: px(root.getPropertyValue("--document-margins-bottom")),
+      tokenTop: pageTokenTop,
+      tokenSides: pageTokenSides,
+      tokenBottom: pageTokenBottom,
       paddingTop: px(pageStyle.paddingTop),
       paddingRight: px(pageStyle.paddingRight),
       paddingBottom: px(pageStyle.paddingBottom),
       paddingLeft: px(pageStyle.paddingLeft),
+      oneOnOneDirection: oneOnOneStyle.flexDirection,
       leftWidth: leftRect.width,
       leftLeft: leftRect.left,
       columnWidth: columnRect.width,
       columnRight: columnRect.right,
+      columnTop: columnRect.top,
+      leftTop: leftRect.top,
       panelWidth: panelRect.width,
       panelLeft: panelRect.left,
       panelRight: panelRect.right,
@@ -86,17 +147,11 @@ async function layoutMetrics(page: Page) {
   });
 }
 
-const viewports = [
-  { width: 1440, height: 900 },
-  { width: 1100, height: 800 },
-  { width: 1024, height: 768 },
-];
-
 for (const viewport of viewports) {
   test.describe(`viewport ${viewport.width}x${viewport.height}`, () => {
-    test.use({ viewport });
+    test.use({ viewport: { width: viewport.width, height: viewport.height } });
 
-    test("agenda panel stays inside the right gutter and does not grow the page", async ({
+    test("1:1 section matches Figma gutters and column geometry", async ({
       page,
     }) => {
       await page.goto("/");
@@ -106,19 +161,36 @@ for (const viewport of viewports) {
       expect(metrics.paddingRight).toBe(metrics.tokenSides);
       expect(metrics.paddingBottom).toBe(metrics.tokenBottom);
       expect(metrics.paddingLeft).toBe(metrics.tokenSides);
+      expect(metrics.tokenTop).toBe(viewport.tokenTop);
+      expect(metrics.tokenSides).toBe(viewport.tokenSides);
+      expect(metrics.tokenBottom).toBe(viewport.tokenBottom);
 
       expect(metrics.leftLeft).toBe(metrics.tokenSides);
-      expect(metrics.leftWidth).toBe(LEFT_COLUMN_WIDTH);
-      expect(metrics.gap).toBe(COLUMN_GAP);
 
-      const expectedWidth =
-        metrics.viewport -
-        metrics.tokenSides * 2 -
-        LEFT_COLUMN_WIDTH -
-        COLUMN_GAP;
+      if (viewport.width < 960) {
+        expect(metrics.oneOnOneDirection).toBe("column");
+        expect(metrics.columnTop).toBeLessThan(metrics.leftTop);
+        expect(metrics.leftWidth).toBeCloseTo(
+          metrics.viewport - metrics.tokenSides * 2,
+          0,
+        );
+        expect(metrics.columnWidth).toBeCloseTo(metrics.leftWidth, 0);
+        expect(metrics.panelWidth).toBeCloseTo(metrics.leftWidth, 0);
+      } else {
+        expect(metrics.oneOnOneDirection).toBe("row");
+        expect(metrics.leftWidth).toBe(viewport.leftColumnWidth);
+        expect(metrics.gap).toBe(viewport.columnGap);
 
-      expect(metrics.columnWidth).toBeCloseTo(expectedWidth, 0);
-      expect(metrics.panelWidth).toBeCloseTo(expectedWidth, 0);
+        const expectedWidth =
+          metrics.viewport -
+          metrics.tokenSides * 2 -
+          viewport.leftColumnWidth -
+          viewport.columnGap;
+
+        expect(metrics.columnWidth).toBeCloseTo(expectedWidth, 0);
+        expect(metrics.panelWidth).toBeCloseTo(expectedWidth, 0);
+      }
+
       expect(metrics.panelRightGutter).toBeCloseTo(metrics.tokenSides, 0);
       expect(metrics.periodRightGutter).toBeCloseTo(metrics.tokenSides, 0);
       expect(metrics.periodRight).toBeCloseTo(metrics.panelRight, 0);
@@ -137,13 +209,14 @@ for (const viewport of viewports) {
 test("changing margin tokens updates gutters and keeps the panel on-screen", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.setViewportSize({ width: 1440, height: 800 });
   await page.goto("/");
   await page.evaluate(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--document-margins-top", "20px");
-    root.style.setProperty("--document-margins-sides", "80px");
-    root.style.setProperty("--document-margins-bottom", "40px");
+    const pageEl = document.querySelector("[data-layout='page']");
+    if (!pageEl) return;
+    pageEl.style.setProperty("--document-margins-top", "20px");
+    pageEl.style.setProperty("--document-margins-sides", "80px");
+    pageEl.style.setProperty("--document-margins-bottom", "40px");
   });
 
   const metrics = await layoutMetrics(page);
@@ -151,10 +224,10 @@ test("changing margin tokens updates gutters and keeps the panel on-screen", asy
   expect(metrics.paddingRight).toBe(80);
   expect(metrics.leftLeft).toBe(80);
   expect(metrics.panelRightGutter).toBeCloseTo(80, 0);
-  expect(metrics.leftWidth).toBe(LEFT_COLUMN_WIDTH);
+  expect(metrics.leftWidth).toBe(480);
   expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.viewport + 1);
 
-  const expectedWidth = metrics.viewport - 80 - 80 - LEFT_COLUMN_WIDTH - COLUMN_GAP;
+  const expectedWidth = metrics.viewport - 80 - 80 - 480 - 15;
   expect(metrics.panelWidth).toBeCloseTo(expectedWidth, 0);
 });
 
@@ -165,7 +238,7 @@ test("header period and agenda panel move 1:1 when the viewport resizes", async 
   await page.setViewportSize({ width: 1400, height: 800 });
   const wide = await layoutMetrics(page);
 
-  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.setViewportSize({ width: 1300, height: 800 });
   const narrow = await layoutMetrics(page);
 
   const viewportDelta = wide.viewport - narrow.viewport;

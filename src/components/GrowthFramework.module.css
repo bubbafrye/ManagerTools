@@ -92,6 +92,42 @@
   color: var(--document-body-text-color);
 }
 
+.descriptionToggle {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--document-text-body-font-face);
+  font-size: var(--document-text-body-font-size);
+  font-weight: normal;
+  line-height: normal;
+  text-align: left;
+  color: var(--document-body-text-color);
+  cursor: pointer;
+}
+
+.readMore {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--document-text-body-font-face);
+  font-size: var(--document-text-label-font-size);
+  font-weight: normal;
+  line-height: normal;
+  text-align: left;
+  text-decoration: underline;
+  color: var(--document-body-text-color);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
 .viewSkills {
   position: relative;
   display: flex;
@@ -159,22 +195,24 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
-  padding: 10px;
+  height: 250px;
+  padding: 10px 0;
   border-radius: var(--containers-card1-radii);
-  background: var(--containers-card2-surface-color);
+  background: var(--containers-panel-surface);
 }
 
 .column {
   display: flex;
   flex: 1 1 0;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 15px;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 5px;
   width: auto;
-  min-width: 80px;
+  min-width: 0;
+  height: 100%;
   padding: 5px;
   border-radius: var(--containers-card1-radii);
   background: var(--containers-card1-surface-color);
@@ -182,17 +220,20 @@
 
 .cellStack {
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 0;
   flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  height: auto;
+  gap: 10px;
+  width: auto;
+  min-width: 0;
+  height: 100%;
 }
 
 .cell {
   position: relative;
+  flex: 1 1 0;
   width: 100%;
-  height: 50px;
+  min-height: 0;
+  height: auto;
   overflow: clip;
   border-radius: var(--containers-panel-radii);
 }
@@ -230,17 +271,21 @@
 
 .columnLabel {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 50px;
+  width: 17px;
+  height: 147px;
   margin: 0;
   font-family: var(--document-text-header-font-face);
   font-weight: var(--document-text-header-font-weight);
   font-size: var(--document-text-label-font-size);
   line-height: normal;
   text-align: center;
+  white-space: nowrap;
   color: var(--document-body-text-color);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
 .skillsFold {
@@ -272,14 +317,20 @@
 
 @media (min-width: 960px) {
   .array {
-    gap: 30px;
+    gap: 15px;
   }
 }
 
 @media (min-width: 1160px) {
   .role {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
+    min-height: 440px;
+  }
+
+  .roleShort {
+    min-height: 240px;
+    height: 240px;
   }
 
   .info {
@@ -287,6 +338,11 @@
     width: auto;
     min-width: 0;
     gap: 10px;
+    align-self: stretch;
+  }
+
+  .roleShort .info {
+    height: 100%;
   }
 
   .text {
@@ -297,16 +353,56 @@
   .chart {
     width: auto;
     flex: 0 0 auto;
+    align-self: stretch;
   }
 
   .array {
     gap: 15px;
+    height: 100%;
+    padding: 10px;
+    align-self: stretch;
+    background: var(--containers-card2-surface-color);
   }
 
   .column {
     flex: 0 0 90px;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 15px;
     width: 90px;
     min-width: 80px;
+    height: 100%;
+  }
+
+  .roleShort .column {
+    gap: 5px;
+  }
+
+  .cellStack {
+    flex: 1 0 0;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    gap: 15px;
+  }
+
+  .roleShort .cellStack {
+    gap: 5px;
+  }
+
+  .cell {
+    flex: 1 0 0;
+    height: auto;
+    min-height: 0;
+  }
+
+  .columnLabel {
+    width: 100%;
+    height: 50px;
+    writing-mode: horizontal-tb;
+    transform: none;
+    white-space: normal;
   }
 
   .skillsGrid {
