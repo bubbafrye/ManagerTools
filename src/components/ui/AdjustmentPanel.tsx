@@ -22,7 +22,7 @@ import {
 } from "../../themes";
 import { ColorGroup, Swatch } from "./Swatch";
 import { ConfirmDelete, FeedbackDialog } from "./ConfirmDelete";
-import { AddThemeIcon, RandoIcon } from "./Icons";
+import { AddThemeGlyph, RandoIcon } from "./Icons";
 import styles from "./AdjustmentPanel.module.css";
 
 type AdjustmentPanelProps = {
@@ -67,6 +67,22 @@ export function AdjustmentPanel({
 
   return (
     <div className={styles.themeEditor} data-layout="theme-editor">
+      <div className={styles.headers}>
+        <p className={styles.headerTitle}>Preset Themes</p>
+        <div className={styles.savePreset}>
+          <p className={styles.saveLabel}>Save as preset:</p>
+          <button
+            type="button"
+            className={styles.saveTheme}
+            aria-label="save theme"
+            title="Save theme (coming soon)"
+            onClick={() => setSaveNoticeOpen(true)}
+          >
+            <AddThemeGlyph />
+          </button>
+        </div>
+      </div>
+      <div className={styles.ui}>
       <div
         className={styles.themes}
         data-layout="themes"
@@ -109,15 +125,6 @@ export function AdjustmentPanel({
       <div className={styles.spacer} aria-hidden />
 
       <div className={styles.panel} data-layout="adjustment-panel">
-        <button
-          type="button"
-          className={styles.saveTheme}
-          aria-label="save theme"
-          title="Save theme (coming soon)"
-          onClick={() => setSaveNoticeOpen(true)}
-        >
-          <AddThemeIcon />
-        </button>
         <div className={styles.options}>
           <div className={styles.row}>
             <div className={styles.fontPair}>
@@ -228,6 +235,7 @@ export function AdjustmentPanel({
             />
           </div>
         </div>
+      </div>
       </div>
 
       {saveNoticeOpen ? (

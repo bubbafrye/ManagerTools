@@ -48,6 +48,42 @@ export function RandoIcon({ className }: IconProps) {
   );
 }
 
+export function AddThemeGlyph({ className }: IconProps) {
+  return (
+    <svg
+      className={`${styles.icon} ${styles.addThemeGlyph} ${className ?? ""}`}
+      width={10.8}
+      height={12.27}
+      viewBox="11 11 31 32.23"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path
+        d="M18.5825 22.6364H33.8552L26.2188 32.8182L18.5825 22.6364Z"
+        fill="currentColor"
+      />
+      <path
+        d="M42 43.2275H11V27.7275H16.167V38.0605H36.833V27.7275H42V43.2275Z"
+        fill="currentColor"
+      />
+      <rect x="24" y="17" width="5" height="9" fill="currentColor" />
+      <rect
+        width="5"
+        height="4"
+        transform="matrix(1 0 0 -1 24 16)"
+        fill="currentColor"
+      />
+      <rect
+        width="5"
+        height="3"
+        transform="matrix(1 0 0 -1 24 11)"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export function AddThemeIcon({ className }: IconProps) {
   const clipId = useId();
 

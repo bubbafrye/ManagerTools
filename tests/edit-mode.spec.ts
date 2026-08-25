@@ -219,6 +219,7 @@ test("themes sit on the left, edit panel on the right, and rando still randomize
   await page.getByRole("button", { name: "Document settings" }).click();
 
   const strip = page.locator("[data-layout='edit-strip']");
+  const editor = page.locator("[data-layout='theme-editor']");
   const themes = page.locator("[data-layout='themes']");
   const panel = page.locator("[data-layout='adjustment-panel']");
   const rando = page.getByRole("button", { name: "rando" });
@@ -235,10 +236,11 @@ test("themes sit on the left, edit panel on the right, and rando still randomize
     panel.boundingBox(),
     rando.boundingBox(),
     strip.boundingBox(),
+    editor.boundingBox(),
   ]);
   expect(boxes[0]?.x).toBeLessThan(boxes[1]?.x ?? 0);
   expect(boxes[2]?.x).toBeLessThan(boxes[1]?.x ?? 0);
-  expect((boxes[1]?.x ?? 0) + (boxes[1]?.width ?? 0)).toBeGreaterThan(
+  expect((boxes[4]?.x ?? 0) + (boxes[4]?.width ?? 0)).toBeGreaterThan(
     (boxes[3]?.x ?? 0) + (boxes[3]?.width ?? 0) - 8,
   );
 

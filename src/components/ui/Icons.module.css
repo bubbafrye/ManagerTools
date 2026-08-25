@@ -49,6 +49,12 @@
   height: 52px;
 }
 
+.addThemeGlyph {
+  width: 10.8px;
+  height: 12.27px;
+  color: var(--containers-panel-stroke-color);
+}
+
 .trash {
   position: relative;
   display: block;
