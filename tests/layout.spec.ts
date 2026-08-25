@@ -15,10 +15,10 @@ const viewports: ViewportSpec[] = [
     width: 1440,
     height: 900,
     leftColumnWidth: 480,
-    columnGap: 15,
+    columnGap: 25,
     tokenSides: 50,
-    tokenTop: 30,
-    tokenBottom: 50,
+    tokenTop: 40,
+    tokenBottom: 40,
   },
   {
     width: 1200,
@@ -219,6 +219,8 @@ test("changing margin tokens updates gutters and keeps the panel on-screen", asy
     pageEl.style.setProperty("--document-margins-bottom", "40px");
   });
 
+  await expect.poll(async () => (await layoutMetrics(page)).paddingLeft).toBe(80);
+
   const metrics = await layoutMetrics(page);
   expect(metrics.paddingLeft).toBe(80);
   expect(metrics.paddingRight).toBe(80);
@@ -227,7 +229,7 @@ test("changing margin tokens updates gutters and keeps the panel on-screen", asy
   expect(metrics.leftWidth).toBe(480);
   expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.viewport + 1);
 
-  const expectedWidth = metrics.viewport - 80 - 80 - 480 - 15;
+  const expectedWidth = metrics.viewport - 80 - 80 - 480 - 25;
   expect(metrics.panelWidth).toBeCloseTo(expectedWidth, 0);
 });
 

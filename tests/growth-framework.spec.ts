@@ -67,3 +67,28 @@ test("Growth Framework Role panel uses CSV copy and five vis cells", async ({
   await expect(framework.getByText(/Operates with high autonomy/)).toBeVisible();
   await expect(columns.first()).toHaveAttribute("data-rating", "3");
 });
+
+test("Growth Framework top-level uses side-by-side layout from 960px", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto("/");
+
+  const role = page.locator("[data-layout='growth-role']");
+  await expect(role).toHaveAttribute("data-short", "");
+
+  const metrics = await page.evaluate(() => {
+    const roleEl = document.querySelector("[data-layout='growth-role']");
+    const label = document.querySelector("[data-layout='growth-array'] p");
+    if (!roleEl || !label) throw new Error("growth layout nodes missing");
+    return {
+      roleDirection: getComputedStyle(roleEl).flexDirection,
+      labelWritingMode: getComputedStyle(label).writingMode,
+      roleHeight: roleEl.getBoundingClientRect().height,
+    };
+  });
+
+  expect(metrics.roleDirection).toBe("row");
+  expect(metrics.labelWritingMode).toBe("horizontal-tb");
+  expect(metrics.roleHeight).toBeCloseTo(240, 0);
+});

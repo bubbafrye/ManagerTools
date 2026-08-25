@@ -316,12 +316,6 @@
 }
 
 @media (min-width: 960px) {
-  .array {
-    gap: 15px;
-  }
-}
-
-@media (min-width: 1160px) {
   .role {
     flex-direction: row;
     align-items: stretch;
@@ -404,7 +398,9 @@
     transform: none;
     white-space: normal;
   }
+}
 
+@media (min-width: 1160px) {
   .skillsGrid {
     grid-template-columns: 1fr 1fr;
   }

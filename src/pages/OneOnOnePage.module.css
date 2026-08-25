@@ -13,6 +13,32 @@
   padding-left: var(--document-margins-sides);
 }
 
+@media (min-width: 960px) {
+  .page {
+    transition:
+      padding 250ms ease-out,
+      gap 250ms ease-out;
+  }
+
+  .oneOnOne {
+    transition: gap 250ms ease-out;
+  }
+
+  .leftSide {
+    transition:
+      width 250ms ease-out,
+      gap 250ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .oneOnOne,
+  .leftSide {
+    transition: none;
+  }
+}
+
 @media (max-width: 1159px) {
   .page {
     gap: 10px;
@@ -122,5 +148,25 @@
   .agendaSide {
     width: 100%;
     order: -1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page {
+    gap: 25px;
+    --document-margins-top: 40px;
+    --document-margins-bottom: 40px;
+  }
+
+  .chrome {
+    gap: 25px;
+  }
+
+  .editStrip {
+    gap: 25px;
+  }
+
+  .oneOnOne {
+    gap: 25px;
   }
 }

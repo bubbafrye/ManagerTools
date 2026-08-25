@@ -102,7 +102,7 @@ describe("layout CSS contract", () => {
     assert.match(tokens, /--document-margins-sides:\s*50px/);
     assert.match(tokens, /--document-margins-bottom:/);
     assert.match(tokens, /--document-body-color:\s*#d1e7d0/);
-    assert.match(tokens, /--document-text-header-font-size:\s*32px/);
+    assert.match(tokens, /--document-text-header-font-size:\s*30px/);
     assert.match(tokens, /--document-text-subheader-font-size:\s*18px/);
     assert.match(tokens, /--document-text-body-font-size:\s*16px/);
     assert.match(tokens, /--document-text-label-font-size:\s*14px/);

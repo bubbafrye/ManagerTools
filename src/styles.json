@@ -144,7 +144,7 @@
           "name": "document/text-header-font-size",
           "resolvedType": "FLOAT",
           "valuesByMode": {
-            "spring light": 32,
+            "spring light": 30,
             "spring dark": 32,
             "aqua light": 32,
             "aqua dark": 32,
