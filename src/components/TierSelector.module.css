@@ -1,0 +1,115 @@
+.selector {
+  position: relative;
+  width: 100%;
+  height: 54px;
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 9px;
+  border-radius: var(--containers-card1-radii);
+  background: var(--framework-column-hue);
+}
+
+.nodes {
+  position: absolute;
+  top: 9px;
+  right: 15px;
+  left: 15px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.node {
+  position: relative;
+  width: 30px;
+  height: 45px;
+  padding: 0;
+  overflow: visible;
+}
+
+.binder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 30px;
+  height: 21px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 454ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nodeOn .binder {
+  opacity: 1;
+}
+
+.binderFill,
+.binderTint,
+.pointFill,
+.pointTint {
+  position: absolute;
+  inset: 0;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.binderFill {
+  background: var(--framework-column-hue);
+}
+
+.binderTint {
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0,
+    var(--framework-node-stop) 15.5px
+  );
+}
+
+.point {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  transition: top 454ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nodeOn .point {
+  top: 15px;
+}
+
+.pointFill {
+  background: var(--framework-column-hue);
+}
+
+.pointTint {
+  background: var(--framework-node-stop);
+}
+
+.numeral {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--document-text-header-font-face);
+  font-size: var(--document-text-subheader-font-size);
+  font-weight: var(--document-text-header-font-weight);
+  line-height: normal;
+  color: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binder,
+  .point {
+    transition: none;
+  }
+}

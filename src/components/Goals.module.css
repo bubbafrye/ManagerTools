@@ -14,7 +14,7 @@
   margin: 0;
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--document-text-body-font-size);
   line-height: normal;
   color: var(--document-header-text-color);
 }

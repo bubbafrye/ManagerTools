@@ -19,10 +19,14 @@
   --document-margins-sides: 50px;
   --document-margins-top: 30px;
   --document-text-body-font-face: Inter, sans-serif;
-  --document-header-text-color: #102e0f;
+  --document-header-text-color: #1a4a18;
   --document-body-text-color: #224521;
   --document-text-header-font-face: Inter, sans-serif;
   --document-text-header-font-weight: bold;
+  --document-text-header-font-size: 32px;
+  --document-text-subheader-font-size: 18px;
+  --document-text-body-font-size: 16px;
+  --document-text-label-font-size: 14px;
   --ui-ui-stroke-color: #2f8c2c;
   --ui-ui-stroke-weight: 1px;
   --ui-ui-surface-color: #f4fbf4;
@@ -30,10 +34,23 @@
   --ui-ui2-stroke-weight: 0px;
   --ui-ui2-surface-color: #2f962c;
 
-  /* Framework collection (green mode) — page background gradient */
-  --column-base: #c1c879;
+  /* Framework collection — green mode. Hues are Framework/base-light per mode. */
+  --column-base: #96a400;
   --column-stop1: #ffffffb2;
   --column-stop2: #ffffff8c;
   --column-stop3: #ffffff66;
   --column-stop4: #ffffff40;
+
+  --framework-base-light: #96a400;
+  --framework-base-dark: #5b6300;
+  --framework-stop1: #ffffffb2;
+  --framework-stop2: #ffffff8c;
+  --framework-stop3: #ffffff66;
+  --framework-stop4: #ffffff40;
+  --framework-hue-1: #cc9905;
+  --framework-hue-2: #96a400;
+  --framework-hue-3: #0baeb0;
+  --framework-hue-4: #d2723a;
+  --framework-hue-5: #d22e41;
+  --framework-hue-6: #ba28ad;
 }

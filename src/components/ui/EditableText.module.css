@@ -1,6 +1,6 @@
 .editable {
   width: 100%;
-  font-size: 16px;
+  font-size: var(--document-text-body-font-size);
   line-height: normal;
   color: var(--document-body-text-color);
   word-break: break-word;
@@ -11,21 +11,21 @@
 .editableHeader {
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 18px;
+  font-size: var(--document-text-subheader-font-size);
   color: var(--document-header-text-color);
 }
 
 .editableSubheader {
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--document-text-body-font-size);
   color: var(--document-header-text-color);
 }
 
 .editableDate {
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 18px;
+  font-size: var(--document-text-subheader-font-size);
   min-height: 29px;
   color: var(--document-header-text-color);
 }

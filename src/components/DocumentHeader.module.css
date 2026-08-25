@@ -4,7 +4,7 @@
   gap: 5px;
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 32px;
+  font-size: var(--document-text-header-font-size);
   line-height: normal;
   color: var(--document-header-text-color);
 }

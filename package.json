@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts tests/reorder.test.ts tests/randomize-look.test.ts && playwright test",
+    "test": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts tests/reorder.test.ts tests/randomize-look.test.ts tests/role-definitions.test.ts && playwright test",
     "test:contract": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts",
     "test:e2e": "playwright test"
   },

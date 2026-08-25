@@ -25,7 +25,7 @@
 }
 
 .label {
-  font-size: 16px;
+  font-size: var(--document-text-body-font-size);
   line-height: normal;
   opacity: 0.6;
 }
@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 14px;
+  font-size: var(--document-text-label-font-size);
   line-height: normal;
   white-space: nowrap;
   color: var(--document-header-text-color);

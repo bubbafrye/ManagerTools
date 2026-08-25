@@ -54,7 +54,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
   "spring light": {
     colors: {
       "document/body-color": "#d1e7d0",
-      "document/header-text-color": "#102e0f",
+      "document/header-text-color": "#1a4a18",
       "document/body-text-color": "#224521",
       "containers/panel-surface": "#b2d3b1",
       "containers/panel-stroke-color": "#2e632c",
@@ -108,7 +108,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
   "aqua light": {
     colors: {
       "document/body-color": "#cee6e9",
-      "document/header-text-color": "#103237",
+      "document/header-text-color": "#1a535b",
       "document/body-text-color": "#22494f",
       "containers/panel-surface": "#abd0d4",
       "containers/panel-stroke-color": "#2e636b",
@@ -162,8 +162,8 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
   "sand light": {
     colors: {
       "document/body-color": "#e9e2ce",
-      "document/header-text-color": "#3f1b12",
-      "document/body-text-color": "#572f23",
+      "document/header-text-color": "#5d281b",
+      "document/body-text-color": "#4b291e",
       "containers/panel-surface": "#d4c3ab",
       "containers/panel-stroke-color": "#763e2d",
       "containers/card1-surface-color": "#f3f0e8",
@@ -216,7 +216,7 @@ export const THEMES: Record<ThemeId, ThemeTokens> = {
   grey: {
     colors: {
       "document/body-color": "#808080",
-      "document/header-text-color": "#1c1c1c",
+      "document/header-text-color": "#313131",
       "document/body-text-color": "#424242",
       "containers/panel-surface": "#c6c6c6",
       "containers/panel-stroke-color": "#5e5e5e",

@@ -31,6 +31,7 @@ describe("layout CSS contract", () => {
       /grid-template-columns:\s*480px minmax\(0,\s*1fr\)/,
     );
     assert.match(css, /\.chrome[\s\S]*grid-column:\s*1 \/ -1/);
+    assert.match(css, /\.framework[\s\S]*grid-column:\s*1 \/ -1/);
     assert.match(css, /\.rightColumn[\s\S]*min-width:\s*0/);
   });
 
@@ -92,15 +93,42 @@ describe("layout CSS contract", () => {
     assert.match(tokens, /--document-margins-sides:\s*50px/);
     assert.match(tokens, /--document-margins-bottom:/);
     assert.match(tokens, /--document-body-color:\s*#d1e7d0/);
-    assert.match(tokens, /--document-header-text-color:\s*#102e0f/);
+    assert.match(tokens, /--document-text-header-font-size:\s*32px/);
+    assert.match(tokens, /--document-text-subheader-font-size:\s*18px/);
+    assert.match(tokens, /--document-text-body-font-size:\s*16px/);
+    assert.match(tokens, /--document-text-label-font-size:\s*14px/);
     assert.match(tokens, /--document-body-text-color:\s*#224521/);
     assert.doesNotMatch(tokens, /--document-text-color:/);
     assert.doesNotMatch(tokens, /--document-margins-sides:\s*150px/);
     assert.match(tokens, /--containers-panel-surface:/);
     assert.match(tokens, /--containers-card1-surface-color:/);
     assert.match(tokens, /--containers-card2-surface-color:/);
+    assert.match(tokens, /--framework-hue-1:\s*#cc9905/);
+    assert.match(tokens, /--framework-hue-6:\s*#ba28ad/);
+    assert.match(tokens, /--framework-stop1:\s*#ffffffb2/);
+    assert.match(tokens, /--framework-base-dark:\s*#5b6300/);
+    assert.match(tokens, /--framework-base-light:\s*#96a400/);
     assert.doesNotMatch(tokens, /--actions-actions-/);
     assert.doesNotMatch(tokens, /--container-container-/);
     assert.doesNotMatch(tokens, /--document-panel-/);
+  });
+
+  it("uses Figma framework breakpoint padding and skill columns", () => {
+    const page = readFileSync(
+      join(root, "src/pages/OneOnOnePage.module.css"),
+      "utf8",
+    );
+    const growth = readFileSync(
+      join(root, "src/components/GrowthFramework.module.css"),
+      "utf8",
+    );
+
+    assert.match(page, /@media \(max-width:\s*1159px\)/);
+    assert.match(page, /--document-margins-sides:\s*25px/);
+    assert.match(page, /--document-margins-top:\s*35px/);
+    assert.match(growth, /@media \(min-width:\s*960px\)/);
+    assert.match(growth, /@media \(min-width:\s*1160px\)/);
+    assert.match(growth, /@media \(min-width:\s*1280px\)/);
+    assert.match(growth, /grid-template-columns:\s*1fr 1fr 1fr/);
   });
 });

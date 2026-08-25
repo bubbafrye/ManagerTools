@@ -3,6 +3,7 @@ import { ActionItems } from "../components/ActionItems";
 import { Agenda } from "../components/Agenda";
 import { DocumentHeader } from "../components/DocumentHeader";
 import { Goals } from "../components/Goals";
+import { GrowthFramework } from "../components/GrowthFramework";
 import { AdjustmentPanel } from "../components/ui/AdjustmentPanel";
 import {
   DEFAULT_APPEARANCE,
@@ -95,6 +96,13 @@ export function OneOnOnePage({
             />
           </div>
         ) : null}
+      </div>
+      <div className={styles.framework} data-layout="growth-framework">
+        <GrowthFramework
+          icName={document.icName}
+          managerName={document.managerName}
+          editMode={editMode}
+        />
       </div>
       <div className={styles.leftColumn} data-layout="left-column">
         <ActionItems

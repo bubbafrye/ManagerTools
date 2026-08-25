@@ -18,6 +18,7 @@ body,
 body {
   margin: 0;
   font-family: var(--document-text-body-font-face);
+  font-size: var(--document-text-body-font-size);
   color: var(--document-body-text-color);
   background: var(--document-body-color);
 }

@@ -42,7 +42,7 @@
 .date {
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
-  font-size: 18px;
+  font-size: var(--document-text-subheader-font-size);
   min-height: 29px;
   width: 100%;
   color: var(--document-header-text-color);
@@ -50,7 +50,7 @@
 
 .due {
   width: 5.5rem;
-  font-size: 16px;
+  font-size: var(--document-text-body-font-size);
   line-height: normal;
   color: var(--document-body-text-color);
 }

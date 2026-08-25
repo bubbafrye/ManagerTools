@@ -1,7 +1,36 @@
-import { useRef } from "react";
+import { useRef, type Ref } from "react";
 import { DateField } from "./ui/DateField";
 import { ListField } from "./ui/ListField";
 import styles from "./Notes.module.css";
+
+type NotesTextProps = {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  ariaLabel: string;
+  layoutId?: string;
+  fieldRef?: Ref<HTMLDivElement>;
+};
+
+export function NotesText({
+  value,
+  onChange,
+  placeholder,
+  ariaLabel,
+  layoutId,
+  fieldRef,
+}: NotesTextProps) {
+  return (
+    <ListField
+      ref={fieldRef}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      ariaLabel={ariaLabel}
+      layoutId={layoutId}
+    />
+  );
+}
 
 type NotesProps = {
   notesDate: string;
@@ -27,8 +56,8 @@ export function Notes({
         ariaLabel="Notes date"
         onEnter={() => notesTextRef.current?.focus()}
       />
-      <ListField
-        ref={notesTextRef}
+      <NotesText
+        fieldRef={notesTextRef}
         value={notesText}
         onChange={onTextChange}
         placeholder="Meeting notes"
