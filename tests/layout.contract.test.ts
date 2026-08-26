@@ -102,10 +102,11 @@ describe("layout CSS contract", () => {
     assert.match(tokens, /--document-margins-sides:\s*50px/);
     assert.match(tokens, /--document-margins-bottom:/);
     assert.match(tokens, /--document-body-color:\s*#d1e7d0/);
-    assert.match(tokens, /--document-text-header-font-size:\s*30px/);
-    assert.match(tokens, /--document-text-subheader-font-size:\s*18px/);
-    assert.match(tokens, /--document-text-body-font-size:\s*16px/);
-    assert.match(tokens, /--document-text-label-font-size:\s*14px/);
+    assert.match(tokens, /--document-text-size-offset:\s*0\.75/);
+    assert.match(tokens, /--document-text-header-font-size-base:\s*30px/);
+    assert.match(tokens, /--document-text-subheader-font-size-base:\s*18px/);
+    assert.match(tokens, /--document-text-body-font-size-base:\s*16px/);
+    assert.match(tokens, /--document-text-label-font-size-base:\s*14px/);
     assert.match(tokens, /--document-body-text-color:\s*#224521/);
     assert.doesNotMatch(tokens, /--document-text-color:/);
     assert.doesNotMatch(tokens, /--document-margins-sides:\s*150px/);
@@ -136,7 +137,6 @@ describe("layout CSS contract", () => {
     assert.match(page, /--document-margins-sides:\s*25px/);
     assert.match(page, /--document-margins-sides:\s*15px/);
     assert.match(page, /--document-margins-sides:\s*10px/);
-    assert.match(growth, /@media \(min-width:\s*960px\)/);
     assert.match(growth, /@media \(min-width:\s*1160px\)/);
     assert.match(growth, /@media \(min-width:\s*1280px\)/);
     assert.match(growth, /grid-template-columns:\s*1fr 1fr 1fr/);

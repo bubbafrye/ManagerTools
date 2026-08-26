@@ -206,6 +206,19 @@
           }
         },
         {
+          "name": "document/text-size-offset",
+          "resolvedType": "FLOAT",
+          "valuesByMode": {
+            "spring light": 0.75,
+            "spring dark": 0.75,
+            "aqua light": 0.75,
+            "aqua dark": 0.75,
+            "sand light": 0.75,
+            "sand dark": 0.75,
+            "grey": 0.75
+          }
+        },
+        {
           "name": "document/manager-name",
           "resolvedType": "STRING",
           "valuesByMode": {

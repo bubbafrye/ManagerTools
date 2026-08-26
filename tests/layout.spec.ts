@@ -48,6 +48,15 @@ const viewports: ViewportSpec[] = [
     tokenBottom: 20,
   },
   {
+    width: 800,
+    height: 900,
+    leftColumnWidth: 780,
+    columnGap: 0,
+    tokenSides: 10,
+    tokenTop: 20,
+    tokenBottom: 20,
+  },
+  {
     width: 700,
     height: 900,
     leftColumnWidth: 680,
@@ -256,4 +265,38 @@ test("header period and agenda panel move 1:1 when the viewport resizes", async 
   expect(periodDelta).toBeCloseTo(viewportDelta, 0);
   expect(panelDelta).toBeCloseTo(viewportDelta, 0);
   expect(periodDelta).toBeCloseTo(panelDelta, 0);
+});
+
+test("document text sizes scale by text-size-offset below 960px", async ({
+  page,
+}) => {
+  const readSizes = () =>
+    page.evaluate(() => {
+      const root = getComputedStyle(document.documentElement);
+      const px = (name: string) =>
+        Number.parseFloat(root.getPropertyValue(name));
+      return {
+        offset: px("--document-text-size-offset"),
+        header: px("--document-text-header-font-size"),
+        subheader: px("--document-text-subheader-font-size"),
+        body: px("--document-text-body-font-size"),
+        label: px("--document-text-label-font-size"),
+      };
+    });
+
+  await page.goto("/");
+  await page.setViewportSize({ width: 1100, height: 800 });
+  const wide = await readSizes();
+  expect(wide.offset).toBeCloseTo(0.75, 2);
+  expect(wide.header).toBeCloseTo(30, 0);
+  expect(wide.subheader).toBeCloseTo(18, 0);
+  expect(wide.body).toBeCloseTo(16, 0);
+  expect(wide.label).toBeCloseTo(14, 0);
+
+  await page.setViewportSize({ width: 900, height: 800 });
+  const narrow = await readSizes();
+  expect(narrow.header).toBeCloseTo(Math.round(30 * 0.75), 0);
+  expect(narrow.subheader).toBeCloseTo(Math.round(18 * 0.75), 0);
+  expect(narrow.body).toBeCloseTo(Math.round(16 * 0.75), 0);
+  expect(narrow.label).toBeCloseTo(Math.round(14 * 0.75), 0);
 });

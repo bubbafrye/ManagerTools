@@ -21,8 +21,8 @@
 .saveLabel {
   margin: 0;
   font-family: var(--document-text-header-font-face);
-  font-size: var(--document-text-subheader-size);
-  font-weight: var(--document-text-header-weight);
+  font-size: var(--document-text-subheader-font-size);
+  font-weight: var(--document-text-header-font-weight);
   line-height: 1;
   color: var(--document-header-text-color);
 }
@@ -120,6 +120,82 @@
   padding: 15px;
   border-radius: var(--containers-panel-radii);
   background: var(--ui-ui-surface-color);
+}
+
+/* 768–959: compact horizontal chrome */
+@media (max-width: 959px) {
+  .themeEditor {
+    padding: 10px;
+  }
+
+  .themes {
+    padding: 5px;
+  }
+}
+
+/* <768: presets card, then save + panel stacked */
+@media (max-width: 767px) {
+  .themeEditor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "themes"
+      "save"
+      "panel";
+    align-items: stretch;
+    row-gap: 0;
+    column-gap: 0;
+  }
+
+  .headers,
+  .ui {
+    display: contents;
+  }
+
+  .headerTitle {
+    grid-area: title;
+    flex: none;
+    padding: 15px 15px 0;
+    border-radius: var(--containers-panel-radii) var(--containers-panel-radii) 0 0;
+    background: var(--ui-ui-surface-color);
+  }
+
+  .themes {
+    grid-area: themes;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+    padding: 10px 15px 15px;
+    border-radius: 0 0 var(--containers-panel-radii) var(--containers-panel-radii);
+  }
+
+  .themeRow {
+    display: contents;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .savePreset {
+    grid-area: save;
+    flex: none;
+    justify-content: flex-start;
+    margin-bottom: 15px;
+  }
+
+  .saveLabel {
+    flex: 0 0 auto;
+    text-align: left;
+  }
+
+  .panel {
+    grid-area: panel;
+    width: 100%;
+    height: auto;
+  }
 }
 
 .saveTheme {

@@ -65,3 +65,36 @@
   font-weight: inherit;
   font-size: inherit;
 }
+
+/* <768: settings + period on top; names centered below */
+@media (max-width: 767px) {
+  .header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "settings period"
+      "names names";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 5px;
+  }
+
+  .settingsButton {
+    grid-area: settings;
+  }
+
+  .names {
+    grid-area: names;
+    flex: none;
+    width: 100%;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .period {
+    grid-area: period;
+    justify-self: start;
+    text-align: left;
+    font-size: var(--document-text-subheader-font-size);
+  }
+}

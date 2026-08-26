@@ -83,159 +83,170 @@ export function AdjustmentPanel({
         </div>
       </div>
       <div className={styles.ui}>
-      <div
-        className={styles.themes}
-        data-layout="themes"
-        data-themes-container=""
-      >
-        <div className={styles.themeRow}>
-          <button
-            type="button"
-            className={styles.themeButton}
-            aria-label="rando"
-            onClick={onRandomize}
-          >
-            <RandoIcon />
-          </button>
-          {row1.map((id) => (
-            <ThemeSwatchButton
-              key={id}
-              id={id}
-              selected={activeThemeId === id}
-              hidden={pendingDelete === id}
-              onSelect={onSelectTheme}
-              onRequestDelete={setPendingDelete}
-            />
-          ))}
-        </div>
-        <div className={styles.themeRow}>
-          {row2.map((id) => (
-            <ThemeSwatchButton
-              key={id}
-              id={id}
-              selected={activeThemeId === id}
-              hidden={pendingDelete === id}
-              onSelect={onSelectTheme}
-              onRequestDelete={setPendingDelete}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.spacer} aria-hidden />
-
-      <div className={styles.panel} data-layout="adjustment-panel">
-        <div className={styles.options}>
-          <div className={styles.row}>
-            <div className={styles.fontPair}>
-              <FontSelect
-                ariaLabel="header font"
-                value={appearance.headerFont}
-                onChange={(headerFont) => onChange({ headerFont })}
+        <div
+          className={styles.themes}
+          data-layout="themes"
+          data-themes-container=""
+        >
+          <div className={styles.themeRow}>
+            <button
+              type="button"
+              className={styles.themeButton}
+              aria-label="rando"
+              onClick={onRandomize}
+            >
+              <RandoIcon />
+            </button>
+            {row1.map((id) => (
+              <ThemeSwatchButton
+                key={id}
+                id={id}
+                selected={activeThemeId === id}
+                hidden={pendingDelete === id}
+                onSelect={onSelectTheme}
+                onRequestDelete={setPendingDelete}
               />
-              <Swatch
-                token="--document-header-text-color"
-                label="header color"
-              />
-            </div>
-            <div className={styles.fontPair}>
-              <FontSelect
-                ariaLabel="body font"
-                value={appearance.bodyFont}
-                onChange={(bodyFont) => onChange({ bodyFont })}
-              />
-              <Swatch
-                token="--document-body-text-color"
-                label="body text color"
-              />
-            </div>
-            <NumberField
-              label="corners"
-              value={appearance.panelRadius}
-              onChange={(panelRadius) =>
-                onChange({
-                  panelRadius,
-                  cardRadius: cardRadiiFromPanel(panelRadius),
-                })
-              }
-            />
-            <NumberField
-              label="outer borders"
-              value={appearance.panelBorder}
-              onChange={(panelBorder) => onChange({ panelBorder })}
-            />
-            <NumberField
-              label="inner borders"
-              value={appearance.cardBorder}
-              onChange={(cardBorder) => onChange({ cardBorder })}
-            />
+            ))}
           </div>
-          <div className={styles.row}>
-            <ColorGroup
-              label="page"
-              colors={[{ token: "--document-body-color", label: "page color" }]}
-            />
-            <ColorGroup
-              label="panels"
-              compact
-              colors={[
-                {
-                  token: "--containers-panel-surface",
-                  label: "panels surface",
-                },
-                {
-                  token: "--containers-panel-stroke-color",
-                  label: "panels stroke",
-                },
-              ]}
-            />
-            <ColorGroup
-              label="section 1"
-              compact
-              colors={[
-                {
-                  token: "--containers-card1-surface-color",
-                  label: "section 1 surface",
-                },
-                {
-                  token: "--containers-card1-stroke-color",
-                  label: "section 1 stroke",
-                },
-              ]}
-            />
-            <ColorGroup
-              label="section 2"
-              compact
-              colors={[
-                {
-                  token: "--containers-card2-surface-color",
-                  label: "section 2 surface",
-                },
-                {
-                  token: "--containers-card2-stroke-color",
-                  label: "section 2 stroke",
-                },
-              ]}
-            />
-            <ColorGroup
-              label="accent 1"
-              compact
-              colors={[
-                { token: "--ui-ui-surface-color", label: "accent 1 surface" },
-                { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
-              ]}
-            />
-            <ColorGroup
-              label="accent 2"
-              compact
-              colors={[
-                { token: "--ui-ui2-surface-color", label: "accent 2 surface" },
-                { token: "--ui-ui2-stroke-color", label: "accent 2 stroke" },
-              ]}
-            />
+          <div className={styles.themeRow}>
+            {row2.map((id) => (
+              <ThemeSwatchButton
+                key={id}
+                id={id}
+                selected={activeThemeId === id}
+                hidden={pendingDelete === id}
+                onSelect={onSelectTheme}
+                onRequestDelete={setPendingDelete}
+              />
+            ))}
           </div>
         </div>
-      </div>
+
+        <div className={styles.spacer} aria-hidden />
+
+        <div className={styles.panel} data-layout="adjustment-panel">
+          <div className={styles.options}>
+            <div className={styles.row}>
+              <div className={styles.fontPair}>
+                <FontSelect
+                  ariaLabel="header font"
+                  value={appearance.headerFont}
+                  onChange={(headerFont) => onChange({ headerFont })}
+                />
+                <Swatch
+                  token="--document-header-text-color"
+                  label="header color"
+                />
+              </div>
+              <div className={styles.fontPair}>
+                <FontSelect
+                  ariaLabel="body font"
+                  value={appearance.bodyFont}
+                  onChange={(bodyFont) => onChange({ bodyFont })}
+                />
+                <Swatch
+                  token="--document-body-text-color"
+                  label="body text color"
+                />
+              </div>
+              <NumberField
+                label="corners"
+                value={appearance.panelRadius}
+                onChange={(panelRadius) =>
+                  onChange({
+                    panelRadius,
+                    cardRadius: cardRadiiFromPanel(panelRadius),
+                  })
+                }
+              />
+              <NumberField
+                label="outer borders"
+                value={appearance.panelBorder}
+                onChange={(panelBorder) => onChange({ panelBorder })}
+              />
+              <NumberField
+                label="inner borders"
+                value={appearance.cardBorder}
+                onChange={(cardBorder) => onChange({ cardBorder })}
+              />
+            </div>
+            <div className={styles.row}>
+              <ColorGroup
+                label="page"
+                colors={[
+                  { token: "--document-body-color", label: "page color" },
+                ]}
+              />
+              <ColorGroup
+                label="panels"
+                compact
+                colors={[
+                  {
+                    token: "--containers-panel-surface",
+                    label: "panels surface",
+                  },
+                  {
+                    token: "--containers-panel-stroke-color",
+                    label: "panels stroke",
+                  },
+                ]}
+              />
+              <ColorGroup
+                label="section 1"
+                compact
+                colors={[
+                  {
+                    token: "--containers-card1-surface-color",
+                    label: "section 1 surface",
+                  },
+                  {
+                    token: "--containers-card1-stroke-color",
+                    label: "section 1 stroke",
+                  },
+                ]}
+              />
+              <ColorGroup
+                label="section 2"
+                compact
+                colors={[
+                  {
+                    token: "--containers-card2-surface-color",
+                    label: "section 2 surface",
+                  },
+                  {
+                    token: "--containers-card2-stroke-color",
+                    label: "section 2 stroke",
+                  },
+                ]}
+              />
+              <ColorGroup
+                label="accent 1"
+                compact
+                colors={[
+                  {
+                    token: "--ui-ui-surface-color",
+                    label: "accent 1 surface",
+                  },
+                  { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
+                ]}
+              />
+              <ColorGroup
+                label="accent 2"
+                compact
+                colors={[
+                  {
+                    token: "--ui-ui2-surface-color",
+                    label: "accent 2 surface",
+                  },
+                  {
+                    token: "--ui-ui2-stroke-color",
+                    label: "accent 2 stroke",
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {saveNoticeOpen ? (

@@ -225,3 +225,39 @@
 .savePresetDisabled .saveButton::after {
   display: none;
 }
+
+/* <768: Edit Preset above save row */
+@media (max-width: 767px) {
+  .headers {
+    align-items: flex-start;
+  }
+
+  .savePreset {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "edit edit"
+      "label btn";
+    align-items: center;
+    justify-content: end;
+    column-gap: 10px;
+    row-gap: 10px;
+  }
+
+  .editPreset {
+    grid-area: edit;
+    justify-self: end;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .saveLabel {
+    grid-area: label;
+  }
+
+  .saveButton {
+    grid-area: btn;
+  }
+}

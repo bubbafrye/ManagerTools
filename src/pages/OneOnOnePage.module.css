@@ -134,6 +134,10 @@
 }
 
 @media (max-width: 959px) {
+  .chrome {
+    gap: 10px;
+  }
+
   .oneOnOne {
     flex-direction: column;
     align-items: stretch;
