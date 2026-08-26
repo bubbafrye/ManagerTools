@@ -1,5 +1,23 @@
 import { expect, test } from "@playwright/test";
 
+test("agenda entry stacks IC and Manager panels under 768px", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 480, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+
+  const ic = page.locator("[data-layout='agenda-ic']");
+  const manager = page.locator("[data-layout='agenda-manager']");
+  const icBox = await ic.boundingBox();
+  const managerBox = await manager.boundingBox();
+  expect(icBox).toBeTruthy();
+  expect(managerBox).toBeTruthy();
+
+  expect(managerBox!.y).toBeGreaterThan(icBox!.y + icBox!.height - 1);
+  expect(icBox!.width).toBeCloseTo(managerBox!.width, 0);
+});
+
 test("list placeholders sit on the first line, hide on focus, and return only if still blank", async ({
   page,
 }) => {

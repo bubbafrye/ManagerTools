@@ -1,14 +1,21 @@
 .entry {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   width: 100%;
   min-width: 0;
 }
 
 .sides {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   width: 100%;
   min-width: 0;
+}
+
+/* <768: stack IC and Manager agenda panels */
+@media (max-width: 767px) {
+  .sides {
+    flex-direction: column;
+  }
 }

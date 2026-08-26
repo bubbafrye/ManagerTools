@@ -3,9 +3,9 @@
   flex-direction: column;
   width: 100%;
   padding: 5px 20px;
-  border-radius: var(--containers-card1-radii);
-  border: var(--containers-card2-stroke-weight) solid
-    var(--containers-card2-stroke-color);
-  background: var(--containers-card2-surface-color);
+  border-radius: var(--containers-panel-radii);
+  border: var(--containers-panel-stroke-weight) solid
+    var(--containers-card1-stroke-color);
+  background: var(--containers-card1-surface-color);
   word-break: break-word;
 }

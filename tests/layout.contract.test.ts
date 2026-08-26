@@ -57,9 +57,13 @@ describe("layout CSS contract", () => {
     assert.match(entryCss, /\.sides[\s\S]*display:\s*flex/);
     assert.match(panelCss, /\.panel[\s\S]*flex:\s*1/);
     assert.match(panelCss, /\.panel[\s\S]*min-width:\s*0/);
+    assert.match(
+      entryCss,
+      /@media \(max-width:\s*767px\)[\s\S]*flex-direction:\s*column/,
+    );
   });
 
-  it("maps Notes to card2 and IC/Manager agenda panels to card1 (Figma)", () => {
+  it("maps Notes to card1 and IC/Manager agenda panels to card2 (Figma)", () => {
     const notesCss = readFileSync(
       join(root, "src/components/Notes.module.css"),
       "utf8",
@@ -69,22 +73,22 @@ describe("layout CSS contract", () => {
       "utf8",
     );
 
-    assert.match(notesCss, /background:\s*var\(--containers-card2-surface-color\)/);
+    assert.match(notesCss, /background:\s*var\(--containers-card1-surface-color\)/);
     assert.match(
       notesCss,
-      /border:[\s\S]*var\(--containers-card2-stroke-color\)/,
-    );
-    assert.match(
-      panelCss,
-      /background:\s*var\(--containers-card1-surface-color\)/,
-    );
-    assert.match(
-      panelCss,
       /border:[\s\S]*var\(--containers-card1-stroke-color\)/,
+    );
+    assert.match(
+      panelCss,
+      /background:\s*var\(--containers-card2-surface-color\)/,
+    );
+    assert.match(
+      panelCss,
+      /border:[\s\S]*var\(--containers-card2-stroke-color\)/,
     );
     assert.doesNotMatch(
       panelCss,
-      /--containers-card2-surface-color|--containers-card2-stroke-color/,
+      /--containers-card1-surface-color|--containers-card1-stroke-color/,
     );
   });
 

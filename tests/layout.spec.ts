@@ -141,9 +141,12 @@ async function layoutMetrics(page: Page) {
       icWidth: icRect.width,
       icLeft: icRect.left,
       icRight: icRect.right,
+      icTop: icRect.top,
+      icBottom: icRect.bottom,
       managerWidth: managerRect.width,
       managerLeft: managerRect.left,
       managerRight: managerRect.right,
+      managerTop: managerRect.top,
       gap: columnRect.left - leftRect.right,
       columnRightGutter: window.innerWidth - columnRect.right,
       panelRightGutter: window.innerWidth - panelRect.right,
@@ -201,8 +204,13 @@ for (const viewport of viewports) {
       }
 
       expect(metrics.panelRightGutter).toBeCloseTo(metrics.tokenSides, 0);
-      expect(metrics.periodRightGutter).toBeCloseTo(metrics.tokenSides, 0);
-      expect(metrics.periodRight).toBeCloseTo(metrics.panelRight, 0);
+      if (viewport.width < 768) {
+        // xsm header: period sits beside settings on the left
+        expect(metrics.periodRightGutter).toBeGreaterThan(metrics.tokenSides);
+      } else {
+        expect(metrics.periodRightGutter).toBeCloseTo(metrics.tokenSides, 0);
+        expect(metrics.periodRight).toBeCloseTo(metrics.panelRight, 0);
+      }
       expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.viewport + 1);
 
       expect(metrics.icWidth).toBeCloseTo(metrics.managerWidth, 0);
@@ -211,6 +219,12 @@ for (const viewport of viewports) {
       expect(metrics.managerRight).toBeLessThanOrEqual(
         metrics.viewport - metrics.tokenSides + 1,
       );
+
+      if (viewport.width < 768) {
+        expect(metrics.managerTop).toBeGreaterThan(metrics.icBottom - 1);
+      } else {
+        expect(metrics.icTop).toBeCloseTo(metrics.managerTop, 0);
+      }
     });
   });
 }
@@ -284,8 +298,8 @@ test("document text sizes scale by text-size-offset below 960px", async ({
       };
     });
 
-  await page.goto("/");
   await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto("/");
   const wide = await readSizes();
   expect(wide.offset).toBeCloseTo(0.75, 2);
   expect(wide.header).toBeCloseTo(30, 0);
@@ -294,8 +308,10 @@ test("document text sizes scale by text-size-offset below 960px", async ({
   expect(wide.label).toBeCloseTo(14, 0);
 
   await page.setViewportSize({ width: 900, height: 800 });
+  await expect
+    .poll(async () => (await readSizes()).header)
+    .toBeCloseTo(Math.round(30 * 0.75), 0);
   const narrow = await readSizes();
-  expect(narrow.header).toBeCloseTo(Math.round(30 * 0.75), 0);
   expect(narrow.subheader).toBeCloseTo(Math.round(18 * 0.75), 0);
   expect(narrow.body).toBeCloseTo(Math.round(16 * 0.75), 0);
   expect(narrow.label).toBeCloseTo(Math.round(14 * 0.75), 0);
