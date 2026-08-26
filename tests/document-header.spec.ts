@@ -59,12 +59,12 @@ test("document header places adjust left, names center, and range right", async 
   expect(icBox).toBeTruthy();
   expect(managerBox).toBeTruthy();
 
-  expect(settingsBox!.x).toBeCloseTo(headerBox!.x, 1);
+  expect(settingsBox!.x).toBeCloseTo(headerBox!.x + 17, 1);
   expect(settingsBox!.width).toBeCloseTo(28, 0);
   expect(settingsBox!.height).toBeCloseTo(29, 0);
 
   expect(periodBox!.x + periodBox!.width).toBeCloseTo(
-    headerBox!.x + headerBox!.width,
+    headerBox!.x + headerBox!.width - 17,
     1,
   );
 

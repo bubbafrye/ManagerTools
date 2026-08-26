@@ -211,6 +211,40 @@ test("swatch writes a color token live", async ({ page }) => {
   expect(textColor).toBe("#ff0000");
 });
 
+test("theme editor stacks presets and edit controls under 768px", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 480, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+
+  const editor = page.locator("[data-layout='theme-editor']");
+  const themes = page.locator("[data-layout='themes']");
+  const panel = page.locator("[data-layout='adjustment-panel']");
+  const title = editor.getByText("Preset Themes");
+  const save = page.getByRole("button", { name: "save theme" });
+
+  const editorBox = await editor.boundingBox();
+  const titleBox = await title.boundingBox();
+  const themesBox = await themes.boundingBox();
+  const saveBox = await save.boundingBox();
+  const panelBox = await panel.boundingBox();
+  expect(editorBox).toBeTruthy();
+  expect(titleBox).toBeTruthy();
+  expect(themesBox).toBeTruthy();
+  expect(saveBox).toBeTruthy();
+  expect(panelBox).toBeTruthy();
+
+  expect(themesBox!.y).toBeGreaterThan(titleBox!.y);
+  expect(themesBox!.x).toBeCloseTo(titleBox!.x, 0);
+  expect(saveBox!.y).toBeGreaterThan(themesBox!.y + themesBox!.height - 1);
+  expect(panelBox!.y).toBeGreaterThan(saveBox!.y);
+  expect(panelBox!.width).toBeLessThanOrEqual(editorBox!.width + 1);
+  expect(panelBox!.x + panelBox!.width).toBeLessThanOrEqual(
+    editorBox!.x + editorBox!.width + 1,
+  );
+});
+
 test("themes sit on the left, edit panel on the right, and rando still randomizes", async ({
   page,
 }) => {

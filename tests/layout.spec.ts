@@ -208,8 +208,9 @@ for (const viewport of viewports) {
         // xsm header: period sits beside settings on the left
         expect(metrics.periodRightGutter).toBeGreaterThan(metrics.tokenSides);
       } else {
-        expect(metrics.periodRightGutter).toBeCloseTo(metrics.tokenSides, 0);
-        expect(metrics.periodRight).toBeCloseTo(metrics.panelRight, 0);
+        // document-header inset: panel stroke (2) + padding (15)
+        expect(metrics.periodRightGutter).toBeCloseTo(metrics.tokenSides + 17, 0);
+        expect(metrics.periodRight).toBeCloseTo(metrics.panelRight - 17, 0);
       }
       expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.viewport + 1);
 

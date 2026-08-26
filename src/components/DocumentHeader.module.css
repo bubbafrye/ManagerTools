@@ -2,6 +2,13 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 15px;
+  border-radius: var(--containers-panel-radii);
+  border: var(--containers-panel-stroke-weight) solid
+    var(--containers-panel-stroke-color);
+  background: var(--containers-panel-surface);
   font-family: var(--document-text-header-font-face);
   font-weight: bold;
   font-size: var(--document-text-header-font-size);
@@ -75,6 +82,7 @@
       "settings period"
       "names names";
     align-items: center;
+    justify-items: stretch;
     column-gap: 10px;
     row-gap: 5px;
   }
@@ -89,6 +97,10 @@
     width: 100%;
     justify-content: center;
     gap: 5px;
+  }
+
+  .nameSlot {
+    display: none;
   }
 
   .period {

@@ -67,22 +67,8 @@ export function AdjustmentPanel({
 
   return (
     <div className={styles.themeEditor} data-layout="theme-editor">
-      <div className={styles.headers}>
+      <div className={styles.presetsBlock}>
         <p className={styles.headerTitle}>Preset Themes</p>
-        <div className={styles.savePreset}>
-          <p className={styles.saveLabel}>Save as preset:</p>
-          <button
-            type="button"
-            className={styles.saveTheme}
-            aria-label="save theme"
-            title="Save theme (coming soon)"
-            onClick={() => setSaveNoticeOpen(true)}
-          >
-            <AddThemeGlyph />
-          </button>
-        </div>
-      </div>
-      <div className={styles.ui}>
         <div
           className={styles.themes}
           data-layout="themes"
@@ -121,12 +107,23 @@ export function AdjustmentPanel({
             ))}
           </div>
         </div>
-
-        <div className={styles.spacer} aria-hidden />
-
+      </div>
+      <div className={styles.controlsBlock}>
+        <div className={styles.savePreset}>
+          <p className={styles.saveLabel}>Save as preset:</p>
+          <button
+            type="button"
+            className={styles.saveTheme}
+            aria-label="save theme"
+            title="Save theme (coming soon)"
+            onClick={() => setSaveNoticeOpen(true)}
+          >
+            <AddThemeGlyph />
+          </button>
+        </div>
         <div className={styles.panel} data-layout="adjustment-panel">
           <div className={styles.options}>
-            <div className={styles.row}>
+            <div className={styles.fontsRow}>
               <div className={styles.fontPair}>
                 <FontSelect
                   ariaLabel="header font"
@@ -149,7 +146,22 @@ export function AdjustmentPanel({
                   label="body text color"
                 />
               </div>
+            </div>
+            <div className={styles.numbersRow}>
               <NumberField
+                className={styles.numberOuter}
+                label="outer borders"
+                value={appearance.panelBorder}
+                onChange={(panelBorder) => onChange({ panelBorder })}
+              />
+              <NumberField
+                className={styles.numberInner}
+                label="inner borders"
+                value={appearance.cardBorder}
+                onChange={(cardBorder) => onChange({ cardBorder })}
+              />
+              <NumberField
+                className={styles.numberCorners}
                 label="corners"
                 value={appearance.panelRadius}
                 onChange={(panelRadius) =>
@@ -159,91 +171,90 @@ export function AdjustmentPanel({
                   })
                 }
               />
-              <NumberField
-                label="outer borders"
-                value={appearance.panelBorder}
-                onChange={(panelBorder) => onChange({ panelBorder })}
-              />
-              <NumberField
-                label="inner borders"
-                value={appearance.cardBorder}
-                onChange={(cardBorder) => onChange({ cardBorder })}
-              />
             </div>
-            <div className={styles.row}>
-              <ColorGroup
-                label="page"
-                colors={[
-                  { token: "--document-body-color", label: "page color" },
-                ]}
-              />
-              <ColorGroup
-                label="panels"
-                compact
-                colors={[
-                  {
-                    token: "--containers-panel-surface",
-                    label: "panels surface",
-                  },
-                  {
-                    token: "--containers-panel-stroke-color",
-                    label: "panels stroke",
-                  },
-                ]}
-              />
-              <ColorGroup
-                label="section 1"
-                compact
-                colors={[
-                  {
-                    token: "--containers-card1-surface-color",
-                    label: "section 1 surface",
-                  },
-                  {
-                    token: "--containers-card1-stroke-color",
-                    label: "section 1 stroke",
-                  },
-                ]}
-              />
-              <ColorGroup
-                label="section 2"
-                compact
-                colors={[
-                  {
-                    token: "--containers-card2-surface-color",
-                    label: "section 2 surface",
-                  },
-                  {
-                    token: "--containers-card2-stroke-color",
-                    label: "section 2 stroke",
-                  },
-                ]}
-              />
-              <ColorGroup
-                label="accent 1"
-                compact
-                colors={[
-                  {
-                    token: "--ui-ui-surface-color",
-                    label: "accent 1 surface",
-                  },
-                  { token: "--ui-ui-stroke-color", label: "accent 1 stroke" },
-                ]}
-              />
-              <ColorGroup
-                label="accent 2"
-                compact
-                colors={[
-                  {
-                    token: "--ui-ui2-surface-color",
-                    label: "accent 2 surface",
-                  },
-                  {
-                    token: "--ui-ui2-stroke-color",
-                    label: "accent 2 stroke",
-                  },
-                ]}
-              />
+            <div className={styles.colorsRow}>
+              <div className={styles.colorCol}>
+                <ColorGroup
+                  label="page"
+                  colors={[
+                    { token: "--document-body-color", label: "page color" },
+                  ]}
+                />
+                <ColorGroup
+                  label="panels"
+                  compact
+                  colors={[
+                    {
+                      token: "--containers-panel-surface",
+                      label: "panels surface",
+                    },
+                    {
+                      token: "--containers-panel-stroke-color",
+                      label: "panels stroke",
+                    },
+                  ]}
+                />
+              </div>
+              <div className={styles.colorCol}>
+                <ColorGroup
+                  label="section 1"
+                  compact
+                  colors={[
+                    {
+                      token: "--containers-card1-surface-color",
+                      label: "section 1 surface",
+                    },
+                    {
+                      token: "--containers-card1-stroke-color",
+                      label: "section 1 stroke",
+                    },
+                  ]}
+                />
+                <ColorGroup
+                  label="accent 1"
+                  compact
+                  colors={[
+                    {
+                      token: "--ui-ui-surface-color",
+                      label: "accent 1 surface",
+                    },
+                    {
+                      token: "--ui-ui-stroke-color",
+                      label: "accent 1 stroke",
+                    },
+                  ]}
+                />
+              </div>
+              <div className={styles.colorCol}>
+                <ColorGroup
+                  label="section 2"
+                  compact
+                  colors={[
+                    {
+                      token: "--containers-card2-surface-color",
+                      label: "section 2 surface",
+                    },
+                    {
+                      token: "--containers-card2-stroke-color",
+                      label: "section 2 stroke",
+                    },
+                  ]}
+                />
+                <ColorGroup
+                  label="accent 2"
+                  compact
+                  colors={[
+                    {
+                      token: "--ui-ui2-surface-color",
+                      label: "accent 2 surface",
+                    },
+                    {
+                      token: "--ui-ui2-stroke-color",
+                      label: "accent 2 stroke",
+                    },
+                  ]}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -395,9 +406,10 @@ type NumberFieldProps = {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  className?: string;
 };
 
-function NumberField({ label, value, onChange }: NumberFieldProps) {
+function NumberField({ label, value, onChange, className }: NumberFieldProps) {
   const [draft, setDraft] = useState(String(value));
 
   useEffect(() => {
@@ -405,7 +417,11 @@ function NumberField({ label, value, onChange }: NumberFieldProps) {
   }, [value]);
 
   return (
-    <label className={styles.numberField}>
+    <label
+      className={
+        className ? `${styles.numberField} ${className}` : styles.numberField
+      }
+    >
       {label}
       <input
         className={styles.numberInput}

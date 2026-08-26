@@ -228,8 +228,17 @@
 
 /* <768: Edit Preset above save row */
 @media (max-width: 767px) {
+  .roleEditor {
+    padding: 15px;
+  }
+
   .headers {
     align-items: flex-start;
+    gap: 10px;
+  }
+
+  .roleSelector {
+    flex: 0 1 auto;
   }
 
   .savePreset {
@@ -242,6 +251,8 @@
     justify-content: end;
     column-gap: 10px;
     row-gap: 10px;
+    width: 337px;
+    max-width: 100%;
   }
 
   .editPreset {
