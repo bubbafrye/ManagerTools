@@ -26,7 +26,7 @@
   flex-direction: column;
   align-items: center;
   align-self: stretch;
-  gap: 15px;
+  gap: 10px;
   width: 100%;
   min-width: 0;
   padding: 15px 0;
@@ -90,22 +90,6 @@
   font-weight: normal;
   line-height: normal;
   color: var(--document-body-text-color);
-}
-
-.descriptionToggle {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  font-family: var(--document-text-body-font-face);
-  font-size: var(--document-text-body-font-size);
-  font-weight: normal;
-  line-height: normal;
-  text-align: left;
-  color: var(--document-body-text-color);
-  cursor: pointer;
 }
 
 .readMore {
@@ -184,6 +168,7 @@
   display: flex;
   width: 100%;
   min-width: 0;
+  height: 200px;
   align-self: stretch;
   overflow-x: auto;
   overflow-y: clip;
@@ -195,9 +180,9 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   width: 100%;
-  height: 250px;
+  height: 100%;
   padding: 10px 0;
   border-radius: var(--containers-card1-radii);
   background: var(--containers-panel-surface);
@@ -315,37 +300,37 @@
   gap: 15px;
 }
 
+/* narrow: 960–1159 — stacked, rotated labels, 15px array gap */
 @media (min-width: 960px) {
+  .array {
+    gap: 15px;
+  }
+}
+
+/* medium: ≥1160 — side-by-side, vertical columns, 90px */
+@media (min-width: 1160px) {
   .role {
     flex-direction: row;
     align-items: stretch;
-    min-height: 440px;
-  }
-
-  .roleShort {
-    min-height: 240px;
-    height: 240px;
+    overflow: visible;
   }
 
   .info {
-    flex: 1 1 0;
+    flex: 1 0 0;
     width: auto;
     min-width: 0;
-    gap: 10px;
     align-self: stretch;
-  }
-
-  .roleShort .info {
-    height: 100%;
+    overflow: visible;
   }
 
   .text {
-    flex: 1 0 0;
-    min-height: 0;
+    flex: 0 0 auto;
+    width: 100%;
   }
 
   .chart {
     width: auto;
+    height: auto;
     flex: 0 0 auto;
     align-self: stretch;
   }
@@ -398,31 +383,13 @@
     transform: none;
     white-space: normal;
   }
-}
 
-@media (min-width: 1160px) {
   .skillsGrid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (min-width: 1280px) {
-  .chart {
-    flex: 1 1 0;
-    width: auto;
-    min-width: 0;
-  }
-
-  .array {
-    gap: 25px;
-  }
-
-  .column {
-    flex: 1 1 0;
-    width: auto;
-    min-width: 90px;
-  }
-
   .skillsGrid {
     grid-template-columns: 1fr 1fr 1fr;
   }

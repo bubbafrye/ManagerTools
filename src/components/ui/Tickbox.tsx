@@ -18,12 +18,12 @@ export function Tickbox({ checked, onChange, label }: TickboxProps) {
       onClick={() => onChange(!checked)}
     >
       {checked ? (
-        <img
+        <span
           className={styles.check}
-          src={publicUrl("assets/check.svg")}
-          alt=""
-          width={13}
-          height={13}
+          style={{
+            ["--tickbox-check-mask" as string]: `url("${publicUrl("assets/check.svg")}")`,
+          }}
+          aria-hidden
         />
       ) : null}
     </button>

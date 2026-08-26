@@ -123,6 +123,7 @@ export function GrowthFramework({
                   <span className={styles.titleLevel}>{` ${numeral}`}</span>
                 ) : null}
               </h2>
+              <p className={styles.rank}>{subtitle}</p>
               {editMode ? (
                 <div
                   className={styles.roleSelector}
@@ -140,7 +141,6 @@ export function GrowthFramework({
                   />
                 </div>
               ) : null}
-              <p className={styles.rank}>{subtitle}</p>
             </header>
             {contentEdit ? (
               <div className={styles.description}>
@@ -162,23 +162,26 @@ export function GrowthFramework({
                 />
               </div>
             ) : showDescription && description ? (
-              <button
-                type="button"
-                className={styles.descriptionToggle}
-                onClick={() => {
-                  setDescriptionOpen(false);
-                  setExpanded(false);
-                }}
-              >
-                {description}
-              </button>
+              <>
+                <p className={styles.description}>{description}</p>
+                <button
+                  type="button"
+                  className={styles.readMore}
+                  onClick={() => {
+                    setDescriptionOpen(false);
+                    setExpanded(false);
+                  }}
+                >
+                  See less...
+                </button>
+              </>
             ) : (
               <button
                 type="button"
                 className={styles.readMore}
                 onClick={() => setDescriptionOpen(true)}
               >
-                Read more...
+                See more...
               </button>
             )}
           </div>
