@@ -81,6 +81,22 @@ export function fromIsoDate(iso: string): string {
   return `${match[2]}-${match[3]}-${match[1].slice(-2)}`;
 }
 
+export function createEmptyDocument(): DocumentState {
+  return {
+    icName: "IC",
+    managerName: "Manager",
+    periodLabel: "",
+    actionItems: [],
+    professionalGoals: [],
+    personalGoals: [],
+    agendaEntries: [],
+    settings: {
+      showDueDates: false,
+      showCompletedTasks: true,
+    },
+  };
+}
+
 export function createInitialDocument(): DocumentState {
   return {
     icName: "IC",

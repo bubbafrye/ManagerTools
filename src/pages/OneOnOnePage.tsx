@@ -24,9 +24,16 @@ import {
   type ThemeId,
 } from "../themes";
 import type { DocumentActions } from "../hooks/useDocumentState";
+import type { SyncStatus } from "../sync/connect";
 import styles from "./OneOnOnePage.module.css";
 
-type OneOnOnePageProps = DocumentActions;
+type OneOnOnePageProps = DocumentActions & {
+  peerCount: number;
+  syncStatus: SyncStatus;
+  copied: boolean;
+  onNewPage: () => void;
+  onCopyLink: () => void;
+};
 
 export function OneOnOnePage({
   document,
@@ -45,6 +52,11 @@ export function OneOnOnePage({
   reorderAgendaEntries,
   deleteAgendaEntry,
   updateSettings,
+  peerCount,
+  syncStatus,
+  copied,
+  onNewPage,
+  onCopyLink,
 }: OneOnOnePageProps) {
   const { settings } = document;
   const [editMode, setEditMode] = useState(false);
@@ -85,6 +97,11 @@ export function OneOnOnePage({
           onIcNameChange={(icName) => updateIdentity({ icName })}
           onManagerNameChange={(managerName) => updateIdentity({ managerName })}
           onToggleEditMode={() => setEditMode((open) => !open)}
+          peerCount={peerCount}
+          syncStatus={syncStatus}
+          copied={copied}
+          onNewPage={onNewPage}
+          onCopyLink={onCopyLink}
         />
         {editMode ? (
           <div className={styles.editStrip} data-layout="edit-strip">

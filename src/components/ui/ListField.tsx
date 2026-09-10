@@ -6,6 +6,7 @@ import {
   parseListText,
   serializeRoot,
 } from "./listTextModel";
+import { getTextOffset, setTextOffset } from "./caret";
 import styles from "./ListField.module.css";
 
 type ListFieldProps = {
@@ -174,9 +175,14 @@ export function ListField({
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || document.activeElement === el) return;
+    if (!el) return;
     const html = blocksToHtml(parseListText(value, { alwaysList }));
-    if (el.innerHTML !== html) el.innerHTML = html;
+    if (el.innerHTML === html) return;
+    const focused = document.activeElement === el;
+    if (focused && serializeRoot(el, { alwaysList }) === value) return;
+    const offset = focused ? getTextOffset(el) : null;
+    el.innerHTML = html;
+    if (focused && offset !== null) setTextOffset(el, offset);
   }, [alwaysList, value]);
 
   return (

@@ -4,23 +4,38 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently -k \"npm run sync\" \"npm run dev:app\"",
+    "dev:app": "VITE_SYNC_URL=ws://localhost:1234 vite",
+    "dev:sync": "npm run dev",
+    "sync": "HOST=localhost PORT=1234 y-websocket",
     "build": "tsc -b && vite build",
+    "deploy:preview": "vite build --base=/ && partykit deploy",
+    "deploy:sync": "wrangler deploy",
     "preview": "vite preview",
-    "test": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts tests/reorder.test.ts tests/randomize-look.test.ts tests/role-definitions.test.ts && playwright test",
+    "test": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts tests/reorder.test.ts tests/randomize-look.test.ts tests/role-definitions.test.ts tests/sync-schema.test.ts tests/sync-route.test.ts && playwright test",
     "test:contract": "node --test tests/layout.contract.test.ts tests/assets.contract.test.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "partykit": "^0.0.115",
+    "partyserver": "^0.5.10",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "y-indexeddb": "^9.0.12",
+    "y-partykit": "^0.0.33",
+    "y-partyserver": "^2.2.0",
+    "y-websocket": "^3.1.0",
+    "yjs": "^13.6.32"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "@y/websocket-server": "^0.1.5",
+    "concurrently": "^10.0.5",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "wrangler": "^4.131.0"
   }
 }

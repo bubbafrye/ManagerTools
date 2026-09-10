@@ -1,0 +1,21 @@
+{
+  "name": "manager-tools-sync",
+  "main": "party/worker.ts",
+  "account_id": "b921db52c0743ec2d80563f71c6eee82",
+  "compatibility_date": "2024-09-01",
+  "workers_dev": true,
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "YjsServer",
+        "class_name": "YjsServer"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["YjsServer"]
+    }
+  ]
+}

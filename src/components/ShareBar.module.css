@@ -1,0 +1,38 @@
+.bar {
+  position: absolute;
+  left: 48px;
+  top: 50%;
+  margin-top: -0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-family: var(--document-text-body-font-face);
+  font-size: var(--document-text-label-font-size);
+  line-height: 1;
+  color: var(--document-body-text-color);
+  pointer-events: none;
+}
+
+.bar button {
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  .bar {
+    display: none;
+  }
+}
+
+.action {
+  opacity: 0.6;
+}
+
+.action:hover {
+  opacity: 0.85;
+}
+
+.status {
+  opacity: 0.45;
+}

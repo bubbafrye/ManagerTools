@@ -53,13 +53,14 @@ test("goals can be dragged between Professional and Personal", async ({
   expect(fromIds).toHaveLength(2);
   expect(toIds).toHaveLength(2);
 
-  await professional.locator("[data-sortable-id]").nth(0).dragTo(
-    personal.locator("[data-sortable-id]").nth(0),
-    {
-      sourcePosition: { x: 6, y: 6 },
-      targetPosition: { x: 6, y: 8 },
-    },
-  );
+  const source = professional.locator("[data-sortable-id]").nth(0);
+  const target = personal.locator("[data-sortable-id]").nth(0);
+  await source.scrollIntoViewIfNeeded();
+  await target.scrollIntoViewIfNeeded();
+  await source.dragTo(target, {
+    sourcePosition: { x: 6, y: 6 },
+    targetPosition: { x: 6, y: 8 },
+  });
 
   await expect.poll(() => sortableIds(professional)).toEqual([fromIds[1]]);
   await expect

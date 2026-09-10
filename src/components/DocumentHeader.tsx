@@ -1,5 +1,7 @@
+import { ShareBar } from "./ShareBar";
 import { AdjustIcon, EditIcon } from "./ui/Icons";
 import { EditableText } from "./ui/EditableText";
+import type { SyncStatus } from "../sync/connect";
 import styles from "./DocumentHeader.module.css";
 
 type DocumentHeaderProps = {
@@ -10,6 +12,11 @@ type DocumentHeaderProps = {
   onIcNameChange: (value: string) => void;
   onManagerNameChange: (value: string) => void;
   onToggleEditMode: () => void;
+  peerCount: number;
+  syncStatus: SyncStatus;
+  copied: boolean;
+  onNewPage: () => void;
+  onCopyLink: () => void;
 };
 
 export function DocumentHeader({
@@ -20,6 +27,11 @@ export function DocumentHeader({
   onIcNameChange,
   onManagerNameChange,
   onToggleEditMode,
+  peerCount,
+  syncStatus,
+  copied,
+  onNewPage,
+  onCopyLink,
 }: DocumentHeaderProps) {
   return (
     <header
@@ -35,6 +47,13 @@ export function DocumentHeader({
       >
         <AdjustIcon />
       </button>
+        <ShareBar
+        peerCount={peerCount}
+        syncStatus={syncStatus}
+        copied={copied}
+        onNewPage={onNewPage}
+        onCopyLink={onCopyLink}
+      />
       <div className={styles.names} data-layout="ic-manager">
         <span className={`${styles.nameSlot} ${styles.nameSlotHidden}`} aria-hidden>
           <EditIcon />

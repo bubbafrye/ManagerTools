@@ -1,0 +1,6 @@
+{
+  "name": "manager-tools-sync",
+  "main": "party/server.ts",
+  "compatibilityDate": "2024-09-01",
+  "serve": "dist"
+}

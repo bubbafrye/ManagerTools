@@ -44,7 +44,7 @@ test("COMPLETE appears only on a full meter and toggles completed", async ({
   const complete = goal.getByRole("button", { name: "Mark goal complete" });
   await expect(complete).toBeVisible();
   await expect(
-    goal.getByText("Press ‘complete’ to close the task."),
+    goal.getByText("Press ‘complete’ to close this task."),
   ).toBeVisible();
 
   await complete.click();
@@ -52,7 +52,7 @@ test("COMPLETE appears only on a full meter and toggles completed", async ({
   await expect(pressed).toHaveAttribute("aria-pressed", "true");
   await expect(meter).toBeDisabled();
   await expect(
-    goal.getByText("Press ‘complete’ to close the task."),
+    goal.getByText("Press ‘complete’ to close this task."),
   ).toHaveCount(0);
 
   await pressed.click();

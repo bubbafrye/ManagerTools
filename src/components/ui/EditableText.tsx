@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { getTextOffset, setTextOffset } from "./caret";
 import styles from "./EditableText.module.css";
 
 type EditableTextProps = {
@@ -54,9 +55,13 @@ export function EditableText({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || document.activeElement === el) return;
-    if (el.innerText.replace(/\u200B/g, "") !== value) {
-      el.innerText = value || "";
+    if (!el) return;
+    if (el.innerText.replace(/\u200B/g, "") === value) return;
+    const focused = document.activeElement === el;
+    const offset = focused ? getTextOffset(el) : null;
+    el.innerText = value || "";
+    if (focused && offset !== null) {
+      setTextOffset(el, Math.min(offset, value.length));
     }
   }, [value]);
 
