@@ -166,6 +166,7 @@ export function OneOnOnePage({
           <Goals
             professionalGoals={document.professionalGoals}
             personalGoals={document.personalGoals}
+            editMode={editMode}
             showCompleted={settings.showCompletedTasks}
             onAddProfessional={() => addGoal("professionalGoals")}
             onAddPersonal={() => addGoal("personalGoals")}

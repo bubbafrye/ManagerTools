@@ -1,6 +1,7 @@
 import type { ActionItemData } from "../types/document";
 import { DateField } from "./ui/DateField";
 import { EditableText } from "./ui/EditableText";
+import { Grip } from "./ui/Grip";
 import { Tickbox } from "./ui/Tickbox";
 import styles from "./ActionItem.module.css";
 
@@ -27,20 +28,22 @@ export function ActionItem({
     <div
       className={`${styles.item} ${item.completed ? styles.completed : ""}`}
     >
-      <Tickbox
-        checked={item.completed}
-        onChange={(completed) => onUpdate({ completed })}
-        label={`Mark "${item.text || "action item"}" complete`}
-      />
-      <div className={styles.text}>
-        <EditableText
-          value={item.text}
-          onChange={(text) => onUpdate({ text })}
-          placeholder="Action item"
+      <div className={styles.body} data-name="item">
+        <Tickbox
+          checked={item.completed}
+          onChange={(completed) => onUpdate({ completed })}
+          label={`Mark "${item.text || "action item"}" complete`}
         />
+        <div className={styles.text}>
+          <EditableText
+            value={item.text}
+            onChange={(text) => onUpdate({ text })}
+            placeholder="Action item"
+          />
+        </div>
       </div>
       {showDue && (
-        <div className={styles.due}>
+        <div className={styles.due} data-name="dueDate">
           {editMode && (
             <Tickbox
               checked={Boolean(item.hasDueDate)}
@@ -56,6 +59,7 @@ export function ActionItem({
           />
         </div>
       )}
+      {editMode ? <Grip /> : null}
     </div>
   );
 }

@@ -1,10 +1,12 @@
 import type { GoalData } from "../types/document";
+import { Grip } from "./ui/Grip";
 import { ListField } from "./ui/ListField";
 import { ProgressBar } from "./ui/ProgressBar";
 import styles from "./Goal.module.css";
 
 type GoalProps = {
   goal: GoalData;
+  editMode: boolean;
   showCompleted: boolean;
   onUpdate: (patch: Partial<GoalData>) => void;
   onIncrementProgress: () => void;
@@ -12,6 +14,7 @@ type GoalProps = {
 
 export function Goal({
   goal,
+  editMode,
   showCompleted,
   onUpdate,
   onIncrementProgress,
@@ -22,7 +25,7 @@ export function Goal({
 
   return (
     <article className={styles.goal}>
-      <div className={styles.content}>
+      <div className={styles.content} data-name="content">
         <ListField
           value={goal.text}
           onChange={(text) => onUpdate({ text })}
@@ -30,14 +33,15 @@ export function Goal({
           ariaLabel="Goal"
           layoutId="goal-text"
         />
+        <ProgressBar
+          progress={goal.progress}
+          completed={Boolean(goal.completed)}
+          onIncrement={onIncrementProgress}
+          onToggleComplete={() => onUpdate({ completed: !goal.completed })}
+          label="Increment goal progress"
+        />
       </div>
-      <ProgressBar
-        progress={goal.progress}
-        completed={Boolean(goal.completed)}
-        onIncrement={onIncrementProgress}
-        onToggleComplete={() => onUpdate({ completed: !goal.completed })}
-        label="Increment goal progress"
-      />
+      {editMode ? <Grip stacks={2} /> : null}
     </article>
   );
 }

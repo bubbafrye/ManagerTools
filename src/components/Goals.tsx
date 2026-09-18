@@ -11,6 +11,7 @@ type GoalSectionProps = {
   title: string;
   listId: GoalListId;
   goals: GoalData[];
+  editMode: boolean;
   showCompleted: boolean;
   onAdd: () => void;
   onUpdate: (id: string, patch: Partial<GoalData>) => void;
@@ -23,6 +24,7 @@ function GoalSection({
   title,
   listId,
   goals,
+  editMode,
   showCompleted,
   onAdd,
   onUpdate,
@@ -47,6 +49,7 @@ function GoalSection({
         renderItem={(goal) => (
           <Goal
             goal={goal}
+            editMode={editMode}
             showCompleted={showCompleted}
             onUpdate={(patch) => onUpdate(goal.id, patch)}
             onIncrementProgress={() => onIncrementProgress(goal.id)}
@@ -60,6 +63,7 @@ function GoalSection({
 type GoalsProps = {
   professionalGoals: GoalData[];
   personalGoals: GoalData[];
+  editMode: boolean;
   showCompleted: boolean;
   onAddProfessional: () => void;
   onAddPersonal: () => void;
@@ -74,6 +78,7 @@ type GoalsProps = {
 export function Goals({
   professionalGoals,
   personalGoals,
+  editMode,
   showCompleted,
   onAddProfessional,
   onAddPersonal,
@@ -95,6 +100,7 @@ export function Goals({
         title="Professional Goals:"
         listId="professionalGoals"
         goals={professionalGoals}
+        editMode={editMode}
         showCompleted={showCompleted}
         onAdd={onAddProfessional}
         onUpdate={onUpdateProfessional}
@@ -107,6 +113,7 @@ export function Goals({
         title="Personal Goals:"
         listId="personalGoals"
         goals={personalGoals}
+        editMode={editMode}
         showCompleted={showCompleted}
         onAdd={onAddPersonal}
         onUpdate={onUpdatePersonal}

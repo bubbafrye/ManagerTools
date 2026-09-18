@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 declare global {
   interface Window {
@@ -17,6 +17,26 @@ async function sortableIds(scope: Locator) {
     els.map((el) => el.getAttribute("data-sortable-id")),
   );
 }
+
+async function enterSettings(page: Page) {
+  await page.getByRole("button", { name: "Document settings" }).click();
+}
+
+test("reorder grips are visible only in document settings", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const actions = page.getByRole("region", { name: "Action Items" });
+  const goals = page.getByRole("region", { name: "Goals" });
+  await expect(actions.locator("[data-name='grip']")).toHaveCount(0);
+  await expect(goals.locator("[data-name='grip']")).toHaveCount(0);
+
+  await enterSettings(page);
+  await expect(actions.locator("[data-name='grip']")).toHaveCount(2);
+  await expect(goals.locator("[data-name='grip']")).toHaveCount(4);
+});
 
 test("action items can be dragged to reorder", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -101,13 +121,13 @@ test("goal drag ghost stays position fixed while moving", async ({ page }) => {
   const professional = page
     .getByRole("heading", { name: "Professional Goals:" })
     .locator("xpath=..");
-  await professional.locator("[data-sortable-id]").nth(0).dragTo(
-    professional.locator("[data-sortable-id]").nth(1),
-    {
-      sourcePosition: { x: 6, y: 6 },
-      targetPosition: { x: 6, y: 40 },
-    },
-  );
+  const source = professional.locator("[data-sortable-id]").nth(0);
+  const target = professional.locator("[data-sortable-id]").nth(1);
+  await source.scrollIntoViewIfNeeded();
+  await source.dragTo(target, {
+    sourcePosition: { x: 6, y: 6 },
+    targetPosition: { x: 6, y: 40 },
+  });
 
   const samples = await page.evaluate(() => window.__goalGhost);
   expect(samples.length).toBeGreaterThan(0);
