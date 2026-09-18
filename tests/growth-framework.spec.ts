@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 test("Growth Framework Role panel uses CSV copy and five vis cells", async ({
   page,
@@ -89,6 +89,7 @@ test("Growth Framework 960–1159 uses narrow stacked top-level", async ({
       roleDirection: getComputedStyle(roleEl).flexDirection,
       labelWritingMode: getComputedStyle(label).writingMode,
       arrayGap: getComputedStyle(array).gap,
+      arrayPadding: getComputedStyle(array).padding,
       chartHeight: chart.getBoundingClientRect().height,
     };
   });
@@ -96,16 +97,12 @@ test("Growth Framework 960–1159 uses narrow stacked top-level", async ({
   expect(metrics.roleDirection).toBe("column");
   expect(metrics.labelWritingMode).toBe("vertical-rl");
   expect(metrics.arrayGap).toBe("15px");
-  expect(metrics.chartHeight).toBeCloseTo(200, 0);
+  expect(metrics.arrayPadding).toBe("10px");
+  expect(metrics.chartHeight).toBeCloseTo(274, 0);
 });
 
-test("Growth Framework ≥1160 uses medium side-by-side top-level", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-
-  const metrics = await page.evaluate(() => {
+async function sideBySideMetrics(page: Page) {
+  return page.evaluate(() => {
     const role = document.querySelector("[data-layout='growth-role']");
     const info = role?.querySelector("[class*='info']");
     const chart = role?.querySelector("[class*='chart']");
@@ -118,28 +115,61 @@ test("Growth Framework ≥1160 uses medium side-by-side top-level", async ({
     }
     const columnRects = [...columns].map((item) => item.getBoundingClientRect());
     const arrayStyle = getComputedStyle(array);
+    const chartRect = chart.getBoundingClientRect();
     return {
       roleDirection: getComputedStyle(role).flexDirection,
       labelWritingMode: getComputedStyle(label).writingMode,
       infoWidth: info.getBoundingClientRect().width,
-      chartWidth: chart.getBoundingClientRect().width,
+      chartWidth: chartRect.width,
+      chartHeight: chartRect.height,
       chartFlex: getComputedStyle(chart).flex,
       arrayGap: arrayStyle.gap,
+      arrayPadding: arrayStyle.padding,
       columnWidth: column.getBoundingClientRect().width,
       columnCount: columnRects.length,
       lastColumnRight: columnRects.at(-1)?.right ?? 0,
-      chartRight: chart.getBoundingClientRect().right,
+      chartRight: chartRect.right,
       roleRight: role.getBoundingClientRect().right,
     };
   });
+}
+
+test("Growth Framework 1160–1279 uses medium side-by-side array", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await page.goto("/");
+
+  const metrics = await sideBySideMetrics(page);
 
   expect(metrics.roleDirection).toBe("row");
   expect(metrics.labelWritingMode).toBe("horizontal-tb");
   expect(metrics.columnCount).toBe(6);
   expect(metrics.columnWidth).toBeCloseTo(90, 0);
   expect(metrics.arrayGap).toBe("15px");
-  expect(metrics.chartWidth).not.toBeCloseTo(736, 0);
-  expect(metrics.chartFlex).not.toContain("736px");
+  expect(metrics.arrayPadding).toBe("10px");
+  expect(metrics.chartHeight).toBeCloseTo(220, 0);
+  expect(metrics.lastColumnRight).toBeLessThanOrEqual(metrics.chartRight + 1);
+  expect(metrics.chartRight).toBeLessThanOrEqual(metrics.roleRight + 1);
+  expect(metrics.infoWidth + metrics.chartWidth).toBeLessThan(metrics.roleRight - 50);
+});
+
+test("Growth Framework ≥1280 uses wide side-by-side array", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const metrics = await sideBySideMetrics(page);
+
+  expect(metrics.roleDirection).toBe("row");
+  expect(metrics.labelWritingMode).toBe("horizontal-tb");
+  expect(metrics.columnCount).toBe(6);
+  expect(metrics.arrayGap).toBe("25px");
+  expect(metrics.arrayPadding).toBe("10px");
+  expect(metrics.chartWidth).toBeCloseTo(730, 0);
+  expect(metrics.chartHeight).toBeCloseTo(220, 0);
+  expect(metrics.columnWidth).toBeGreaterThan(90);
   expect(metrics.lastColumnRight).toBeLessThanOrEqual(metrics.chartRight + 1);
   expect(metrics.chartRight).toBeLessThanOrEqual(metrics.roleRight + 1);
   expect(metrics.infoWidth + metrics.chartWidth).toBeLessThan(metrics.roleRight - 50);

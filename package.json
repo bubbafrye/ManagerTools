@@ -32,10 +32,13 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
-    "@y/websocket-server": "^0.1.5",
+    "@y/websocket-server": "0.1.1",
     "concurrently": "^10.0.5",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "wrangler": "^4.131.0"
+  },
+  "overrides": {
+    "@y/protocols": "1.0.6-1"
   }
 }
