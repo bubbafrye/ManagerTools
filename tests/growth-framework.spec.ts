@@ -68,6 +68,36 @@ test("Growth Framework Role panel uses CSV copy and five vis cells", async ({
   await expect(columns.first()).toHaveAttribute("data-rating", "3");
 });
 
+test("Growth Framework array columns scrub rating on vertical drag", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const column = page.locator("[data-layout='growth-array'] > div").first();
+  await expect(column).toHaveAttribute("data-rating", "1");
+
+  const start = column.locator("[data-tier='1']");
+  const end = column.locator("[data-tier='4']");
+  const startBox = await start.boundingBox();
+  const endBox = await end.boundingBox();
+  if (!startBox || !endBox) throw new Error("array cells missing boxes");
+
+  await page.mouse.move(
+    startBox.x + startBox.width / 2,
+    startBox.y + startBox.height / 2,
+  );
+  await page.mouse.down();
+  await page.mouse.move(endBox.x + endBox.width / 2, endBox.y + endBox.height / 2, {
+    steps: 8,
+  });
+  await page.mouse.up();
+  await expect(column).toHaveAttribute("data-rating", "4");
+
+  await column.locator("[data-tier='2']").click();
+  await expect(column).toHaveAttribute("data-rating", "2");
+});
+
 test("Growth Framework 960–1159 uses narrow stacked top-level", async ({
   page,
 }) => {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type PointerEvent } from "react";
 import csv from "../data/role-definitions.csv?raw";
 import {
   VISIBLE_TIER_COUNT,
@@ -11,6 +11,25 @@ import { SkillFocus } from "./SkillFocus";
 import { EditableText } from "./ui/EditableText";
 import { TierSelector } from "./TierSelector";
 import styles from "./GrowthFramework.module.css";
+
+function levelFromClientY(stack: HTMLElement, clientY: number): number {
+  const cells = stack.querySelectorAll<HTMLElement>("[data-tier]");
+  let closest = 1;
+  let closestDist = Infinity;
+  for (const cell of cells) {
+    const tier = Number(cell.dataset.tier);
+    if (!Number.isFinite(tier)) continue;
+    const rect = cell.getBoundingClientRect();
+    if (clientY >= rect.top && clientY <= rect.bottom) return tier;
+    const mid = (rect.top + rect.bottom) / 2;
+    const dist = Math.abs(clientY - mid);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closest = tier;
+    }
+  }
+  return closest;
+}
 
 const TINT_CLASS = [
   styles.cellTint1,
@@ -87,6 +106,48 @@ export function GrowthFramework({
   }, [discipline]);
 
   if (!discipline) return null;
+
+  const setSkillRating = (skillId: string, level: number) => {
+    setRatings((prev) => {
+      if (prev[skillId] === level) return prev;
+      return { ...prev, [skillId]: level };
+    });
+  };
+
+  const scrubColumn = (
+    event: PointerEvent<HTMLDivElement>,
+    skillId: string,
+  ) => {
+    setSkillRating(skillId, levelFromClientY(event.currentTarget, event.clientY));
+  };
+
+  const onColumnPointerDown = (
+    event: PointerEvent<HTMLDivElement>,
+    skillId: string,
+  ) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      /* untrusted / test events */
+    }
+    scrubColumn(event, skillId);
+  };
+
+  const onColumnPointerMove = (
+    event: PointerEvent<HTMLDivElement>,
+    skillId: string,
+  ) => {
+    const captured = event.currentTarget.hasPointerCapture(event.pointerId);
+    if (!captured && event.buttons !== 1) return;
+    scrubColumn(event, skillId);
+  };
+
+  const onColumnPointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  };
 
   const skillsOpen = contentEdit || expanded;
   const showDescription = contentEdit || descriptionOpen;
@@ -211,7 +272,14 @@ export function GrowthFramework({
                   data-rating={rating}
                 >
                   <p className={styles.columnLabel}>{skill.title}</p>
-                  <div className={styles.cellStack}>
+                  <div
+                    className={styles.cellStack}
+                    data-layout="growth-cells"
+                    onPointerDown={(event) => onColumnPointerDown(event, skill.id)}
+                    onPointerMove={(event) => onColumnPointerMove(event, skill.id)}
+                    onPointerUp={onColumnPointerUp}
+                    onPointerCancel={onColumnPointerUp}
+                  >
                     {Array.from({ length: VISIBLE_TIER_COUNT }, (_, cell) => {
                       const level = VISIBLE_TIER_COUNT - cell;
                       const earned = level <= rating;
@@ -224,10 +292,7 @@ export function GrowthFramework({
                           data-tier={level}
                           aria-label={`${skill.title} tier ${level}`}
                           aria-pressed={rating === level}
-                          onClick={() => {
-                            if (rating === level) return;
-                            setRatings((prev) => ({ ...prev, [skill.id]: level }));
-                          }}
+                          onClick={() => setSkillRating(skill.id, level)}
                         >
                           <span className={styles.cellBase} aria-hidden />
                           {tintClass ? (
@@ -268,9 +333,7 @@ export function GrowthFramework({
                     icNotes={skillNotes.ic}
                     managerNotes={skillNotes.manager}
                     contentEdit={contentEdit}
-                    onRatingChange={(level) =>
-                      setRatings((prev) => ({ ...prev, [skill.id]: level }))
-                    }
+                    onRatingChange={(level) => setSkillRating(skill.id, level)}
                     onSkillChange={(next) =>
                       setSkills((prev) =>
                         prev.map((item) => (item.id === next.id ? next : item)),

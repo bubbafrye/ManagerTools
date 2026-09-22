@@ -211,6 +211,9 @@
   width: auto;
   min-width: 0;
   height: 100%;
+  touch-action: none;
+  user-select: none;
+  cursor: ns-resize;
 }
 
 .cell {
@@ -221,6 +224,8 @@
   height: auto;
   overflow: clip;
   border-radius: var(--containers-panel-radii);
+  touch-action: none;
+  cursor: ns-resize;
 }
 
 .cellHidden {
