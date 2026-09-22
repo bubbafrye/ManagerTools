@@ -1,5 +1,6 @@
-import type { Appearance } from "./appearance";
+import { applyAppearance, FONT_OPTIONS, type Appearance } from "./appearance";
 import { LOOK_TOKENS_CHANGED } from "./randomizeLook";
+import type { SavedTheme } from "./types/document";
 
 /** Figma One-on-one variable mode names (source of truth). */
 export type ThemeId =
@@ -16,11 +17,32 @@ export type ThemeTokens = {
   floats: Record<string, number>;
 };
 
-/** Preset order in the themes panel (Figma `themes` component). */
-export const THEME_PRESET_ORDER = {
-  row1: ["sand light", "aqua light", "spring light"] as const,
-  row2: ["grey", "sand dark", "aqua dark", "spring dark"] as const,
-};
+/** Preset order in the themes strip (Figma `themes` component). */
+export const THEME_PRESET_ORDER = [
+  "grey",
+  "sand light",
+  "aqua light",
+  "spring light",
+  "sand dark",
+  "aqua dark",
+  "spring dark",
+] as const;
+
+export const THEME_COLOR_CSS = [
+  "--document-body-color",
+  "--document-header-text-color",
+  "--document-body-text-color",
+  "--containers-panel-surface",
+  "--containers-panel-stroke-color",
+  "--containers-card1-surface-color",
+  "--containers-card1-stroke-color",
+  "--containers-card2-surface-color",
+  "--containers-card2-stroke-color",
+  "--ui-ui-surface-color",
+  "--ui-ui-stroke-color",
+  "--ui-ui2-surface-color",
+  "--ui-ui2-stroke-color",
+] as const;
 
 const FIGMA_COLOR_TO_CSS: Record<string, string> = {
   "document/body-color": "--document-body-color",
@@ -292,4 +314,42 @@ export function applyTheme(id: ThemeId, appearance: Appearance): Appearance {
     ...appearance,
     ...themeAppearancePatch(theme),
   };
+}
+
+export function readThemeColors(): Record<string, string> {
+  const style = getComputedStyle(document.documentElement);
+  const colors: Record<string, string> = {};
+  for (const token of THEME_COLOR_CSS) {
+    colors[token] = style.getPropertyValue(token).trim();
+  }
+  return colors;
+}
+
+export function applyThemeColors(colors: Record<string, string>) {
+  const root = document.documentElement.style;
+  for (const [token, value] of Object.entries(colors)) {
+    if (value) root.setProperty(token, value);
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(LOOK_TOKENS_CHANGED));
+  }
+}
+
+export function applySavedTheme(theme: SavedTheme, appearance: Appearance): Appearance {
+  applyThemeColors(theme.colors);
+  const next: Appearance = {
+    ...appearance,
+    panelRadius: theme.appearance.panelRadius,
+    panelBorder: theme.appearance.panelBorder,
+    cardRadius: theme.appearance.cardRadius,
+    cardBorder: theme.appearance.cardBorder,
+    headerFont: FONT_OPTIONS.some((font) => font.name === theme.appearance.headerFont)
+      ? (theme.appearance.headerFont as Appearance["headerFont"])
+      : appearance.headerFont,
+    bodyFont: FONT_OPTIONS.some((font) => font.name === theme.appearance.bodyFont)
+      ? (theme.appearance.bodyFont as Appearance["bodyFont"])
+      : appearance.bodyFont,
+  };
+  applyAppearance(next);
+  return next;
 }

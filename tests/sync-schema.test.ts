@@ -4,6 +4,7 @@ import * as Y from "yjs";
 import {
   addActionItem,
   addAgendaEntry,
+  addSavedTheme,
   applyYText,
   isReady,
   moveGoal,
@@ -93,5 +94,30 @@ describe("document mutations", () => {
     const next = readDocument(doc).agendaEntries[0];
     assert.equal(next.notesText, "Talk about Q3");
     assert.equal(next.icAgenda.text, "- Ship it");
+  });
+
+  it("persists a custom theme on the shared document", () => {
+    const doc = new Y.Doc();
+    seedDocument(doc, "empty");
+    assert.equal(
+      addSavedTheme(doc, {
+        id: "theme-1",
+        name: "My look",
+        colors: { "--document-body-color": "#abcdef" },
+        appearance: {
+          panelRadius: 8,
+          panelBorder: 3,
+          cardRadius: 5,
+          cardBorder: 2,
+          headerFont: "Inter",
+          bodyFont: "Lora",
+        },
+      }),
+      true,
+    );
+    const [theme] = readDocument(doc).settings.customThemes;
+    assert.equal(theme.name, "My look");
+    assert.equal(theme.colors["--document-body-color"], "#abcdef");
+    assert.equal(theme.appearance.panelRadius, 8);
   });
 });

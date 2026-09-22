@@ -32,8 +32,34 @@ export type Appearance = {
   bodyFont: FontName;
 };
 
+export const CORNER_SLIDER_MAX = 30;
+export const BORDER_SLIDER_MAX = 10;
+
+export function clampCornerRadius(value: number) {
+  return Math.min(CORNER_SLIDER_MAX, Math.max(0, value));
+}
+
+export function clampBorderWidth(value: number) {
+  return Math.min(BORDER_SLIDER_MAX, Math.max(0, value));
+}
+
 export function cardRadiiFromPanel(panelRadius: number) {
-  return Math.ceil(panelRadius * 0.6);
+  return Math.ceil(clampCornerRadius(panelRadius) * 0.6);
+}
+
+export function cardStrokeFromPanel(panelBorder: number) {
+  return Math.round(clampBorderWidth(panelBorder) * 0.8);
+}
+
+export function geometryFromSliders(panelRadius: number, panelBorder: number) {
+  const radius = clampCornerRadius(panelRadius);
+  const border = clampBorderWidth(panelBorder);
+  return {
+    panelRadius: radius,
+    cardRadius: cardRadiiFromPanel(radius),
+    panelBorder: border,
+    cardBorder: cardStrokeFromPanel(border),
+  };
 }
 
 /** Spring light geometry (Figma); fonts stay Inter until the user changes them. */
@@ -59,6 +85,7 @@ export function applyAppearance(appearance: Appearance) {
     `${appearance.panelBorder}px`,
   );
   root.setProperty("--containers-card1-radii", `${appearance.cardRadius}px`);
+  root.setProperty("--containers-card2-radii", `${appearance.cardRadius}px`);
   root.setProperty(
     "--containers-card1-stroke-weight",
     `${appearance.cardBorder}px`,

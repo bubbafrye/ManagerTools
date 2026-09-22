@@ -2,6 +2,7 @@ import {
   FONT_OPTIONS,
   applyAppearance,
   cardRadiiFromPanel,
+  cardStrokeFromPanel,
   type Appearance,
   type FontName,
 } from "./appearance.ts";
@@ -193,6 +194,7 @@ function pickColor(rng: Rng, token: string, recipe: LookRecipe) {
 
 function randomizeWith(recipe: LookRecipe, rng: Rng): RandomizedLook {
   const containerRadius = randInt(rng, recipe.radius[0], recipe.radius[1]);
+  const panelBorder = randInt(rng, recipe.stroke[0], recipe.stroke[1]);
   const darkSurfaces = rng() < 0.5;
   const surfaceRange = darkSurfaces
     ? { min: 0, max: 0.12, fallback: recipe.base ? "#6b3210" : "#0a0a0a" }
@@ -244,8 +246,8 @@ function randomizeWith(recipe: LookRecipe, rng: Rng): RandomizedLook {
     appearance: {
       panelRadius: containerRadius,
       cardRadius: cardRadiiFromPanel(containerRadius),
-      panelBorder: randInt(rng, recipe.stroke[0], recipe.stroke[1]),
-      cardBorder: randInt(rng, recipe.stroke[0], recipe.stroke[1]),
+      panelBorder,
+      cardBorder: cardStrokeFromPanel(panelBorder),
       headerFont: pickFont(rng),
       bodyFont: pickFont(rng),
     },
@@ -255,7 +257,7 @@ function randomizeWith(recipe: LookRecipe, rng: Rng): RandomizedLook {
 }
 
 export function randomizeLook(rng: Rng = Math.random): RandomizedLook {
-  return randomizeWith({ radius: [0, 50], stroke: [0, 20] }, rng);
+  return randomizeWith({ radius: [0, 30], stroke: [0, 10] }, rng);
 }
 
 export function applyRandomizedLook(look: RandomizedLook) {

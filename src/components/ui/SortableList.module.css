@@ -14,6 +14,35 @@
   cursor: grab;
 }
 
+.enter {
+  animation: item-enter 250ms ease-out both;
+}
+
+.shift {
+  transition: transform 250ms ease-out;
+}
+
+@keyframes item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    animation: none;
+  }
+
+  .shift {
+    transition: none;
+  }
+}
+
 .item:not(:last-child) {
   padding-bottom: 10px;
 }

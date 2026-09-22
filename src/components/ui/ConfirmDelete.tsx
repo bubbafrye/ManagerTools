@@ -4,6 +4,7 @@ import {
   buttonGroupVariantForText,
   headerTextHex,
 } from "./ButtonGroup";
+import { Modal } from "./Modal";
 import styles from "./ConfirmDelete.module.css";
 
 type ConfirmChromeProps = {
@@ -21,43 +22,16 @@ function ConfirmChrome({
   focusRef,
   children,
 }: ConfirmChromeProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const onDismissRef = useRef(onDismiss);
   const titleId = useId();
 
-  onDismissRef.current = onDismiss;
-
   useEffect(() => {
-    const node = dialogRef.current;
-    if (!node) return;
-    if (!node.open) node.showModal();
-    if (focusRef && typeof focusRef !== "function" && focusRef.current) {
-      focusRef.current.focus();
+    if (focusRef && typeof focusRef !== "function") {
+      focusRef.current?.focus();
     }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      onDismissRef.current();
-    };
-    const onCancel = (event: Event) => {
-      event.preventDefault();
-      onDismissRef.current();
-    };
-
-    window.addEventListener("keydown", onKeyDown, true);
-    node.addEventListener("cancel", onCancel);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown, true);
-      node.removeEventListener("cancel", onCancel);
-      if (node.open) node.close();
-    };
   }, [focusRef]);
 
   return (
-    <dialog
-      ref={dialogRef}
+    <Modal
       className={styles.dialog}
       data-confirm-kind={kind}
       aria-labelledby={titleId}
@@ -65,6 +39,7 @@ function ConfirmChrome({
         background: "var(--containers-panel-surface)",
         borderColor: "var(--containers-panel-stroke-color)",
       }}
+      onClose={onDismiss}
     >
       <div className={styles.prompt}>
         <p className={styles.message} id={titleId}>
@@ -72,7 +47,7 @@ function ConfirmChrome({
         </p>
       </div>
       {children}
-    </dialog>
+    </Modal>
   );
 }
 

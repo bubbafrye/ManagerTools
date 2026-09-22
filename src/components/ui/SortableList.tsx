@@ -1,4 +1,11 @@
-import { useState, type DragEvent, type ReactNode } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type DragEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import {
   createDragGhost,
   hideNativeDragImage,
@@ -76,6 +83,100 @@ function dropBeforeId<T extends Item>(
   return items[index + 1]?.id ?? null;
 }
 
+function measureItemTops(root: HTMLElement | null) {
+  const tops = new Map<string, number>();
+  if (!root) return tops;
+  const origin = root.getBoundingClientRect().top;
+  for (const el of root.querySelectorAll<HTMLElement>("[data-sortable-id]")) {
+    const id = el.dataset.sortableId;
+    if (id) tops.set(id, el.getBoundingClientRect().top - origin);
+  }
+  return tops;
+}
+
+function slideExistingDown(
+  root: HTMLElement,
+  fresh: ReadonlySet<string>,
+  prevTops: Map<string, number>,
+  nextTops: Map<string, number>,
+) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for (const el of root.querySelectorAll<HTMLElement>("[data-sortable-id]")) {
+    const id = el.dataset.sortableId;
+    if (!id || fresh.has(id)) continue;
+    const prevTop = prevTops.get(id);
+    const nextTop = nextTops.get(id);
+    if (prevTop == null || nextTop == null) continue;
+    const dy = prevTop - nextTop;
+    // Inserts push existing rows down. A positive invert means the
+    // stored tops are stale (scroll/layout), which plays as jump-down + slide-up.
+    if (dy >= 0) continue;
+    el.classList.remove(styles.shift);
+    el.style.transition = "none";
+    el.style.transform = `translateY(${dy}px)`;
+    void el.offsetWidth;
+    el.style.transition = "";
+    el.classList.add(styles.shift);
+    el.style.transform = "";
+    const done = (event: TransitionEvent) => {
+      if (event.target !== el || event.propertyName !== "transform") return;
+      el.classList.remove(styles.shift);
+      el.removeEventListener("transitionend", done);
+    };
+    el.addEventListener("transitionend", done);
+  }
+}
+
+function useEnteringIds(
+  items: readonly Item[],
+  listRef: RefObject<HTMLElement | null>,
+) {
+  const seenRef = useRef<Set<string> | null>(null);
+  const topsRef = useRef<Map<string, number>>(new Map());
+  const [enteringIds, setEnteringIds] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+
+  useLayoutEffect(() => {
+    const root = listRef.current;
+    const nextTops = measureItemTops(root);
+    if (seenRef.current === null) {
+      seenRef.current = new Set(items.map((item) => item.id));
+      topsRef.current = nextTops;
+      return;
+    }
+    const seen = seenRef.current;
+    const wasEmpty = seen.size === 0;
+    const fresh = new Set<string>();
+    for (const item of items) {
+      if (seen.has(item.id)) continue;
+      seen.add(item.id);
+      fresh.add(item.id);
+    }
+    // A batch of rows after an empty list is document hydrate, not a user add.
+    if (fresh.size > 0 && !(wasEmpty && fresh.size > 1)) {
+      setEnteringIds((prev) => {
+        const next = new Set(prev);
+        for (const id of fresh) next.add(id);
+        return next;
+      });
+      if (root) slideExistingDown(root, fresh, topsRef.current, nextTops);
+    }
+    topsRef.current = nextTops;
+  }, [items, listRef]);
+
+  const clearEntering = (id: string) => {
+    setEnteringIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
+
+  return { enteringIds, clearEntering };
+}
+
 export function SortableList<T extends Item>({
   kind,
   listId,
@@ -86,6 +187,8 @@ export function SortableList<T extends Item>({
 }: SortableListProps<T>) {
   const [over, setOver] = useState<Over>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const { enteringIds, clearEntering } = useEnteringIds(items, listRef);
 
   const allow = (event: DragEvent) => {
     if (activeDrag && activeDrag.kind !== kind) return false;
@@ -111,6 +214,7 @@ export function SortableList<T extends Item>({
   return (
     <>
       <div
+        ref={listRef}
         className={styles.list}
         data-sortable-list={listId}
         onDragOver={(event) => {
@@ -134,9 +238,13 @@ export function SortableList<T extends Item>({
                 indicator === "before" ? ` ${styles.dropBefore}` : ""
               }${indicator === "after" ? ` ${styles.dropAfter}` : ""}${
                 pendingDelete === item.id ? ` ${styles.pendingRemove}` : ""
-              }`}
+              }${enteringIds.has(item.id) ? ` ${styles.enter}` : ""}`}
               draggable
               data-sortable-id={item.id}
+              onAnimationEnd={(event) => {
+                if (event.target !== event.currentTarget) return;
+                clearEntering(item.id);
+              }}
               onPointerDown={(event) => {
                 const target = event.target as HTMLElement;
                 event.currentTarget.draggable = !target.closest(INTERACTIVE);

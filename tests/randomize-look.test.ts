@@ -20,23 +20,27 @@ function mulberry32(seed: number) {
 }
 
 describe("randomizeLook", () => {
-  it("keeps card radius at 0.6 of panel radius, rounded up, and strokes in 0-20", () => {
+  it("keeps card radius at 0.6 of panel radius and card stroke at 0.8 of panel", () => {
     for (let seed = 1; seed <= 40; seed += 1) {
       const look = randomizeLook(mulberry32(seed));
       assert.equal(
         look.appearance.cardRadius,
         cardRadiiFromPanel(look.appearance.panelRadius),
       );
+      assert.equal(
+        look.appearance.cardBorder,
+        Math.round(look.appearance.panelBorder * 0.8),
+      );
       assert.ok(look.appearance.panelRadius >= 0);
-      assert.ok(look.appearance.panelRadius <= 50);
+      assert.ok(look.appearance.panelRadius <= 30);
       assert.ok(look.appearance.panelBorder >= 0);
-      assert.ok(look.appearance.panelBorder <= 20);
+      assert.ok(look.appearance.panelBorder <= 10);
       assert.ok(look.appearance.cardBorder >= 0);
-      assert.ok(look.appearance.cardBorder <= 20);
+      assert.ok(look.appearance.cardBorder <= 8);
       for (const weight of Object.values(look.strokeWeights)) {
         const px = Number.parseFloat(weight);
         assert.ok(px >= 0);
-        assert.ok(px <= 20);
+        assert.ok(px <= 10);
       }
     }
   });

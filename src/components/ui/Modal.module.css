@@ -1,0 +1,7 @@
+.modal::backdrop {
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--containers-panel-stroke-color) 50%, #000000) 60%,
+    transparent
+  );
+}

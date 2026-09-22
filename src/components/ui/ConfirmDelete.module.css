@@ -18,10 +18,6 @@
   border-style: solid;
 }
 
-.dialog::backdrop {
-  background: transparent;
-}
-
 .prompt {
   display: flex;
   flex-direction: column;

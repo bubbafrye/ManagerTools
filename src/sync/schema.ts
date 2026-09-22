@@ -11,6 +11,7 @@ import {
   type DocumentSettings,
   type DocumentState,
   type GoalData,
+  type SavedTheme,
 } from "../types/document.ts";
 
 export const DEFAULT_PAGE_ID = "local";
@@ -25,6 +26,7 @@ const PROFESSIONAL_GOALS = "professionalGoals";
 const PERSONAL_GOALS = "personalGoals";
 const AGENDA_ENTRIES = "agendaEntries";
 const READY = "ready";
+const CUSTOM_THEMES = "customThemes";
 
 function asMap(value: unknown): Y.Map<unknown> | null {
   return value instanceof Y.Map ? value : null;
@@ -79,6 +81,55 @@ function writeSettings(map: Y.Map<unknown>, settings: DocumentSettings) {
   map.set("showCompletedTasks", settings.showCompletedTasks);
 }
 
+function writeSavedTheme(theme: SavedTheme): Y.Map<unknown> {
+  const map = new Y.Map<unknown>();
+  map.set("id", theme.id);
+  map.set("name", theme.name);
+  map.set("colors", { ...theme.colors });
+  map.set("appearance", { ...theme.appearance });
+  return map;
+}
+
+function asRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== "object") return {};
+  const record: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (typeof entry === "string") record[key] = entry;
+  }
+  return record;
+}
+
+function readSavedTheme(map: Y.Map<unknown>): SavedTheme | null {
+  const id = asString(map.get("id"));
+  const name = asString(map.get("name"));
+  if (!id || !name) return null;
+  const appearanceRaw = map.get("appearance");
+  const appearance =
+    appearanceRaw && typeof appearanceRaw === "object"
+      ? (appearanceRaw as SavedTheme["appearance"])
+      : {
+          panelRadius: 6,
+          panelBorder: 2,
+          cardRadius: 2,
+          cardBorder: 2,
+          headerFont: "Inter",
+          bodyFont: "Inter",
+        };
+  return {
+    id,
+    name,
+    colors: asRecord(map.get("colors")),
+    appearance: {
+      panelRadius: asNumber(appearance.panelRadius, 6),
+      panelBorder: asNumber(appearance.panelBorder, 2),
+      cardRadius: asNumber(appearance.cardRadius, 2),
+      cardBorder: asNumber(appearance.cardBorder, 2),
+      headerFont: asString(appearance.headerFont, "Inter"),
+      bodyFont: asString(appearance.bodyFont, "Inter"),
+    },
+  };
+}
+
 function writeActionItem(item: ActionItemData): Y.Map<unknown> {
   const map = new Y.Map<unknown>();
   map.set("id", item.id);
@@ -130,6 +181,10 @@ export function writeDocument(doc: Y.Doc, state: DocumentState) {
     meta.set("periodLabel", state.periodLabel);
     meta.set(READY, true);
     writeSettings(doc.getMap(SETTINGS), state.settings);
+    replaceArray(
+      doc.getArray(CUSTOM_THEMES),
+      state.settings.customThemes.map(writeSavedTheme),
+    );
     replaceArray(
       doc.getArray(ACTION_ITEMS),
       state.actionItems.map(writeActionItem),
@@ -218,6 +273,9 @@ export function readDocument(doc: Y.Doc): DocumentState {
     settings: {
       showDueDates: asBoolean(settings.get("showDueDates")),
       showCompletedTasks: asBoolean(settings.get("showCompletedTasks"), true),
+      customThemes: readMaps(doc.getArray(CUSTOM_THEMES))
+        .map(readSavedTheme)
+        .filter((theme): theme is SavedTheme => theme !== null),
     },
   };
 }
@@ -292,6 +350,18 @@ export function updateSettings(doc: Y.Doc, patch: Partial<DocumentSettings>) {
       settings.set("showCompletedTasks", patch.showCompletedTasks);
     }
   });
+}
+
+export function addSavedTheme(doc: Y.Doc, theme: SavedTheme) {
+  if (!isReady(doc)) return false;
+  doc.getArray(CUSTOM_THEMES).push([writeSavedTheme(theme)]);
+  return true;
+}
+
+export function deleteSavedTheme(doc: Y.Doc, id: string) {
+  const arr = doc.getArray(CUSTOM_THEMES);
+  const found = findMap(arr, id);
+  if (found) arr.delete(found.index, 1);
 }
 
 export function addActionItem(doc: Y.Doc) {

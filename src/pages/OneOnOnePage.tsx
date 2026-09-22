@@ -20,8 +20,8 @@ import {
 import { applyRandomizedLook, randomizeLook } from "../randomizeLook";
 import {
   DEFAULT_THEME_ID,
+  applySavedTheme,
   applyTheme,
-  type ThemeId,
 } from "../themes";
 import type { DocumentActions } from "../hooks/useDocumentState";
 import type { SyncStatus } from "../sync/connect";
@@ -52,6 +52,8 @@ export function OneOnOnePage({
   reorderAgendaEntries,
   deleteAgendaEntry,
   updateSettings,
+  addSavedTheme,
+  deleteSavedTheme,
   peerCount,
   syncStatus,
   copied,
@@ -61,7 +63,7 @@ export function OneOnOnePage({
   const { settings } = document;
   const [editMode, setEditMode] = useState(false);
   const [appearance, setAppearance] = useState<Appearance>(DEFAULT_APPEARANCE);
-  const [activeThemeId, setActiveThemeId] = useState<ThemeId | null>(
+  const [activeThemeId, setActiveThemeId] = useState<string | null>(
     DEFAULT_THEME_ID,
   );
   const roleNames = useMemo(
@@ -108,6 +110,8 @@ export function OneOnOnePage({
             <AdjustmentPanel
               appearance={appearance}
               activeThemeId={activeThemeId}
+              customThemes={settings.customThemes}
+              canPersist={true}
               onChange={(patch) => {
                 setActiveThemeId(null);
                 setAppearance((prev) => ({ ...prev, ...patch }));
@@ -116,8 +120,16 @@ export function OneOnOnePage({
                 setAppearance((prev) => applyTheme(id, prev));
                 setActiveThemeId(id);
               }}
+              onSelectSavedTheme={(theme) => {
+                setAppearance((prev) => applySavedTheme(theme, prev));
+                setActiveThemeId(theme.id);
+              }}
+              onSaveTheme={(theme) => addSavedTheme(theme)}
               onThemeRemoved={(id) => {
                 setActiveThemeId((prev) => (prev === id ? null : prev));
+                if (settings.customThemes.some((theme) => theme.id === id)) {
+                  deleteSavedTheme(id);
+                }
               }}
               onRandomize={() => {
                 const look = randomizeLook();

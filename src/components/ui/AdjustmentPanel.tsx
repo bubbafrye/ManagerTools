@@ -1,11 +1,5 @@
-import { useEffect, useRef, useState, type CSSProperties, type DragEvent } from "react";
-import {
-  FONT_OPTIONS,
-  cardRadiiFromPanel,
-  fontStack,
-  type Appearance,
-  type FontName,
-} from "../../appearance";
+import { useRef, useState, type CSSProperties, type DragEvent } from "react";
+import { applyAppearance, type Appearance } from "../../appearance";
 import {
   createDragGhost,
   hideNativeDragImage,
@@ -14,28 +8,35 @@ import {
   type DragGhostSession,
 } from "../../dragGhost";
 import { publicUrl } from "../../publicUrl";
+import { createId, type SavedTheme } from "../../types/document";
 import {
   THEMES,
   THEME_PRESET_ORDER,
+  applyThemeColors,
+  readThemeColors,
   themeCssVars,
   type ThemeId,
 } from "../../themes";
-import { ColorGroup, Swatch } from "./Swatch";
 import { ConfirmDelete, FeedbackDialog } from "./ConfirmDelete";
-import { AddThemeGlyph, RandoIcon } from "./Icons";
+import { RandoIcon } from "./Icons";
+import { ThemeConfigPanel } from "./ThemeConfigPanel";
 import styles from "./AdjustmentPanel.module.css";
 
 type AdjustmentPanelProps = {
   appearance: Appearance;
   onChange: (patch: Partial<Appearance>) => void;
   onRandomize: () => void;
-  activeThemeId: ThemeId | null;
+  activeThemeId: string | null;
+  customThemes: readonly SavedTheme[];
   onSelectTheme: (id: ThemeId) => void;
-  onThemeRemoved?: (id: ThemeId) => void;
+  onSelectSavedTheme: (theme: SavedTheme) => void;
+  onSaveTheme: (theme: SavedTheme) => boolean;
+  onThemeRemoved?: (id: string) => void;
+  canPersist: boolean;
 };
 
 type ThemeDrag = {
-  id: ThemeId;
+  id: string;
   session: DragGhostSession;
 };
 
@@ -48,217 +49,150 @@ function keepThemeDropAlive(event: Event) {
   if (transfer) transfer.dropEffect = "move";
 }
 
+type Snapshot = {
+  appearance: Appearance;
+  colors: Record<string, string>;
+};
+
 export function AdjustmentPanel({
   appearance,
   onChange,
   onRandomize,
   activeThemeId,
+  customThemes,
   onSelectTheme,
+  onSelectSavedTheme,
+  onSaveTheme,
   onThemeRemoved,
+  canPersist,
 }: AdjustmentPanelProps) {
-  const [removedIds, setRemovedIds] = useState<ReadonlySet<ThemeId>>(
+  const [removedIds, setRemovedIds] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
-  const [pendingDelete, setPendingDelete] = useState<ThemeId | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [saveNoticeOpen, setSaveNoticeOpen] = useState(false);
+  const snapshotRef = useRef<Snapshot | null>(null);
 
-  const row1 = THEME_PRESET_ORDER.row1.filter((id) => !removedIds.has(id));
-  const row2 = THEME_PRESET_ORDER.row2.filter((id) => !removedIds.has(id));
+  const presets = THEME_PRESET_ORDER.filter((id) => !removedIds.has(id));
+  const saved = customThemes.filter((theme) => !removedIds.has(theme.id));
+
+  const openEditor = () => {
+    snapshotRef.current = {
+      appearance,
+      colors: readThemeColors(),
+    };
+    setEditorOpen(true);
+  };
+
+  const revertAndClose = () => {
+    const snapshot = snapshotRef.current;
+    if (snapshot) {
+      applyThemeColors(snapshot.colors);
+      applyAppearance(snapshot.appearance);
+      onChange(snapshot.appearance);
+    }
+    snapshotRef.current = null;
+    setEditorOpen(false);
+  };
+
+  const commitSave = (name: string) => {
+    if (!canPersist) {
+      setSaveNoticeOpen(true);
+      return;
+    }
+    if (!name) return;
+    const theme: SavedTheme = {
+      id: createId(),
+      name,
+      colors: readThemeColors(),
+      appearance,
+    };
+    if (!onSaveTheme(theme)) {
+      setSaveNoticeOpen(true);
+      return;
+    }
+    snapshotRef.current = null;
+    setEditorOpen(false);
+  };
 
   return (
     <div className={styles.themeEditor} data-layout="theme-editor">
-      <div className={styles.presetsBlock}>
-        <p className={styles.headerTitle}>Preset Themes</p>
+      <p className={styles.headerTitle}>Themes</p>
+      <div className={styles.ui} data-layout="theme-ui">
         <div
           className={styles.themes}
           data-layout="themes"
           data-themes-container=""
         >
-          <div className={styles.themeRow}>
-            <button
-              type="button"
-              className={styles.themeButton}
-              aria-label="rando"
-              onClick={onRandomize}
-            >
-              <RandoIcon />
-            </button>
-            {row1.map((id) => (
-              <ThemeSwatchButton
-                key={id}
-                id={id}
-                selected={activeThemeId === id}
-                hidden={pendingDelete === id}
-                onSelect={onSelectTheme}
-                onRequestDelete={setPendingDelete}
-              />
-            ))}
-          </div>
-          <div className={styles.themeRow}>
-            {row2.map((id) => (
-              <ThemeSwatchButton
-                key={id}
-                id={id}
-                selected={activeThemeId === id}
-                hidden={pendingDelete === id}
-                onSelect={onSelectTheme}
-                onRequestDelete={setPendingDelete}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className={styles.controlsBlock}>
-        <div className={styles.savePreset}>
-          <p className={styles.saveLabel}>Save as preset:</p>
           <button
             type="button"
-            className={styles.saveTheme}
-            aria-label="save theme"
-            title="Save theme (coming soon)"
-            onClick={() => setSaveNoticeOpen(true)}
+            className={styles.themeButton}
+            aria-label="rando"
+            onClick={onRandomize}
           >
-            <AddThemeGlyph />
+            <RandoIcon />
+          </button>
+          {presets.map((id) => (
+            <ThemeSwatchButton
+              key={id}
+              id={id}
+              label={id}
+              vars={themeCssVars(THEMES[id]) as CSSProperties}
+              selected={activeThemeId === id}
+              hidden={pendingDelete === id}
+              onSelect={() => onSelectTheme(id)}
+              onRequestDelete={setPendingDelete}
+            />
+          ))}
+          {saved.map((theme) => (
+            <ThemeSwatchButton
+              key={theme.id}
+              id={theme.id}
+              label={theme.name}
+              vars={theme.colors as CSSProperties}
+              selected={activeThemeId === theme.id}
+              hidden={pendingDelete === theme.id}
+              onSelect={() => onSelectSavedTheme(theme)}
+              onRequestDelete={setPendingDelete}
+            />
+          ))}
+          <div className={styles.bar} aria-hidden />
+          <button
+            type="button"
+            className={styles.addTheme}
+            aria-label="add theme"
+            onClick={openEditor}
+          >
+            <img
+              src={publicUrl("assets/add-theme-plus.svg")}
+              alt=""
+              width={32}
+              height={32}
+            />
           </button>
         </div>
-        <div className={styles.panel} data-layout="adjustment-panel">
-          <div className={styles.options}>
-            <div className={styles.fontsRow}>
-              <div className={styles.fontPair}>
-                <FontSelect
-                  ariaLabel="header font"
-                  value={appearance.headerFont}
-                  onChange={(headerFont) => onChange({ headerFont })}
-                />
-                <Swatch
-                  token="--document-header-text-color"
-                  label="header color"
-                />
-              </div>
-              <div className={styles.fontPair}>
-                <FontSelect
-                  ariaLabel="body font"
-                  value={appearance.bodyFont}
-                  onChange={(bodyFont) => onChange({ bodyFont })}
-                />
-                <Swatch
-                  token="--document-body-text-color"
-                  label="body text color"
-                />
-              </div>
-            </div>
-            <div className={styles.numbersRow}>
-              <NumberField
-                className={styles.numberOuter}
-                label="outer borders"
-                value={appearance.panelBorder}
-                onChange={(panelBorder) => onChange({ panelBorder })}
-              />
-              <NumberField
-                className={styles.numberInner}
-                label="inner borders"
-                value={appearance.cardBorder}
-                onChange={(cardBorder) => onChange({ cardBorder })}
-              />
-              <NumberField
-                className={styles.numberCorners}
-                label="corners"
-                value={appearance.panelRadius}
-                onChange={(panelRadius) =>
-                  onChange({
-                    panelRadius,
-                    cardRadius: cardRadiiFromPanel(panelRadius),
-                  })
-                }
-              />
-            </div>
-            <div className={styles.colorsRow}>
-              <div className={styles.colorCol}>
-                <ColorGroup
-                  label="page"
-                  colors={[
-                    { token: "--document-body-color", label: "page color" },
-                  ]}
-                />
-                <ColorGroup
-                  label="panels"
-                  compact
-                  colors={[
-                    {
-                      token: "--containers-panel-surface",
-                      label: "panels surface",
-                    },
-                    {
-                      token: "--containers-panel-stroke-color",
-                      label: "panels stroke",
-                    },
-                  ]}
-                />
-              </div>
-              <div className={styles.colorCol}>
-                <ColorGroup
-                  label="section 1"
-                  compact
-                  colors={[
-                    {
-                      token: "--containers-card1-surface-color",
-                      label: "section 1 surface",
-                    },
-                    {
-                      token: "--containers-card1-stroke-color",
-                      label: "section 1 stroke",
-                    },
-                  ]}
-                />
-                <ColorGroup
-                  label="accent 1"
-                  compact
-                  colors={[
-                    {
-                      token: "--ui-ui-surface-color",
-                      label: "accent 1 surface",
-                    },
-                    {
-                      token: "--ui-ui-stroke-color",
-                      label: "accent 1 stroke",
-                    },
-                  ]}
-                />
-              </div>
-              <div className={styles.colorCol}>
-                <ColorGroup
-                  label="section 2"
-                  compact
-                  colors={[
-                    {
-                      token: "--containers-card2-surface-color",
-                      label: "section 2 surface",
-                    },
-                    {
-                      token: "--containers-card2-stroke-color",
-                      label: "section 2 stroke",
-                    },
-                  ]}
-                />
-                <ColorGroup
-                  label="accent 2"
-                  compact
-                  colors={[
-                    {
-                      token: "--ui-ui2-surface-color",
-                      label: "accent 2 surface",
-                    },
-                    {
-                      token: "--ui-ui2-stroke-color",
-                      label: "accent 2 stroke",
-                    },
-                  ]}
-                />
-              </div>
-            </div>
-          </div>
+        <div className={styles.savePreset}>
+          <button
+            type="button"
+            className={styles.editTheme}
+            aria-label="Edit theme"
+            onClick={openEditor}
+          >
+            Edit theme
+          </button>
         </div>
       </div>
+
+      {editorOpen ? (
+        <ThemeConfigPanel
+          appearance={appearance}
+          onChange={onChange}
+          onClose={revertAndClose}
+          onSave={commitSave}
+          canPersist={canPersist}
+        />
+      ) : null}
 
       {saveNoticeOpen ? (
         <FeedbackDialog
@@ -285,28 +219,31 @@ export function AdjustmentPanel({
 }
 
 type ThemeSwatchButtonProps = {
-  id: ThemeId;
+  id: string;
+  label: string;
+  vars: CSSProperties;
   selected: boolean;
   hidden: boolean;
-  onSelect: (id: ThemeId) => void;
-  onRequestDelete: (id: ThemeId) => void;
+  onSelect: () => void;
+  onRequestDelete: (id: string) => void;
 };
 
 function ThemeSwatchButton({
   id,
+  label,
+  vars,
   selected,
   hidden,
   onSelect,
   onRequestDelete,
 }: ThemeSwatchButtonProps) {
-  const vars = themeCssVars(THEMES[id]) as CSSProperties;
   const suppressClick = useRef(false);
 
   return (
     <button
       type="button"
       className={`${styles.themeButton}${hidden ? ` ${styles.themeButtonHidden}` : ""}`}
-      aria-label={id}
+      aria-label={label}
       aria-pressed={selected}
       data-theme-id={id}
       draggable
@@ -316,7 +253,7 @@ function ThemeSwatchButton({
           suppressClick.current = false;
           return;
         }
-        onSelect(id);
+        onSelect();
       }}
       onDragStart={(event: DragEvent<HTMLButtonElement>) => {
         suppressClick.current = true;
@@ -356,7 +293,6 @@ function ThemeSwatchButton({
   );
 }
 
-/** Inline of /assets/theme-swatch.svg so theme CSS vars on the button apply. */
 function ThemeSwatchGraphic() {
   return (
     <svg
@@ -399,114 +335,5 @@ function ThemeSwatchGraphic() {
         stroke="var(--containers-card1-stroke-color)"
       />
     </svg>
-  );
-}
-
-type NumberFieldProps = {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-  className?: string;
-};
-
-function NumberField({ label, value, onChange, className }: NumberFieldProps) {
-  const [draft, setDraft] = useState(String(value));
-
-  useEffect(() => {
-    setDraft(String(value));
-  }, [value]);
-
-  return (
-    <label
-      className={
-        className ? `${styles.numberField} ${className}` : styles.numberField
-      }
-    >
-      {label}
-      <input
-        className={styles.numberInput}
-        type="number"
-        min={0}
-        value={draft}
-        aria-label={label}
-        onChange={(event) => {
-          const raw = event.target.value;
-          setDraft(raw);
-          if (raw === "") return;
-          const next = Number.parseInt(raw, 10);
-          if (Number.isFinite(next) && next >= 0) onChange(next);
-        }}
-        onBlur={() => {
-          setDraft(String(value));
-        }}
-      />
-    </label>
-  );
-}
-
-type FontSelectProps = {
-  ariaLabel: string;
-  value: FontName;
-  onChange: (value: FontName) => void;
-};
-
-function FontSelect({ ariaLabel, value, onChange }: FontSelectProps) {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      event.stopPropagation();
-      setOpen(false);
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
-
-  return (
-    <div className={styles.fontSelect} ref={rootRef}>
-      <button
-        type="button"
-        className={styles.fontTrigger}
-        aria-label={ariaLabel}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        style={{
-          fontFamily: fontStack(value),
-          ["--dropdown-mask" as string]: `url("${publicUrl("assets/dropdown.svg")}")`,
-        }}
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        {value}
-      </button>
-      {open ? (
-        <div className={styles.fontMenu} role="listbox" aria-label={ariaLabel}>
-          {FONT_OPTIONS.map((font) => (
-            <div
-              key={font.name}
-              role="option"
-              aria-selected={font.name === value}
-              className={styles.fontOption}
-              style={{ fontFamily: font.stack }}
-              onClick={() => {
-                onChange(font.name);
-                setOpen(false);
-              }}
-            >
-              {font.name}
-            </div>
-          ))}
-        </div>
-      ) : null}
-    </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   type DocumentSettings,
   type DocumentState,
   type GoalData,
+  type SavedTheme,
 } from "../types/document";
 import {
   connect,
@@ -21,6 +22,8 @@ import type { GoalSection, SeedMode } from "./schema";
 export type DocumentActions = {
   document: DocumentState;
   updateSettings: (patch: Partial<DocumentSettings>) => void;
+  addSavedTheme: (theme: SavedTheme) => boolean;
+  deleteSavedTheme: (id: string) => void;
   addActionItem: () => void;
   updateActionItem: (id: string, patch: Partial<ActionItemData>) => void;
   deleteActionItem: (id: string) => void;
@@ -145,6 +148,19 @@ export function useYjsDocument(pageId: string, seed: SeedMode) {
     [withDoc],
   );
 
+  const addSavedTheme = useCallback(
+    (theme: SavedTheme) => {
+      const current = roomRef.current?.doc;
+      if (!current) return false;
+      return schema.addSavedTheme(current, theme);
+    },
+    [],
+  );
+
+  const deleteSavedTheme = useCallback((id: string) => {
+    withDoc((doc) => schema.deleteSavedTheme(doc, id));
+  }, [withDoc]);
+
   const addActionItem = useCallback(() => {
     withDoc(schema.addActionItem);
   }, [withDoc]);
@@ -233,6 +249,8 @@ export function useYjsDocument(pageId: string, seed: SeedMode) {
   const actions: DocumentActions = {
     document,
     updateSettings,
+    addSavedTheme,
+    deleteSavedTheme,
     addActionItem,
     updateActionItem,
     deleteActionItem,

@@ -25,9 +25,24 @@ export type AgendaEntryData = {
   managerAgenda: AgendaSideData;
 };
 
+export type SavedTheme = {
+  id: string;
+  name: string;
+  colors: Record<string, string>;
+  appearance: {
+    panelRadius: number;
+    panelBorder: number;
+    cardRadius: number;
+    cardBorder: number;
+    headerFont: string;
+    bodyFont: string;
+  };
+};
+
 export type DocumentSettings = {
   showDueDates: boolean;
   showCompletedTasks: boolean;
+  customThemes: SavedTheme[];
 };
 
 export type DocumentState = {
@@ -93,6 +108,7 @@ export function createEmptyDocument(): DocumentState {
     settings: {
       showDueDates: false,
       showCompletedTasks: true,
+      customThemes: [],
     },
   };
 }
@@ -146,6 +162,7 @@ export function createInitialDocument(): DocumentState {
     settings: {
       showDueDates: false,
       showCompletedTasks: true,
+      customThemes: [],
     },
   };
 }
