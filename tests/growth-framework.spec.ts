@@ -120,11 +120,14 @@ async function sideBySideMetrics(page: Page) {
       roleDirection: getComputedStyle(role).flexDirection,
       labelWritingMode: getComputedStyle(label).writingMode,
       infoWidth: info.getBoundingClientRect().width,
+      infoHeight: info.getBoundingClientRect().height,
       chartWidth: chartRect.width,
       chartHeight: chartRect.height,
       chartFlex: getComputedStyle(chart).flex,
       arrayGap: arrayStyle.gap,
       arrayPadding: arrayStyle.padding,
+      columnPadding: getComputedStyle(column).padding,
+      columnGap: getComputedStyle(column).gap,
       columnWidth: column.getBoundingClientRect().width,
       columnCount: columnRects.length,
       lastColumnRight: columnRects.at(-1)?.right ?? 0,
@@ -148,7 +151,9 @@ test("Growth Framework 1160–1279 uses medium side-by-side array", async ({
   expect(metrics.columnWidth).toBeCloseTo(90, 0);
   expect(metrics.arrayGap).toBe("15px");
   expect(metrics.arrayPadding).toBe("10px");
-  expect(metrics.chartHeight).toBeCloseTo(220, 0);
+  expect(metrics.columnPadding).toBe("3px 5px");
+  expect(metrics.columnGap).toBe("2px");
+  expect(metrics.chartHeight).toBeCloseTo(metrics.infoHeight, 0);
   expect(metrics.lastColumnRight).toBeLessThanOrEqual(metrics.chartRight + 1);
   expect(metrics.chartRight).toBeLessThanOrEqual(metrics.roleRight + 1);
   expect(metrics.infoWidth + metrics.chartWidth).toBeLessThan(metrics.roleRight - 50);
@@ -167,8 +172,10 @@ test("Growth Framework ≥1280 uses wide side-by-side array", async ({
   expect(metrics.columnCount).toBe(6);
   expect(metrics.arrayGap).toBe("25px");
   expect(metrics.arrayPadding).toBe("10px");
+  expect(metrics.columnPadding).toBe("3px 5px");
+  expect(metrics.columnGap).toBe("2px");
   expect(metrics.chartWidth).toBeCloseTo(730, 0);
-  expect(metrics.chartHeight).toBeCloseTo(220, 0);
+  expect(metrics.chartHeight).toBeCloseTo(metrics.infoHeight, 0);
   expect(metrics.columnWidth).toBeGreaterThan(90);
   expect(metrics.lastColumnRight).toBeLessThanOrEqual(metrics.chartRight + 1);
   expect(metrics.chartRight).toBeLessThanOrEqual(metrics.roleRight + 1);

@@ -184,8 +184,6 @@
   width: 100%;
   height: 100%;
   padding: 10px;
-  border: var(--containers-card1-stroke-weight) solid
-    var(--containers-card1-stroke-color);
   border-radius: var(--containers-card1-radii);
   background: var(--containers-panel-surface);
 }
@@ -324,20 +322,19 @@
   }
 
   .chart {
+    flex-direction: column;
     width: auto;
     height: auto;
+    min-height: 0;
     flex: 0 0 auto;
     align-self: stretch;
   }
 
-  .roleShort .chart {
-    height: 220px;
-    align-self: auto;
-  }
-
   .array {
+    flex: 1 0 0;
     gap: 15px;
-    height: 100%;
+    height: auto;
+    min-height: 0;
     padding: 10px;
     align-self: stretch;
     background: var(--containers-card2-surface-color);
@@ -355,7 +352,8 @@
   }
 
   .roleShort .column {
-    gap: 5px;
+    gap: 2px;
+    padding: 3px 5px;
   }
 
   .cellStack {
@@ -367,7 +365,7 @@
   }
 
   .roleShort .cellStack {
-    gap: 5px;
+    gap: 2px;
   }
 
   .cell {

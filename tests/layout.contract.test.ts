@@ -144,7 +144,7 @@ describe("layout CSS contract", () => {
     assert.match(growth, /@media \(min-width:\s*1160px\)/);
     assert.match(growth, /@media \(min-width:\s*1280px\)/);
     assert.match(growth, /height:\s*274px/);
-    assert.match(growth, /height:\s*220px/);
+    assert.match(growth, /align-self:\s*stretch/);
     assert.match(growth, /gap:\s*25px/);
     assert.match(growth, /flex:\s*0 0 730px/);
     assert.match(growth, /grid-template-columns:\s*1fr 1fr 1fr/);
