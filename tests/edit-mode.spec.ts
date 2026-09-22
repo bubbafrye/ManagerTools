@@ -469,9 +469,10 @@ test("role editor lists CSV roles with New Role last and save starts disabled", 
 
   await role.click();
   const options = page.getByRole("option");
-  await expect(options).toHaveCount(2);
+  await expect(options).toHaveCount(3);
   await expect(options.nth(0)).toHaveText("Product Designer");
-  await expect(options.nth(1)).toHaveText("-- New Role --");
+  await expect(options.nth(1)).toHaveText("Product Manager");
+  await expect(options.nth(2)).toHaveText("-- New Role --");
 
   await page.getByRole("option", { name: "-- New Role --" }).click();
   await expect(role).toHaveText("-- New Role --");

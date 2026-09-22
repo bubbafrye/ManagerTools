@@ -19,7 +19,7 @@ const csv = readFileSync(
 describe("parseRoleDefinitions", () => {
   it("groups each CSV role and keeps -- New Role -- last in the name list", () => {
     const disciplines = parseRoleDefinitions(csv);
-    assert.equal(disciplines.length, 2);
+    assert.equal(disciplines.length, 3);
     const role = disciplines[0];
     assert.equal(role.discipline, "Product Designer");
     assert.equal(role.definition, "");
@@ -44,9 +44,16 @@ describe("parseRoleDefinitions", () => {
     assert.equal(role.skills[0].title, "Technical Ability");
     assert.equal(role.skills[5].title, "Research & Data");
     assert.match(role.skills[5].definition, /research and analytics/i);
-    assert.equal(disciplines[1].discipline, "-- New Role --");
+    const pm = disciplines[1];
+    assert.equal(pm.discipline, "Product Manager");
+    assert.equal(pm.skills.length, 6);
+    assert.equal(pm.skills[0].title, "Product Sense");
+    assert.equal(pm.skills[5].title, "Discovery & Research");
+    assert.match(pm.tiers[0].description, /defined slice of the product/);
+    assert.equal(disciplines[2].discipline, "-- New Role --");
     assert.deepEqual(listRoleNames(disciplines), [
       "Product Designer",
+      "Product Manager",
       "-- New Role --",
     ]);
     assert.deepEqual(
