@@ -18,6 +18,7 @@ import {
   type ThemeId,
 } from "../../themes";
 import { ConfirmDelete, FeedbackDialog } from "./ConfirmDelete";
+import { DefaultBtn } from "./DefaultBtn";
 import { RandoIcon } from "./Icons";
 import { ThemeConfigPanel } from "./ThemeConfigPanel";
 import styles from "./AdjustmentPanel.module.css";
@@ -173,14 +174,9 @@ export function AdjustmentPanel({
           </button>
         </div>
         <div className={styles.savePreset}>
-          <button
-            type="button"
-            className={styles.editTheme}
-            aria-label="Edit theme"
-            onClick={openEditor}
-          >
+          <DefaultBtn aria-label="Edit theme" onClick={openEditor}>
             Edit theme
-          </button>
+          </DefaultBtn>
         </div>
       </div>
 

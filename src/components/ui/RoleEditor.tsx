@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { publicUrl } from "../../publicUrl";
 import { AddThemeGlyph } from "./Icons";
 import { FeedbackDialog } from "./ConfirmDelete";
+import { DefaultBtn } from "./DefaultBtn";
 import styles from "./RoleEditor.module.css";
 
 type RoleEditorProps = {
@@ -84,15 +85,14 @@ export function RoleEditor({
         <div
           className={`${styles.savePreset}${canSave ? "" : ` ${styles.savePresetDisabled}`}`}
         >
-          <button
-            type="button"
+          <DefaultBtn
             className={styles.editPreset}
             aria-label="Edit Preset"
             disabled={contentEdit}
             onClick={onEditPreset}
           >
             Edit Preset
-          </button>
+          </DefaultBtn>
           <div className={styles.spacer} aria-hidden />
           <p className={styles.saveLabel}>Save preset:</p>
           <button

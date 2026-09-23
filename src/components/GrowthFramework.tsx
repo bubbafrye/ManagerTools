@@ -8,6 +8,7 @@ import {
   type RoleSkill,
 } from "../data/parseRoleDefinitions";
 import { SkillFocus } from "./SkillFocus";
+import { DefaultBtn } from "./ui/DefaultBtn";
 import { EditableText } from "./ui/EditableText";
 import { TierSelector } from "./TierSelector";
 import styles from "./GrowthFramework.module.css";
@@ -247,15 +248,13 @@ export function GrowthFramework({
             )}
           </div>
           {showDescription ? (
-            <button
-              type="button"
-              className={styles.viewSkills}
+            <DefaultBtn
               aria-expanded={skillsOpen}
               aria-controls="growth-skills"
               onClick={() => setExpanded((open) => !open)}
             >
               {skillsOpen ? "Hide Skills" : "View Skills"}
-            </button>
+            </DefaultBtn>
           ) : null}
         </div>
         <div className={styles.chart}>

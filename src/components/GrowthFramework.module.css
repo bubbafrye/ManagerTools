@@ -112,58 +112,6 @@
   cursor: pointer;
 }
 
-.viewSkills {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 40px;
-  flex-shrink: 0;
-  padding: 5px 15px;
-  overflow: clip;
-  border-radius: var(--containers-card1-radii);
-  border: 2px solid var(--ui-ui2-stroke-color);
-  background: var(--ui-ui2-surface-color);
-  font-family: var(--document-text-header-font-face);
-  font-size: var(--document-text-label-font-size);
-  font-weight: bold;
-  line-height: normal;
-  color: var(--ui-ui-surface-color);
-  cursor: pointer;
-}
-
-.viewSkills::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  box-shadow:
-    inset 0 -4px 0 rgb(0 0 0 / 0.4),
-    inset 0 4px 0 rgb(255 255 255 / 0.4);
-}
-
-.viewSkills:hover::after {
-  box-shadow:
-    inset 0 40px 4px rgb(255 255 255 / 0.25),
-    inset 0 -4px 0 rgb(0 0 0 / 0.4),
-    inset 0 4px 0 rgb(255 255 255 / 0.4);
-}
-
-.viewSkills:active::after {
-  box-shadow: inset 0 40px 4px rgb(0 0 0 / 0.25);
-}
-
-.viewSkills:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.viewSkills:disabled::after {
-  display: none;
-}
-
 .chart {
   display: flex;
   width: 100%;
