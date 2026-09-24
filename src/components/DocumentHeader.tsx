@@ -1,7 +1,9 @@
 import { ShareBar } from "./ShareBar";
+import { DefaultBtn } from "./ui/DefaultBtn";
 import { AdjustIcon, EditIcon } from "./ui/Icons";
 import { EditableText } from "./ui/EditableText";
 import type { SyncStatus } from "../sync/connect";
+import enterShift from "../styles/enterShift.module.css";
 import styles from "./DocumentHeader.module.css";
 
 type DocumentHeaderProps = {
@@ -34,27 +36,33 @@ export function DocumentHeader({
   onCopyLink,
 }: DocumentHeaderProps) {
   return (
-    <header
-      className={styles.header}
-      data-layout="document-header"
-    >
-      <button
-        type="button"
-        className={styles.settingsButton}
-        onClick={onToggleEditMode}
-        aria-label="Document settings"
-        aria-pressed={editMode}
+    <div className={styles.stack}>
+      {editMode ? (
+        <DefaultBtn className={enterShift.enter} onClick={onNewPage}>
+          Create new page
+        </DefaultBtn>
+      ) : null}
+      <header
+        className={styles.header}
+        data-layout="document-header"
+        data-settings-shift="header"
       >
-        <AdjustIcon />
-      </button>
+        <button
+          type="button"
+          className={styles.settingsButton}
+          onClick={onToggleEditMode}
+          aria-label="Document settings"
+          aria-pressed={editMode}
+        >
+          <AdjustIcon />
+        </button>
         <ShareBar
-        peerCount={peerCount}
-        syncStatus={syncStatus}
-        copied={copied}
-        onNewPage={onNewPage}
-        onCopyLink={onCopyLink}
-      />
-      <div className={styles.names} data-layout="ic-manager">
+          peerCount={peerCount}
+          syncStatus={syncStatus}
+          copied={copied}
+          onCopyLink={onCopyLink}
+        />
+        <div className={styles.names} data-layout="ic-manager">
         <span className={`${styles.nameSlot} ${styles.nameSlotHidden}`} aria-hidden>
           <EditIcon />
         </span>
@@ -93,9 +101,10 @@ export function DocumentHeader({
           <EditIcon />
         </span>
       </div>
-      <div className={styles.period} data-layout="period">
-        {periodLabel}
-      </div>
-    </header>
+        <div className={styles.period} data-layout="period">
+          {periodLabel}
+        </div>
+      </header>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ActionItems } from "../components/ActionItems";
 import { Agenda } from "../components/Agenda";
 import { DocumentHeader } from "../components/DocumentHeader";
@@ -25,6 +25,7 @@ import {
 } from "../themes";
 import type { DocumentActions } from "../hooks/useDocumentState";
 import type { SyncStatus } from "../sync/connect";
+import enterShift from "../styles/enterShift.module.css";
 import styles from "./OneOnOnePage.module.css";
 
 type OneOnOnePageProps = DocumentActions & {
@@ -74,6 +75,8 @@ export function OneOnOnePage({
     () => roleNames[0] ?? "Product Designer",
   );
   const [contentEdit, setContentEdit] = useState(false);
+  const pageRef = useRef<HTMLElement>(null);
+  const settingsTopsRef = useRef<Map<string, number> | null>(null);
 
   useEffect(() => {
     applyAppearance(appearance);
@@ -88,8 +91,38 @@ export function OneOnOnePage({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [editMode]);
 
+  useLayoutEffect(() => {
+    const root = pageRef.current;
+    const prevTops = settingsTopsRef.current;
+    settingsTopsRef.current = null;
+    if (!editMode || !root || !prevTops) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    for (const el of root.querySelectorAll<HTMLElement>("[data-settings-shift]")) {
+      const id = el.dataset.settingsShift;
+      if (!id) continue;
+      const prevTop = prevTops.get(id);
+      if (prevTop == null) continue;
+      const dy = prevTop - el.getBoundingClientRect().top;
+      if (dy >= 0) continue;
+      el.classList.remove(enterShift.shift);
+      el.style.transition = "none";
+      el.style.transform = `translateY(${dy}px)`;
+      void el.offsetWidth;
+      el.style.transition = "";
+      el.classList.add(enterShift.shift);
+      el.style.transform = "";
+      const done = (event: TransitionEvent) => {
+        if (event.target !== el || event.propertyName !== "transform") return;
+        el.classList.remove(enterShift.shift);
+        el.removeEventListener("transitionend", done);
+      };
+      el.addEventListener("transitionend", done);
+    }
+  }, [editMode]);
+
   return (
-    <main className={styles.page} data-layout="page">
+    <main ref={pageRef} className={styles.page} data-layout="page">
       <div className={styles.chrome}>
         <DocumentHeader
           icName={document.icName}
@@ -98,7 +131,20 @@ export function OneOnOnePage({
           editMode={editMode}
           onIcNameChange={(icName) => updateIdentity({ icName })}
           onManagerNameChange={(managerName) => updateIdentity({ managerName })}
-          onToggleEditMode={() => setEditMode((open) => !open)}
+          onToggleEditMode={() => {
+            const root = pageRef.current;
+            if (!editMode && root) {
+              const tops = new Map<string, number>();
+              for (const el of root.querySelectorAll<HTMLElement>(
+                "[data-settings-shift]",
+              )) {
+                const id = el.dataset.settingsShift;
+                if (id) tops.set(id, el.getBoundingClientRect().top);
+              }
+              settingsTopsRef.current = tops;
+            }
+            setEditMode((open) => !open);
+          }}
           peerCount={peerCount}
           syncStatus={syncStatus}
           copied={copied}
@@ -106,7 +152,10 @@ export function OneOnOnePage({
           onCopyLink={onCopyLink}
         />
         {editMode ? (
-          <div className={styles.editStrip} data-layout="edit-strip">
+          <div
+            className={`${styles.editStrip} ${enterShift.enter}`}
+            data-layout="edit-strip"
+          >
             <AdjustmentPanel
               appearance={appearance}
               activeThemeId={activeThemeId}
@@ -151,7 +200,11 @@ export function OneOnOnePage({
           </div>
         ) : null}
       </div>
-      <div className={styles.framework} data-layout="growth-framework">
+      <div
+        className={styles.framework}
+        data-layout="growth-framework"
+        data-settings-shift="framework"
+      >
         <GrowthFramework
           key={selectedRole}
           icName={document.icName}
@@ -161,7 +214,11 @@ export function OneOnOnePage({
           contentEdit={contentEdit}
         />
       </div>
-      <section className={styles.oneOnOne} data-layout="one-on-one">
+      <section
+        className={styles.oneOnOne}
+        data-layout="one-on-one"
+        data-settings-shift="one-on-one"
+      >
         <div className={styles.leftSide} data-layout="left-column">
           <ActionItems
             items={document.actionItems}

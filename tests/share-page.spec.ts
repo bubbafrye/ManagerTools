@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("New 1:1 opens an empty shared room and copies the invite URL", async ({
+test("Create new page opens an empty shared room and copies the invite URL", async ({
   page,
 }) => {
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
@@ -8,7 +8,9 @@ test("New 1:1 opens an empty shared room and copies the invite URL", async ({
   await page.goto("/");
 
   await expect(page.getByText("Make this moar pretty")).toBeVisible();
-  await page.getByRole("button", { name: "New 1:1" }).click();
+  await expect(page.getByRole("button", { name: "Create new page" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Document settings" }).click();
+  await page.getByRole("button", { name: "Create new page" }).click();
 
   await expect.poll(() => page.evaluate(() => location.hash)).toMatch(
     /^#\/p\/[0-9a-f-]{36}$/i,
