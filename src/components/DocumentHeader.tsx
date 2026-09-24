@@ -1,4 +1,5 @@
 import { ShareBar } from "./ShareBar";
+import { DateRangePicker } from "./DateRangePicker";
 import { DefaultBtn } from "./ui/DefaultBtn";
 import { AdjustIcon, EditIcon } from "./ui/Icons";
 import { EditableText } from "./ui/EditableText";
@@ -13,6 +14,7 @@ type DocumentHeaderProps = {
   editMode: boolean;
   onIcNameChange: (value: string) => void;
   onManagerNameChange: (value: string) => void;
+  onPeriodChange: (value: string) => void;
   onToggleEditMode: () => void;
   peerCount: number;
   syncStatus: SyncStatus;
@@ -28,6 +30,7 @@ export function DocumentHeader({
   editMode,
   onIcNameChange,
   onManagerNameChange,
+  onPeriodChange,
   onToggleEditMode,
   peerCount,
   syncStatus,
@@ -38,7 +41,10 @@ export function DocumentHeader({
   return (
     <div className={styles.stack}>
       {editMode ? (
-        <DefaultBtn className={enterShift.enter} onClick={onNewPage}>
+        <DefaultBtn
+          className={`${styles.newPage} ${enterShift.enter}`}
+          onClick={onNewPage}
+        >
           Create new page
         </DefaultBtn>
       ) : null}
@@ -47,15 +53,17 @@ export function DocumentHeader({
         data-layout="document-header"
         data-settings-shift="header"
       >
-        <button
-          type="button"
-          className={styles.settingsButton}
-          onClick={onToggleEditMode}
-          aria-label="Document settings"
-          aria-pressed={editMode}
-        >
-          <AdjustIcon />
-        </button>
+        <div className={styles.settings} data-layout="settings">
+          <button
+            type="button"
+            className={styles.settingsButton}
+            onClick={onToggleEditMode}
+            aria-label="Document settings"
+            aria-pressed={editMode}
+          >
+            <AdjustIcon />
+          </button>
+        </div>
         <ShareBar
           peerCount={peerCount}
           syncStatus={syncStatus}
@@ -101,9 +109,10 @@ export function DocumentHeader({
           <EditIcon />
         </span>
       </div>
-        <div className={styles.period} data-layout="period">
-          {periodLabel}
-        </div>
+        <DateRangePicker
+          periodLabel={periodLabel}
+          onPeriodChange={onPeriodChange}
+        />
       </header>
     </div>
   );

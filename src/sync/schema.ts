@@ -470,12 +470,13 @@ export function moveGoal(
 
 export function updateIdentity(
   doc: Y.Doc,
-  patch: { icName?: string; managerName?: string },
+  patch: { icName?: string; managerName?: string; periodLabel?: string },
 ) {
   const meta = doc.getMap(META);
   doc.transact(() => {
     if (patch.icName !== undefined) meta.set("icName", patch.icName);
     if (patch.managerName !== undefined) meta.set("managerName", patch.managerName);
+    if (patch.periodLabel !== undefined) meta.set("periodLabel", patch.periodLabel);
   });
 }
 

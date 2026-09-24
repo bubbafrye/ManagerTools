@@ -58,6 +58,8 @@ export type DocumentState = {
 
 export const PROGRESS_SEGMENTS = 10;
 
+export const DEFAULT_PERIOD_LABEL = "Date Range";
+
 export function createId(): string {
   return crypto.randomUUID();
 }
@@ -100,7 +102,7 @@ export function createEmptyDocument(): DocumentState {
   return {
     icName: "IC",
     managerName: "Manager",
-    periodLabel: "",
+    periodLabel: DEFAULT_PERIOD_LABEL,
     actionItems: [],
     professionalGoals: [],
     personalGoals: [],
@@ -117,7 +119,7 @@ export function createInitialDocument(): DocumentState {
   return {
     icName: "IC",
     managerName: "Manager",
-    periodLabel: "Q2 2026",
+    periodLabel: DEFAULT_PERIOD_LABEL,
     actionItems: [
       { id: createId(), text: "Make this moar pretty", completed: false },
       {

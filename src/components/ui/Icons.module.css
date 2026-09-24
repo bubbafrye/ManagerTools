@@ -27,6 +27,55 @@
   mask-position: center;
 }
 
+.calendar {
+  position: relative;
+  width: 22px;
+  height: 23.32px;
+  color: var(--document-header-text-color);
+}
+
+.calendarMast,
+.calendarFrame,
+.calendarRings {
+  position: absolute;
+  background-color: currentColor;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.calendarMast {
+  top: 1.76px;
+  left: 0;
+  width: 22px;
+  height: 5.28027px;
+}
+
+.calendarFrame {
+  top: 3.96px;
+  left: 0;
+  width: 22px;
+  height: 19.3599px;
+}
+
+.calendarRings {
+  top: 0;
+  left: 4.4px;
+  width: 13.2002px;
+  height: 3.51997px;
+}
+
+.calendarDay {
+  position: absolute;
+  width: 3.733px;
+  height: 3.52px;
+  border-radius: 0.5px;
+  background-color: currentColor;
+}
+
 .edit {
   width: 25px;
   height: 22px;

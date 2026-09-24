@@ -173,6 +173,47 @@ export function AdjustIcon({ className }: IconProps) {
   );
 }
 
+const CALENDAR_DAYS = [
+  [4, 8],
+  [9.133, 8],
+  [14.267, 8],
+  [4, 12.4],
+  [9.133, 12.4],
+  [14.267, 12.4],
+  [4, 16.8],
+  [9.133, 16.8],
+  [14.267, 16.8],
+] as const;
+
+export function CalendarIcon({ className }: IconProps) {
+  return (
+    <span
+      className={`${styles.icon} ${styles.calendar} ${className ?? ""}`}
+      aria-hidden
+    >
+      <span
+        className={styles.calendarMast}
+        style={maskStyle("assets/calendar-mast.svg")}
+      />
+      <span
+        className={styles.calendarFrame}
+        style={maskStyle("assets/calendar-frame.svg")}
+      />
+      <span
+        className={styles.calendarRings}
+        style={maskStyle("assets/calendar-rings.svg")}
+      />
+      {CALENDAR_DAYS.map(([x, y]) => (
+        <span
+          key={`${x}-${y}`}
+          className={styles.calendarDay}
+          style={{ left: `${x}px`, top: `${y}px` }}
+        />
+      ))}
+    </span>
+  );
+}
+
 export function TrashIcon({ className }: IconProps) {
   return (
     <span className={`${styles.trash} ${className ?? ""}`} aria-hidden>

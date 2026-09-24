@@ -63,6 +63,12 @@ test("document header places adjust left, names center, and range right", async 
   expect(settingsBox!.width).toBeCloseTo(28, 0);
   expect(settingsBox!.height).toBeCloseTo(29, 0);
 
+  const settingsSlot = page.locator("[data-layout='settings']");
+  const settingsSlotBox = await settingsSlot.boundingBox();
+  expect(settingsSlotBox).toBeTruthy();
+  expect(settingsSlotBox!.width).toBeCloseTo(180, 0);
+
+  expect(periodBox!.width).toBeGreaterThanOrEqual(179);
   expect(periodBox!.x + periodBox!.width).toBeCloseTo(
     headerBox!.x + headerBox!.width - 17,
     1,
@@ -70,7 +76,9 @@ test("document header places adjust left, names center, and range right", async 
 
   const clusterMid = (icBox!.x + managerBox!.x + managerBox!.width) / 2;
   const leftoverMid = namesBox!.x + namesBox!.width / 2;
+  const headerMid = headerBox!.x + headerBox!.width / 2;
   expect(clusterMid).toBeCloseTo(leftoverMid, 0);
+  expect(clusterMid).toBeCloseTo(headerMid, 1);
 });
 
 test("document header stacks settings+period above centered names under 768px", async ({
@@ -147,4 +155,57 @@ test("default IC and Manager names clear on focus and restore if left unchanged"
   await expect(ic).toHaveText("Ada");
   await ic.click();
   await expect(ic).toHaveText("Ada");
+});
+
+test("unset period shows Date Range at half opacity until a range is chosen", async ({
+  page,
+}) => {
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Document settings" }).click();
+  await page.getByRole("button", { name: "Create new page" }).click();
+  await expect.poll(() => page.evaluate(() => location.hash)).toMatch(
+    /^#\/p\/[0-9a-f-]{36}$/i,
+  );
+
+  const period = page.locator("[data-layout='period']");
+  const label = period.locator("[data-layout='period-label']");
+  await expect(label).toHaveText("Date Range");
+  await expect(label).toHaveCSS("opacity", "0.5");
+
+  await period.getByRole("button").first().click();
+  await page.getByRole("button", { name: "Q1" }).click();
+  await expect(label).toContainText("Q1");
+  await expect(label).not.toHaveText("Date Range");
+  await expect(label).toHaveCSS("opacity", "1");
+});
+
+test("Date Range control opens a picker that updates the header period", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const period = page.locator("[data-layout='period']");
+  await period.getByRole("button").first().click();
+
+  const picker = page.locator("[data-layout='date-picker']");
+  await expect(picker).toBeVisible();
+  await expect(picker.getByRole("button", { name: "Q1" })).toBeVisible();
+  await expect(picker.getByRole("button", { name: "YEAR", exact: true })).toBeVisible();
+
+  await picker.getByRole("button", { name: "Q3" }).click();
+  await expect(picker).toHaveCount(0);
+  await expect(period).toContainText("Q3");
+
+  await period.getByRole("button").first().click();
+  await page.getByRole("button", { name: "Year", exact: true }).click();
+  const nextYear = page.getByRole("option").nth(1);
+  const year = (await nextYear.innerText()).trim();
+  await nextYear.click();
+  await expect(period).toContainText(`Q3 ${year}`);
+
+  await page.getByRole("button", { name: "YEAR", exact: true }).click();
+  await expect(period).toContainText(year);
 });

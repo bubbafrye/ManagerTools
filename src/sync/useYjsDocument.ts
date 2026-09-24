@@ -42,7 +42,11 @@ export type DocumentActions = {
     itemId: string,
     beforeId: string | null,
   ) => void;
-  updateIdentity: (patch: { icName?: string; managerName?: string }) => void;
+  updateIdentity: (patch: {
+    icName?: string;
+    managerName?: string;
+    periodLabel?: string;
+  }) => void;
   addAgendaEntry: () => void;
   updateAgendaEntry: (id: string, patch: Partial<AgendaEntryData>) => void;
   reorderAgendaEntries: (itemId: string, beforeId: string | null) => void;
@@ -218,7 +222,11 @@ export function useYjsDocument(pageId: string, seed: SeedMode) {
   );
 
   const updateIdentity = useCallback(
-    (patch: { icName?: string; managerName?: string }) => {
+    (patch: {
+      icName?: string;
+      managerName?: string;
+      periodLabel?: string;
+    }) => {
       withDoc((doc) => schema.updateIdentity(doc, patch));
     },
     [withDoc],

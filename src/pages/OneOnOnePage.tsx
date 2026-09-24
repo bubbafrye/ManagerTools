@@ -131,6 +131,7 @@ export function OneOnOnePage({
           editMode={editMode}
           onIcNameChange={(icName) => updateIdentity({ icName })}
           onManagerNameChange={(managerName) => updateIdentity({ managerName })}
+          onPeriodChange={(periodLabel) => updateIdentity({ periodLabel })}
           onToggleEditMode={() => {
             const root = pageRef.current;
             if (!editMode && root) {
