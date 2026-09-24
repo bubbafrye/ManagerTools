@@ -7,7 +7,6 @@ import {
   removeDragGhost,
   type DragGhostSession,
 } from "../../dragGhost";
-import { publicUrl } from "../../publicUrl";
 import { createId, type SavedTheme } from "../../types/document";
 import {
   THEMES,
@@ -159,23 +158,12 @@ export function AdjustmentPanel({
             />
           ))}
           <div className={styles.bar} aria-hidden />
-          <button
-            type="button"
-            className={styles.addTheme}
-            aria-label="add theme"
+          <DefaultBtn
+            className={styles.editButton}
+            aria-label="Edit theme"
             onClick={openEditor}
           >
-            <img
-              src={publicUrl("assets/add-theme-plus.svg")}
-              alt=""
-              width={32}
-              height={32}
-            />
-          </button>
-        </div>
-        <div className={styles.savePreset}>
-          <DefaultBtn aria-label="Edit theme" onClick={openEditor}>
-            Edit theme
+            Edit
           </DefaultBtn>
         </div>
       </div>

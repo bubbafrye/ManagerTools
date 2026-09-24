@@ -78,45 +78,13 @@
   background: var(--containers-panel-stroke-color);
 }
 
-.addTheme {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  overflow: visible;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.addTheme img {
-  display: block;
-  margin: -1px;
-}
-
-.savePreset {
-  display: flex;
-  flex: 1 0 0;
-  align-items: flex-end;
-  justify-content: flex-end;
-  min-width: 0;
-  height: 48px;
+.editButton {
+  width: 91px;
+  height: 32px;
 }
 
 @media (max-width: 640px) {
   .themeEditor {
     width: 100%;
-  }
-
-  .ui {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
-
-  .savePreset {
-    justify-content: flex-start;
-    height: 48px;
   }
 }

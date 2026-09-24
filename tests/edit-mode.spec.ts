@@ -186,7 +186,7 @@ test("swatch writes a color token live", async ({ page }) => {
   expect(textColor).toBe("#ff0000");
 });
 
-test("theme editor stacks presets and edit button under 640px", async ({
+test("theme editor keeps presets and edit in one strip under 640px", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 480, height: 900 });
@@ -198,18 +198,23 @@ test("theme editor stacks presets and edit button under 640px", async ({
   const title = editor.getByText("Themes", { exact: true });
   const edit = page.getByRole("button", { name: "Edit theme" });
 
-  const editorBox = await editor.boundingBox();
   const titleBox = await title.boundingBox();
   const themesBox = await themes.boundingBox();
   const editBox = await edit.boundingBox();
-  expect(editorBox).toBeTruthy();
   expect(titleBox).toBeTruthy();
   expect(themesBox).toBeTruthy();
   expect(editBox).toBeTruthy();
 
   expect(themesBox!.y).toBeGreaterThan(titleBox!.y);
   expect(themesBox!.x).toBeCloseTo(titleBox!.x, 0);
-  expect(editBox!.y).toBeGreaterThan(themesBox!.y + themesBox!.height - 1);
+  expect(editBox!.x).toBeGreaterThan(themesBox!.x);
+  expect(editBox!.x + editBox!.width).toBeLessThanOrEqual(
+    themesBox!.x + themesBox!.width + 1,
+  );
+  expect(editBox!.y).toBeGreaterThanOrEqual(themesBox!.y - 1);
+  expect(editBox!.y + editBox!.height).toBeLessThanOrEqual(
+    themesBox!.y + themesBox!.height + 1,
+  );
 });
 
 test("themes sit on the left, edit button on the right, and rando still randomizes", async ({
@@ -405,7 +410,7 @@ test("save theme commits a named swatch to the document", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   await page.getByRole("button", { name: "Document settings" }).click();
-  await page.getByRole("button", { name: "add theme" }).click();
+  await page.getByRole("button", { name: "Edit theme" }).click();
 
   const dialog = page.locator("[data-layout='theme-config']");
   await expect(dialog).toBeVisible();
